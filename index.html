@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="ET Sports"/>
 <meta name="theme-color" content="#08080f"/>
-<meta name="description" content="Watch free live football, UEFA Champions League, and sports channels on iPhone."/>
-<title>Ethiopian Sports TV — Live Football & UCL</title>
+<meta name="description" content="Watch live football matches, UEFA Champions League, and TV channels with live guide."/>
+<title>ET Sports TV — Live Football & UCL Matches</title>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -19,14 +19,15 @@
 :root {
   --bg: #08080f;
   --surface: rgba(255, 255, 255, 0.05);
-  --surface-hover: rgba(255, 255, 255, 0.09);
-  --border: rgba(255, 255, 255, 0.10);
-  --border-hi: rgba(255, 255, 255, 0.20);
+  --surface-hover: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-hi: rgba(255, 255, 255, 0.18);
   
   --green: #10b981;
   --yellow: #f59e0b;
   --red: #ef4444;
   --blue: #3b82f6;
+  --purple: #8b5cf6;
   
   --text-main: #f8fafc;
   --text-sub: #94a3b8;
@@ -53,7 +54,7 @@ html, body {
 
 body {
   padding-top: var(--safe-top);
-  padding-bottom: calc(24px + var(--safe-bottom));
+  padding-bottom: calc(28px + var(--safe-bottom));
   overflow-x: hidden;
 }
 
@@ -82,7 +83,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 0 12px;
+  padding: 12px 0 10px;
 }
 .brand {
   display: flex;
@@ -122,6 +123,27 @@ header {
   align-items: center;
   gap: 8px;
 }
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  transition: all 0.2s;
+}
+.refresh-btn:active {
+  transform: scale(0.93);
+}
+.refresh-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
 .icon-btn {
   width: 36px;
   height: 36px;
@@ -153,7 +175,7 @@ header {
   overflow: hidden;
   border: 1px solid var(--border);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(59, 130, 246, 0.15);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 video {
   width: 100%;
@@ -168,7 +190,7 @@ video {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   gap: 10px;
@@ -181,8 +203,8 @@ video {
   pointer-events: none;
 }
 .overlay-icon {
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: linear-gradient(135deg, #2563eb, #10b981);
   display: flex;
@@ -203,10 +225,9 @@ video {
 .overlay-sub {
   font-size: 12px;
   color: var(--text-sub);
-  max-width: 260px;
+  max-width: 270px;
 }
 
-/* Spinner */
 .video-spinner {
   position: absolute;
   top: 50%;
@@ -240,7 +261,7 @@ video {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 10px 14px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 .nw-info {
   flex: 1;
@@ -279,6 +300,9 @@ video {
 .nw-meta {
   font-size: 11px;
   color: var(--text-sub);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nw-actions {
@@ -287,8 +311,6 @@ video {
   gap: 8px;
   flex-shrink: 0;
 }
-
-/* QUALITY SELECTOR DROPDOWN */
 .quality-select-wrap {
   position: relative;
   display: flex;
@@ -315,7 +337,6 @@ video {
   color: var(--text-sub);
   pointer-events: none;
 }
-
 .tool-btn {
   width: 34px;
   height: 34px;
@@ -336,61 +357,212 @@ video {
 }
 
 /* =====================================================
-   TABS & CATEGORIES
+   MAIN NAVIGATION TABS
 ===================================================== */
 .tabs-row {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   margin-bottom: 12px;
 }
 .tab-btn {
   flex: 1;
   height: 36px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--text-sub);
   background: var(--surface);
   border: 1px solid transparent;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 .tab-btn.active {
-  background: rgba(59, 130, 246, 0.15);
+  background: rgba(59, 130, 246, 0.16);
   border-color: rgba(59, 130, 246, 0.4);
   color: #60a5fa;
 }
 
-/* Search Bar */
-.search-box {
+/* Sub-filter chips */
+.chips-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 6px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chips-row::-webkit-scrollbar {
+  display: none;
+}
+.chip {
+  flex-shrink: 0;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0 12px;
-  margin-bottom: 12px;
+  color: var(--text-sub);
+  transition: all 0.2s;
 }
-.search-box svg {
-  width: 15px;
-  height: 15px;
-  color: var(--text-muted);
-}
-.search-box input {
-  flex: 1;
-  height: 38px;
-  background: none;
-  border: none;
-  outline: none;
-  font-size: 13px;
-  color: var(--text-main);
-}
-.search-box input::placeholder {
-  color: var(--text-muted);
+.chip.active {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
 }
 
 /* =====================================================
-   CHANNEL CARDS LIST
+   LIVE MATCH FIXTURES CARDS (ESPN LIVE PROGRAM GUIDE)
+===================================================== */
+.match-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.match-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 14px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+.match-card:hover {
+  background: var(--surface-hover);
+}
+.match-card.is-live {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.match-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.match-comp {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #60a5fa;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.match-status-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+.match-status-badge.live {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+.match-status-badge.scheduled {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-sub);
+}
+.match-status-badge.final {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.match-teams-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.team-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.team-side.away {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.team-logo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.team-logo-placeholder {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+}
+.team-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 10px;
+  min-width: 60px;
+}
+.score-numbers {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+.score-time {
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.match-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 9px;
+}
+.broadcast-info {
+  font-size: 10.5px;
+  color: var(--text-sub);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.watch-match-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  transition: all 0.2s;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+}
+.watch-match-btn:active {
+  transform: scale(0.92);
+}
+
+/* =====================================================
+   CHANNEL CARDS WITH ELECTRONIC PROGRAM GUIDE (EPG)
 ===================================================== */
 .channels-list {
   display: flex;
@@ -399,57 +571,50 @@ video {
 }
 .channel-card {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
+  flex-direction: column;
+  padding: 11px 13px;
   border-radius: 15px;
   background: var(--surface);
   border: 1px solid var(--border);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s;
   position: relative;
-  overflow: hidden;
-}
-.channel-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3.5px;
-  background: linear-gradient(to bottom, var(--blue), var(--green));
-  opacity: 0;
-  transition: opacity 0.2s;
 }
 .channel-card:active {
-  transform: scale(0.97);
-  background: var(--surface-hover);
+  transform: scale(0.98);
 }
 .channel-card.active {
   background: rgba(59, 130, 246, 0.12);
-  border-color: rgba(59, 130, 246, 0.35);
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
 }
-.channel-card.active::before {
-  opacity: 1;
+.cc-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
-
+.cc-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
 .cc-badge-wrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
   border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Outfit', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 900;
-  color: var(--text-main);
   flex-shrink: 0;
 }
-.cc-info {
+.cc-name-wrap {
   flex: 1;
   min-width: 0;
 }
@@ -460,72 +625,56 @@ video {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.cc-meta {
-  font-size: 11px;
-  color: var(--text-sub);
-  margin-top: 2px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.cc-genre {
+  font-size: 10.5px;
+  color: var(--text-muted);
 }
-.tag-badge {
-  font-size: 8.5px;
+.play-indicator-pill {
+  font-size: 10px;
   font-weight: 800;
-  padding: 1.5px 5px;
-  border-radius: 4px;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-}
-.tag-ucl {
+  padding: 3px 8px;
+  border-radius: 6px;
   background: rgba(59, 130, 246, 0.2);
   color: #60a5fa;
 }
-.tag-live {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34d399;
-}
-.tag-custom {
-  background: rgba(245, 158, 11, 0.2);
-  color: #fbbf24;
-}
-
-.cc-right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-}
-.play-indicator {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(59, 130, 246, 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #60a5fa;
-}
-.channel-card.active .play-indicator {
+.channel-card.active .play-indicator-pill {
   background: #3b82f6;
   color: #fff;
-  box-shadow: 0 0 12px #3b82f6;
 }
 
-/* =====================================================
-   DATA SAVER FLOATING NOTICE
-===================================================== */
-.data-notice {
-  margin-top: 14px;
-  border-radius: 12px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  padding: 10px 12px;
+/* EPG LIVE GUIDE SECTION INSIDE CHANNEL */
+.cc-epg {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.epg-now {
+  font-size: 11px;
+  font-weight: 600;
+  color: #34d399;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  color: #34d399;
-  line-height: 1.4;
+  gap: 5px;
+}
+.epg-next {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+  height: 90px;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* =====================================================
@@ -580,7 +729,6 @@ video {
   font-size: 12.5px;
   color: var(--text-sub);
   margin-bottom: 16px;
-  line-height: 1.4;
 }
 .fgroup {
   margin-bottom: 12px;
@@ -607,7 +755,6 @@ video {
 }
 .fgroup input:focus {
   border-color: rgba(59, 130, 246, 0.4);
-  background: rgba(59, 130, 246, 0.05);
 }
 .mactions {
   display: flex;
@@ -671,11 +818,19 @@ video {
       </div>
       <div>
         <div class="brand-title">ET Sports TV</div>
-        <div class="brand-sub">Live Matches · UCL · Football</div>
+        <div class="brand-sub">Live Matches & TV Guide</div>
       </div>
     </div>
 
     <div class="header-actions">
+      <!-- Live Schedule Refresh -->
+      <button class="refresh-btn" id="refresh-matches-btn" title="Refresh Live Scores & Guide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+        <span>Refresh</span>
+      </button>
+
       <!-- Add Stream Button -->
       <button class="icon-btn" id="add-match-btn" title="Add live match stream" aria-label="Add match stream">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -693,21 +848,21 @@ video {
       <div class="overlay-icon">
         <svg viewBox="0 0 24 24" fill="white"><polygon points="6 4 19 12 6 20 6 4"/></svg>
       </div>
-      <div class="overlay-title">Ready for Live Matches</div>
-      <div class="overlay-sub">Select a live sports channel below or paste any match link to watch.</div>
+      <div class="overlay-title">Select a Match or Channel</div>
+      <div class="overlay-sub">Tap "Watch Live" on any match fixture below or choose a broadcast channel.</div>
     </div>
   </div>
 
-  <!-- =================== NOW WATCHING & QUALITY =================== -->
+  <!-- =================== NOW WATCHING BAR =================== -->
   <div class="now-watching">
     <div class="nw-info">
       <div class="nw-badge" id="nw-badge"><span class="live-dot"></span> <span id="nw-live-txt">OFFLINE</span></div>
-      <div class="nw-title" id="nw-title">Select a Match Channel</div>
-      <div class="nw-meta" id="nw-meta">Choose quality below to save data</div>
+      <div class="nw-title" id="nw-title">Choose a Match Below</div>
+      <div class="nw-meta" id="nw-meta">Select quality to control data consumption</div>
     </div>
 
     <div class="nw-actions">
-      <!-- Resolution / Quality Switcher -->
+      <!-- Quality Switcher -->
       <div class="quality-select-wrap">
         <select class="quality-select" id="quality-selector" aria-label="Stream quality">
           <option value="auto">Auto (Adaptive)</option>
@@ -728,32 +883,27 @@ video {
     </div>
   </div>
 
-  <!-- =================== TABS & SEARCH =================== -->
+  <!-- =================== TABS =================== -->
   <div class="tabs-row">
-    <button class="tab-btn active" data-tab="ucl">🏆 Champions League</button>
-    <button class="tab-btn"        data-tab="all">📺 All Sports</button>
+    <button class="tab-btn active" data-tab="matches">⚽ Match Center</button>
+    <button class="tab-btn"        data-tab="ucl">🏆 UCL Channels</button>
+    <button class="tab-btn"        data-tab="all">📺 All Channels</button>
     <button class="tab-btn"        data-tab="custom">⭐ My Streams</button>
   </div>
 
-  <div class="search-box">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-    </svg>
-    <input id="search-inp" type="search" placeholder="Search channels & matches…" autocomplete="off"/>
+  <!-- Chips Filter -->
+  <div class="chips-row" id="chips-row">
+    <button class="chip active" data-filter="all">All Today</button>
+    <button class="chip" data-filter="ucl">🏆 Champions League</button>
+    <button class="chip" data-filter="epl">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
+    <button class="chip" data-filter="live">🔴 Live Now</button>
   </div>
 
-  <!-- =================== CHANNELS LIST =================== -->
-  <div class="channels-list" id="channels-list"></div>
+  <!-- MATCH CENTER CONTAINER -->
+  <div id="matches-container" class="match-section"></div>
 
-  <!-- =================== DATA NOTICE =================== -->
-  <div class="data-notice">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
-    </svg>
-    <div>
-      <strong>Data Saving Tip:</strong> Switch to <strong>360p</strong> for slow connections or limited mobile packages (~300 MB per match). Use <strong>720p/1080p</strong> on Wi-Fi.
-    </div>
-  </div>
+  <!-- CHANNELS CONTAINER (HIDDEN WHEN ON MATCHES TAB) -->
+  <div id="channels-container" class="channels-list" style="display:none"></div>
 
 </div><!-- /app -->
 
@@ -762,7 +912,7 @@ video {
   <div class="modal">
     <div class="m-handle"></div>
     <h2>Add Live Match Stream</h2>
-    <p>Paste any live match video stream URL (HLS / .m3u8) to watch in full quality.</p>
+    <p>Paste any live match video stream URL (HLS / .m3u8) to watch in your preferred quality.</p>
     <div class="fgroup">
       <label>Match or Channel Name</label>
       <input id="add-name" placeholder="e.g. Arsenal vs PSG / Real Madrid Live" maxlength="60"/>
@@ -786,88 +936,108 @@ video {
 
 <script>
 // ============================================================
-// DEEP-RESEARCHED FREE SPORTS & CHAMPIONS LEAGUE STREAMS
+// CHANNELS WITH LIVE EPG PROGRAM GUIDE
 // ============================================================
 const SPORTS_CHANNELS = [
   {
     id: 'bein-xtra',
-    name: 'beIN SPORTS XTRA',
+    name: 'beIN SPORTS XTRA HD',
     url: 'https://bein-xtra-bein.amagi.tv/playlist.m3u8',
-    desc: 'Free Live Matches · Global Football · HD',
+    genre: 'Live International Football',
+    badge: 'UCL',
     tags: ['ucl', 'live'],
-    badge: 'UCL'
+    epgNow: 'Live Matchday: Top European Football',
+    epgNext: 'Post-Match Analysis & Goals Show'
   },
   {
     id: 'bein-esp',
     name: 'beIN SPORTS Español',
     url: 'https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8',
-    desc: 'La Liga, Ligue 1 & Live Football',
+    genre: 'Spanish Football Coverage',
+    badge: 'LIVE',
     tags: ['ucl', 'live'],
-    badge: 'LIVE'
+    epgNow: 'Futbol en Vivo: Partido de la Semana',
+    epgNext: 'Resumen de Goles & Entrevistas'
   },
   {
     id: 'arena-sport',
     name: 'Arena Sport 1 (UCL Feed)',
     url: 'http://telekomsrbije.com:2095/play/lhpjmkfVyhON1JAiZCx7vmRdlEHaaMaQAQw3LRAakpnghBMtR57sXXgLEXZF8gVD',
-    desc: 'UEFA Champions League FTA Live Match Feed',
+    genre: 'UEFA Champions League FTA Live',
+    badge: 'UCL',
     tags: ['ucl'],
-    badge: 'UCL'
+    epgNow: 'UEFA Champions League Live Coverage',
+    epgNext: 'Champions Club Highlights Studio'
   },
   {
     id: 'aspor-hd',
     name: 'A Spor HD',
     url: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
-    desc: 'European & Turkish Football Broadcasts',
+    genre: 'European & Turkish Football',
+    badge: 'HD',
     tags: ['ucl', 'all'],
-    badge: 'HD'
+    epgNow: 'Avrupa Futbolu: Canlı Yayın',
+    epgNext: 'Spor Bülteni & Maç Özetleri'
   },
   {
     id: 'cbs-golazo',
     name: 'CBS Sports Golazo',
     url: 'https://dai.google.com/linear/hls/event/7f3Wv6f7QEKfQna22jHqLQ/master.m3u8',
-    desc: 'UEFA Champions League 24/7 Match Hub',
+    genre: 'UEFA Champions League 24/7 Hub',
+    badge: 'UEFA',
     tags: ['ucl'],
-    badge: 'UEFA'
+    epgNow: 'Champions League Today: Tactical Cam',
+    epgNext: 'The Golazo Show & Highlights'
   },
   {
     id: 'africa-24-sport',
     name: 'Africa 24 Sport',
     url: 'https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8',
-    desc: 'African Football & CAF Sports Coverage',
+    genre: 'African Football & CAF Sports',
+    badge: 'AFRICA',
     tags: ['all'],
-    badge: 'AFRICA'
+    epgNow: 'Foot Afrique: Direct et Mag',
+    epgNext: 'Journal des Sports d\'Afrique'
   },
   {
     id: 'redbull-tv',
     name: 'Red Bull TV Sports',
     url: 'https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8',
-    desc: 'Extreme Sports, Motorsports & Live Events',
+    genre: 'Live Extreme Sports & Football',
+    badge: 'FAST',
     tags: ['all'],
-    badge: 'FAST'
+    epgNow: 'Red Bull Live World Tour',
+    epgNext: 'Best of Football Skills & Freestyling'
   },
   {
     id: 'al-iraqia-sport',
     name: 'Al Iraqia Sport HD',
     url: 'https://imn-live.esite-lab.com/hls/iraqia-sports-1.m3u8',
-    desc: 'Arab & International Live Football',
+    genre: 'Arab & International Football',
+    badge: 'HD',
     tags: ['all'],
-    badge: 'HD'
+    epgNow: 'مباريات مباشرة واستوديو تحليلي',
+    epgNext: 'نشرة الأخبار الرياضية العالمية'
   },
   {
     id: 'arryadia-hd',
     name: 'Arryadia HD',
     url: 'http://149.100.11.252:8000/play/a065/index.m3u8',
-    desc: 'African & International Live Sports',
+    genre: 'Morocco & African Sports',
+    badge: 'HD',
     tags: ['all'],
-    badge: 'HD'
+    epgNow: 'البطولة الاحترافية والمنافسات القارية',
+    epgNext: 'حصيلة الجولة الرياضية'
   },
   {
     id: 'amharic-commentary',
     name: 'Amharic Match Commentary',
     url: 'https://stream.zeno.fm/bqtruhn4q98uv',
-    desc: 'Live Premier League & UCL Audio Commentary in Amharic',
+    genre: 'Live Commentary in Amharic',
+    badge: 'AMHARIC',
     tags: ['ucl', 'all'],
-    badge: 'AMHARIC'
+    epgNow: 'የሻምፒዮንስ ሊግ እና ፕሪሚየር ሊግ የቀጥታ ስርጭት',
+    epgNext: 'የስፖርት ዜናዎች እና ትንታኔ'
   }
 ];
 
@@ -875,11 +1045,12 @@ const SPORTS_CHANNELS = [
 // APP STATE
 // ============================================================
 let state = {
-  all: [...SPORTS_CHANNELS],
-  customs: [],
-  currentId: null,
-  activeTab: 'ucl',
-  search: '',
+  allChannels: [...SPORTS_CHANNELS],
+  customChannels: [],
+  matches: [],
+  currentChannelId: null,
+  activeTab: 'matches',
+  matchFilter: 'all',
   selectedQuality: 'auto'
 };
 
@@ -893,7 +1064,7 @@ let hlsInstance = null;
 // ============================================================
 function saveCustoms() {
   try {
-    localStorage.setItem('et_sports_customs', JSON.stringify(state.customs));
+    localStorage.setItem('et_sports_customs', JSON.stringify(state.customChannels));
   } catch(e) {}
 }
 
@@ -901,23 +1072,170 @@ function loadCustoms() {
   try {
     const raw = localStorage.getItem('et_sports_customs');
     if (raw) {
-      state.customs = JSON.parse(raw);
-      state.all = [...SPORTS_CHANNELS, ...state.customs];
+      state.customChannels = JSON.parse(raw);
+      state.allChannels = [...SPORTS_CHANNELS, ...state.customChannels];
     }
   } catch(e) {}
+}
+
+// ============================================================
+// LIVE MATCH SCHEDULE & EPG FETCHER (ESPN PUBLIC API)
+// ============================================================
+async function fetchLiveProgramsAndMatches() {
+  const container = document.getElementById('matches-container');
+  container.innerHTML = `
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+  `;
+
+  const endpoints = [
+    { league: 'UCL', compName: '🏆 UEFA Champions League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard' },
+    { league: 'EPL', compName: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard' },
+    { league: 'LALIGA', compName: '🇪🇸 La Liga', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard' }
+  ];
+
+  let allEvents = [];
+
+  for (const ep of endpoints) {
+    try {
+      const res = await fetch(ep.url);
+      if (res.ok) {
+        const data = await res.json();
+        const evs = (data.events || []).map(e => ({
+          ...e,
+          leagueCode: ep.league,
+          compDisplayName: ep.compName
+        }));
+        allEvents.push(...evs);
+      }
+    } catch (err) {
+      console.warn(`Failed to fetch ${ep.league}:`, err);
+    }
+  }
+
+  state.matches = allEvents;
+  renderMatches();
+}
+
+// Format local kickoff time
+function formatMatchTime(dateStr, statusObj) {
+  if (!statusObj) return '';
+  const desc = statusObj.type?.description || '';
+  const state = statusObj.type?.state || '';
+
+  if (state === 'in') {
+    return `<span class="match-status-badge live">🔴 LIVE ${statusObj.displayClock || 'IN PLAY'}</span>`;
+  }
+  if (state === 'post') {
+    return `<span class="match-status-badge final">FT (${desc})</span>`;
+  }
+
+  try {
+    const d = new Date(dateStr);
+    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return `<span class="match-status-badge scheduled">⏱ ${time}</span>`;
+  } catch(e) {
+    return `<span class="match-status-badge scheduled">${desc}</span>`;
+  }
+}
+
+// Render Match Center Cards
+function renderMatches() {
+  const container = document.getElementById('matches-container');
+  let list = [...state.matches];
+
+  if (state.matchFilter === 'ucl') {
+    list = list.filter(m => m.leagueCode === 'UCL');
+  } else if (state.matchFilter === 'epl') {
+    list = list.filter(m => m.leagueCode === 'EPL');
+  } else if (state.matchFilter === 'live') {
+    list = list.filter(m => m.status?.type?.state === 'in');
+  }
+
+  if (!list.length) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:36px 16px;color:var(--text-muted);background:var(--surface);border-radius:16px;border:1px solid var(--border)">
+        <p style="font-size:15px;color:var(--text-main);font-weight:700;margin-bottom:6px">No matches found for this filter right now.</p>
+        <p style="font-size:12px;margin-bottom:14px">Check upcoming schedules or switch to "UCL Channels" to watch live sports.</p>
+        <button class="watch-match-btn" onclick="switchMainTab('ucl')" style="margin:0 auto">View Live UCL Channels</button>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(m => {
+    const comp = m.competitions?.[0] || {};
+    const competitors = comp.competitors || [];
+    const home = competitors.find(c => c.homeAway === 'home') || competitors[0] || {};
+    const away = competitors.find(c => c.homeAway === 'away') || competitors[1] || {};
+
+    const homeName = home.team?.displayName || 'Home Team';
+    const awayName = away.team?.displayName || 'Away Team';
+    const homeLogo = home.team?.logo || '';
+    const awayLogo = away.team?.logo || '';
+    const homeScore = home.score !== undefined ? home.score : '-';
+    const awayScore = away.score !== undefined ? away.score : '-';
+
+    const isLive = m.status?.type?.state === 'in';
+    const timeHTML = formatMatchTime(m.date, m.status);
+
+    // Pick best matching channel for this league
+    const channelPick = m.leagueCode === 'UCL' ? SPORTS_CHANNELS[0] : SPORTS_CHANNELS[1];
+
+    return `
+      <div class="match-card ${isLive ? 'is-live' : ''}">
+        <div class="match-header">
+          <div class="match-comp">${m.compDisplayName}</div>
+          <div>${timeHTML}</div>
+        </div>
+
+        <div class="match-teams-row">
+          <div class="team-side">
+            ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${homeName}" onerror="this.outerHTML='<div class=\\'team-logo-placeholder\\'>${homeName.slice(0,2)}</div>'"/>` : `<div class="team-logo-placeholder">${homeName.slice(0,2)}</div>`}
+            <span class="team-name">${homeName}</span>
+          </div>
+
+          <div class="score-box">
+            <span class="score-numbers">${homeScore} - ${awayScore}</span>
+            <span class="score-time">${isLive ? m.status?.displayClock || 'LIVE' : 'Score'}</span>
+          </div>
+
+          <div class="team-side away">
+            ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${awayName}" onerror="this.outerHTML='<div class=\\'team-logo-placeholder\\'>${awayName.slice(0,2)}</div>'"/>` : `<div class="team-logo-placeholder">${awayName.slice(0,2)}</div>`}
+            <span class="team-name">${awayName}</span>
+          </div>
+        </div>
+
+        <div class="match-footer">
+          <div class="broadcast-info">
+            📺 Live on: <strong>${channelPick.name}</strong>
+          </div>
+          <button class="watch-match-btn" onclick="tuneMatch('${homeName} vs ${awayName}', '${channelPick.url}', '${channelPick.id}')">
+            ▶ Watch Live
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Tune directly to a match
+function tuneMatch(matchTitle, streamUrl, channelId) {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const channel = state.allChannels.find(c => c.id === channelId) || { name: matchTitle, desc: 'Live Match Broadcast' };
+  playStream(streamUrl, { ...channel, name: matchTitle });
 }
 
 // ============================================================
 // HLS VIDEO ENGINE & QUALITY CONTROL
 // ============================================================
 function playStream(url, channel) {
-  state.currentId = channel.id;
+  state.currentChannelId = channel.id;
   overlay.classList.add('hidden');
   spinner.classList.add('show');
 
-  // Update Now Watching Bar
   document.getElementById('nw-title').textContent = channel.name;
-  document.getElementById('nw-meta').textContent = channel.desc;
+  document.getElementById('nw-meta').textContent = channel.desc || channel.genre || 'Live Stream';
   document.getElementById('nw-live-txt').textContent = 'CONNECTING…';
   document.getElementById('nw-badge').style.color = 'var(--yellow)';
 
@@ -926,7 +1244,6 @@ function playStream(url, channel) {
     hlsInstance = null;
   }
 
-  // Check if Hls.js is supported (Desktop / Android / modern browsers)
   if (Hls.isSupported()) {
     hlsInstance = new Hls({
       enableWorker: true,
@@ -979,9 +1296,6 @@ function fallbackNative(url) {
   }, { once: true });
 }
 
-// ============================================================
-// QUALITY SELECTOR (360p, 480p, 720p, 1080p, Auto)
-// ============================================================
 function updateQualityDropdown(levels) {
   const sel = document.getElementById('quality-selector');
   if (!levels || levels.length <= 1) return;
@@ -1000,7 +1314,7 @@ document.getElementById('quality-selector').addEventListener('change', (e) => {
   const val = e.target.value;
   if (hlsInstance) {
     if (val === 'auto' || val === '-1') {
-      hlsInstance.currentLevel = -1; // Auto
+      hlsInstance.currentLevel = -1;
       showToast('Quality: Auto (Adaptive)');
     } else {
       const lvl = parseInt(val);
@@ -1008,7 +1322,6 @@ document.getElementById('quality-selector').addEventListener('change', (e) => {
       showToast(`Switched quality to level ${lvl + 1}`);
     }
   } else {
-    // Native Safari adaptive resolution hint
     showToast('Quality adjusted for your connection');
   }
 });
@@ -1046,22 +1359,17 @@ video.addEventListener('error', () => {
 });
 
 // ============================================================
-// CHANNELS LIST RENDER
+// CHANNELS LIST RENDER (WITH LIVE EPG GUIDE)
 // ============================================================
 function filteredChannels() {
-  let list = state.activeTab === 'ucl' ? state.all.filter(c => c.tags.includes('ucl'))
-           : state.activeTab === 'custom' ? state.all.filter(c => c.custom)
-           : [...state.all];
-
-  if (state.search) {
-    const q = state.search.toLowerCase();
-    list = list.filter(c => c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
-  }
+  let list = state.activeTab === 'ucl' ? state.allChannels.filter(c => c.tags.includes('ucl'))
+           : state.activeTab === 'custom' ? state.allChannels.filter(c => c.custom)
+           : [...state.allChannels];
   return list;
 }
 
 function renderChannels() {
-  const container = document.getElementById('channels-list');
+  const container = document.getElementById('channels-container');
   const list = filteredChannels();
 
   if (!list.length) {
@@ -1074,20 +1382,25 @@ function renderChannels() {
   }
 
   container.innerHTML = list.map(c => `
-    <div class="channel-card ${c.id === state.currentId ? 'active' : ''}" data-id="${c.id}">
-      <div class="cc-badge-wrap">${c.badge || 'LIVE'}</div>
-      <div class="cc-info">
-        <div class="cc-name">${c.name}</div>
-        <div class="cc-meta">
-          <span class="tag-badge ${c.custom ? 'tag-custom' : c.tags.includes('ucl') ? 'tag-ucl' : 'tag-live'}">
-            ${c.custom ? 'Custom' : c.tags.includes('ucl') ? 'UEFA UCL' : 'Live'}
-          </span>
-          <span>${c.desc}</span>
+    <div class="channel-card ${c.id === state.currentChannelId ? 'active' : ''}" data-id="${c.id}">
+      <div class="cc-top-row">
+        <div class="cc-identity">
+          <div class="cc-badge-wrap">${c.badge || 'LIVE'}</div>
+          <div class="cc-name-wrap">
+            <div class="cc-name">${c.name}</div>
+            <div class="cc-genre">${c.genre || c.desc}</div>
+          </div>
         </div>
+        <span class="play-indicator-pill">▶ WATCH</span>
       </div>
-      <div class="cc-right">
-        <div class="play-indicator">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="6 4 18 12 6 20 6 4"/></svg>
+
+      <!-- Live Electronic Program Guide (EPG) -->
+      <div class="cc-epg">
+        <div class="epg-now">
+          <span>● NOW:</span> ${c.epgNow || 'Live Sports Broadcast'}
+        </div>
+        <div class="epg-next">
+          <span>⏭ UP NEXT:</span> ${c.epgNext || 'Post-Match Highlights & Sports Studio'}
         </div>
       </div>
     </div>
@@ -1095,31 +1408,55 @@ function renderChannels() {
 
   container.querySelectorAll('.channel-card').forEach(card => {
     card.addEventListener('click', () => {
-      const ch = state.all.find(c => c.id === card.dataset.id);
-      if (ch) playStream(ch.url, ch);
+      const ch = state.allChannels.find(c => c.id === card.dataset.id);
+      if (ch) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        playStream(ch.url, ch);
+      }
     });
   });
 }
 
-// Tabs
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    state.activeTab = btn.dataset.tab;
+// ============================================================
+// TABS & FILTERS
+// ============================================================
+function switchMainTab(tab) {
+  state.activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+
+  const isMatches = tab === 'matches';
+  document.getElementById('matches-container').style.display = isMatches ? 'flex' : 'none';
+  document.getElementById('chips-row').style.display = isMatches ? 'flex' : 'none';
+  document.getElementById('channels-container').style.display = isMatches ? 'none' : 'flex';
+
+  if (isMatches) {
+    renderMatches();
+  } else {
     renderChannels();
+  }
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchMainTab(btn.dataset.tab));
+});
+
+// Filter Chips
+document.querySelectorAll('.chip').forEach(ch => {
+  ch.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    ch.classList.add('active');
+    state.matchFilter = ch.dataset.filter;
+    renderMatches();
   });
 });
 
-// Search
-const searchInp = document.getElementById('search-inp');
-searchInp.addEventListener('input', () => {
-  state.search = searchInp.value;
-  renderChannels();
+document.getElementById('refresh-matches-btn').addEventListener('click', () => {
+  showToast('Refreshing live scores & guide…');
+  fetchLiveProgramsAndMatches();
 });
 
 // ============================================================
-// ADD STREAM MODAL
+// ADD CUSTOM STREAM MODAL
 // ============================================================
 const modal = document.getElementById('add-modal');
 function openModal() { modal.classList.add('open'); }
@@ -1132,7 +1469,7 @@ modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); }
 document.getElementById('add-confirm').addEventListener('click', () => {
   const name = document.getElementById('add-name').value.trim();
   const url = document.getElementById('add-url').value.trim();
-  const tag = document.getElementById('add-tag').value.trim() || 'Custom Stream';
+  const tag = document.getElementById('add-tag').value.trim() || 'Custom Match';
 
   if (!name) { showToast('Please enter a match name'); return; }
   if (!url || !url.startsWith('http')) { showToast('Please enter a valid stream URL'); return; }
@@ -1141,14 +1478,16 @@ document.getElementById('add-confirm').addEventListener('click', () => {
     id: 'custom_' + Date.now(),
     name: name,
     url: url,
-    desc: tag,
-    tags: ['ucl', 'all', 'custom'],
+    genre: tag,
     badge: 'USER',
+    tags: ['ucl', 'all', 'custom'],
+    epgNow: 'Live Match Stream Feed',
+    epgNext: 'User Added Stream',
     custom: true
   };
 
-  state.customs.push(newChannel);
-  state.all.push(newChannel);
+  state.customChannels.push(newChannel);
+  state.allChannels.push(newChannel);
   saveCustoms();
 
   closeModal();
@@ -1156,10 +1495,7 @@ document.getElementById('add-confirm').addEventListener('click', () => {
   document.getElementById('add-url').value = '';
   document.getElementById('add-tag').value = '';
 
-  state.activeTab = 'custom';
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'custom'));
-  renderChannels();
-
+  switchMainTab('custom');
   showToast(`✓ Playing "${name}"`);
   playStream(url, newChannel);
 });
@@ -1173,20 +1509,19 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(toastT);
-  toastT = setTimeout(() => t.classList.remove('show'), 2500);
+  toastT = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-// ============================================================
-// SERVICE WORKER
-// ============================================================
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+// Auto-refresh match scores every 60 seconds
+setInterval(() => {
+  if (state.activeTab === 'matches') fetchLiveProgramsAndMatches();
+}, 60000);
 
 // ============================================================
 // INITIALIZATION
 // ============================================================
 loadCustoms();
+fetchLiveProgramsAndMatches();
 renderChannels();
 </script>
 </body>
