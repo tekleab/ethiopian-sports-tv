@@ -1033,9 +1033,339 @@ video {
 .toast.show {
   opacity: 1;
 }
+
+/* =====================================================
+   VIP DYNAMIC LOGIN SCREEN
+===================================================== */
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at 50% 25%, #15192c, #06070e 85%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.login-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.03);
+}
+.login-card {
+  width: 100%;
+  max-width: 390px;
+  background: rgba(18, 20, 34, 0.96);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 26px;
+  padding: 28px 24px 26px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 32px rgba(59, 130, 246, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+.login-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.5), transparent 70%);
+  filter: blur(25px);
+  pointer-events: none;
+}
+.login-brand {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.login-badge-icon {
+  font-size: 40px;
+  margin-bottom: 6px;
+  display: inline-block;
+  animation: crown-float 2.5s infinite ease-in-out;
+}
+@keyframes crown-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.login-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  background: linear-gradient(90deg, #60a5fa, #34d399 60%, #fbbf24);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+.login-sub {
+  font-size: 11.5px;
+  color: var(--text-sub);
+  line-height: 1.4;
+}
+.login-hint-chip {
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px dashed rgba(59, 130, 246, 0.45);
+  border-radius: 12px;
+  padding: 9px 12px;
+  text-align: center;
+  font-size: 11.5px;
+  color: #93c5fd;
+  margin-bottom: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.login-hint-chip:hover, .login-hint-chip:active {
+  background: rgba(59, 130, 246, 0.22);
+  border-color: #60a5fa;
+}
+.login-field {
+  margin-bottom: 14px;
+}
+.login-field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+}
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.field-icon {
+  position: absolute;
+  left: 13px;
+  width: 17px;
+  height: 17px;
+  color: var(--text-sub);
+  pointer-events: none;
+}
+.input-wrap input {
+  width: 100%;
+  height: 44px;
+  padding: 0 42px 0 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--text-main);
+  outline: none;
+  transition: all 0.2s;
+}
+.input-wrap input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+}
+.eye-btn {
+  position: absolute;
+  right: 10px;
+  font-size: 17px;
+  color: var(--text-sub);
+  padding: 6px;
+  cursor: pointer;
+}
+.login-alert {
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  text-align: center;
+}
+.login-alert.error {
+  background: rgba(239, 68, 68, 0.16);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  color: #f87171;
+  animation: shake 0.35s ease;
+}
+.login-alert.success {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #34d399;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.login-submit-btn {
+  width: 100%;
+  height: 46px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.45);
+  transition: all 0.2s;
+}
+.login-submit-btn:active {
+  transform: scale(0.97);
+}
+.login-footer {
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-top: 14px;
+}
+
+/* VIP Header Pill */
+.vip-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(245, 158, 11, 0.2));
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  font-size: 11px;
+  font-weight: 800;
+  color: #fbbf24;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.vip-user-pill:active {
+  transform: scale(0.95);
+}
+.vip-logout-icon {
+  font-size: 11px;
+  color: #f87171;
+  margin-left: 2px;
+}
+
+/* Camel Live Football Hub */
+.camel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.camel-banner {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.18), rgba(59, 130, 246, 0.12));
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+.cb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cb-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #78350f, #d97706);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.cb-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fbbf24;
+}
+.cb-sub {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+.cb-open-btn {
+  padding: 8px 13px;
+  border-radius: 11px;
+  background: #f59e0b;
+  color: #000;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.3);
+  transition: all 0.2s;
+}
+.cb-open-btn:active {
+  transform: scale(0.94);
+}
+.camel-notice-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 11.5px;
+  color: var(--text-sub);
+  line-height: 1.45;
+}
 </style>
 </head>
 <body>
+
+<!-- =================== VIP DYNAMIC LOGIN PAGE =================== -->
+<div class="login-overlay" id="login-screen">
+  <div class="login-card">
+    <div class="login-glow"></div>
+    <div class="login-brand">
+      <div class="login-badge-icon">👑</div>
+      <div class="login-title">ET Sports VIP Pass</div>
+      <div class="login-sub">Dynamic Access Portal · Live Football & UCL Streaming</div>
+    </div>
+
+    <div class="login-hint-chip" id="login-hint-chip">
+      ⚡ Quick Autofill: <strong>teklish</strong> / <strong>tek123</strong>
+    </div>
+
+    <form id="login-form">
+      <div class="login-field">
+        <label for="login-username">Username</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input id="login-username" type="text" placeholder="Enter username (teklish)" autocomplete="username" required />
+        </div>
+      </div>
+
+      <div class="login-field">
+        <label for="login-password">Password</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input id="login-password" type="password" placeholder="Enter password (tek123)" autocomplete="current-password" required />
+          <button type="button" class="eye-btn" id="toggle-pwd-btn" aria-label="Toggle password visibility">👁</button>
+        </div>
+      </div>
+
+      <div class="login-alert" id="login-alert" style="display:none"></div>
+
+      <button type="submit" class="login-submit-btn" id="login-btn">
+        <span>Unlock VIP Streaming</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <span>Protected VIP Portal · Authorized Members Only</span>
+    </div>
+  </div>
+</div>
 
 <div id="app">
 
@@ -1054,6 +1384,13 @@ video {
     </div>
 
     <div class="header-actions">
+      <!-- VIP Account Pill -->
+      <button class="vip-user-pill" id="vip-user-pill" title="VIP Member Profile">
+        <span>👑</span>
+        <span id="vip-name-txt">teklish</span>
+        <span class="vip-logout-icon" id="vip-logout-btn" title="Logout">⏻</span>
+      </button>
+
       <!-- Live Schedule Refresh -->
       <button class="refresh-btn" id="refresh-matches-btn" title="Refresh Live Scores & Guide">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
@@ -1073,7 +1410,7 @@ video {
 
   <!-- =================== VIDEO PLAYER STAGE =================== -->
   <div class="video-stage" id="video-stage">
-    <video id="player" playsinline webkit-playsinline x5-playsinline controls></video>
+    <video id="player" playsinline webkit-playsinline x5-playsinline controls preload="auto"></video>
     <div class="video-spinner" id="spinner"></div>
     <div class="video-overlay" id="video-overlay">
       <div class="overlay-icon">
@@ -1145,13 +1482,14 @@ video {
 
   <!-- =================== TABS =================== -->
   <div class="tabs-row">
-    <button class="tab-btn active" data-tab="matches">⚽ Match Center</button>
-    <button class="tab-btn"        data-tab="ucl">🏆 UCL Channels</button>
-    <button class="tab-btn"        data-tab="all">📺 All Channels</button>
+    <button class="tab-btn active" data-tab="matches">⚽ Matches</button>
+    <button class="tab-btn"        data-tab="ucl">🏆 UCL</button>
+    <button class="tab-btn"        data-tab="camel">🐫 Camel1 Live</button>
+    <button class="tab-btn"        data-tab="all">📺 Channels</button>
     <button class="tab-btn"        data-tab="custom">⭐ My Streams</button>
   </div>
 
-  <!-- Chips Filter -->
+  <!-- Chips Filter (for matches tab) -->
   <div class="chips-row" id="chips-row">
     <button class="chip active" data-filter="all">All Today</button>
     <button class="chip" data-filter="ucl">🏆 Champions League</button>
@@ -1162,7 +1500,29 @@ video {
   <!-- MATCH CENTER CONTAINER -->
   <div id="matches-container" class="match-section"></div>
 
-  <!-- CHANNELS CONTAINER (HIDDEN WHEN ON MATCHES TAB) -->
+  <!-- CAMEL1.TV LIVE SECTION -->
+  <div id="camel-container" class="camel-section" style="display:none">
+    <div class="camel-banner">
+      <div class="cb-left">
+        <div class="cb-icon">🐫</div>
+        <div>
+          <div class="cb-title">Camel1 Live Football Hub</div>
+          <div class="cb-sub">Live Match Rooms & Stadium Coverage (camel1.tv)</div>
+        </div>
+      </div>
+      <a href="https://www.camel1.tv/en/live" target="_blank" rel="noopener noreferrer" class="cb-open-btn">
+        <span>Open Camel1.tv</span> ↗
+      </a>
+    </div>
+
+    <div class="camel-notice-box">
+      ⚡ <strong>Live Match Streams:</strong> Tap <strong>"▶ Watch In-App"</strong> on any game below to stream with adaptive quality, or tap <strong>"🌐 Open on Camel1"</strong> for live chat & community predictions.
+    </div>
+
+    <div id="camel-matches-list" class="match-section"></div>
+  </div>
+
+  <!-- CHANNELS CONTAINER (HIDDEN WHEN ON MATCHES/CAMEL TAB) -->
   <div id="channels-container" class="channels-list" style="display:none"></div>
 
 </div><!-- /app -->
@@ -1928,17 +2288,125 @@ function renderChannels() {
 // ============================================================
 // TABS & FILTERS
 // ============================================================
+// ============================================================
+// CAMEL1.TV LIVE MATCHES DATA & RENDERER
+// ============================================================
+const CAMEL_MATCHES = [
+  {
+    comp: '🏆 UEFA Champions League · Camel1 Live Room',
+    home: 'Real Madrid',
+    away: 'Manchester City',
+    homeLogo: 'https://img.thesports.com/football/team/5f7059f40965e5a2cc00987e6bac2f32.png',
+    awayLogo: 'https://img.thesports.com/football/team/d39ce586fd7278342dde33b3090b3f75.png',
+    homeScore: 2,
+    awayScore: 1,
+    statusText: '🔴 LIVE 74\'',
+    isLive: true,
+    streamUrl: 'https://tv-trt1.medya.trt.com.tr/master.m3u8',
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  },
+  {
+    comp: '🏆 UEFA Champions League · Camel1 Live Room',
+    home: 'Bayern Munich',
+    away: 'Paris Saint-Germain',
+    homeLogo: 'https://img.thesports.com/football/team/28e94925fdcc848f86a544a1cedcceed.png',
+    awayLogo: 'https://img.thesports.com/football/team/fbcf002c8d6dd34813fa2b3a4cc9b04c.png',
+    homeScore: 1,
+    awayScore: 1,
+    statusText: '🔴 LIVE 58\'',
+    isLive: true,
+    streamUrl: 'https://bein-xtra-xumo.amagi.tv/playlistR720P.m3u8',
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  },
+  {
+    comp: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League · Camel1 Live Room',
+    home: 'Arsenal',
+    away: 'Liverpool',
+    homeLogo: 'https://img.thesports.com/football/team/7dacaa934fe4be00f23c1e209b5ef947.png',
+    awayLogo: 'https://img.thesports.com/football/team/c166a220bf20977df2bd82fc067696f5.png',
+    homeScore: 0,
+    awayScore: 0,
+    statusText: '⏱ Kickoff 21:00 EAT',
+    isLive: false,
+    streamUrl: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  },
+  {
+    comp: '🇪🇸 La Liga · Camel1 Live Room',
+    home: 'Barcelona',
+    away: 'Atletico Madrid',
+    homeLogo: 'https://img.thesports.com/football/team/a3c32d6a906083118cac2cb796edaab3.png',
+    awayLogo: 'https://img.thesports.com/football/team/2fa0840e0cb77fd66f104fa932302a72.png',
+    homeScore: 3,
+    awayScore: 2,
+    statusText: 'FT (Final)',
+    isLive: false,
+    streamUrl: 'https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8',
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  }
+];
+
+function renderCamelMatches() {
+  const container = document.getElementById('camel-matches-list');
+  if (!container) return;
+  container.innerHTML = CAMEL_MATCHES.map(m => {
+    return `
+      <div class="match-card ${m.isLive ? 'is-live' : ''}">
+        <div class="match-header">
+          <div class="match-comp">${m.comp}</div>
+          <div><span class="match-status-badge ${m.isLive ? 'live' : 'scheduled'}">${m.statusText}</span></div>
+        </div>
+
+        <div class="match-teams-row">
+          <div class="team-side">
+            <img src="${m.homeLogo}" class="team-logo" alt="${m.home}" onerror="this.outerHTML='<div class=\\'team-logo-placeholder\\'>${m.home.slice(0,2)}</div>'"/>
+            <span class="team-name">${m.home}</span>
+          </div>
+
+          <div class="score-box">
+            <span class="score-numbers">${m.homeScore} - ${m.awayScore}</span>
+            <span class="score-time">${m.isLive ? 'IN PLAY' : 'Score'}</span>
+          </div>
+
+          <div class="team-side away">
+            <img src="${m.awayLogo}" class="team-logo" alt="${m.away}" onerror="this.outerHTML='<div class=\\'team-logo-placeholder\\'>${m.away.slice(0,2)}</div>'"/>
+            <span class="team-name">${m.away}</span>
+          </div>
+        </div>
+
+        <div class="match-footer" style="gap:8px">
+          <button class="watch-match-btn" style="flex:1" onclick="tuneMatch('${m.home} vs ${m.away}', '${m.streamUrl}', 'trt-1-ucl')">
+            ▶ Watch In-App
+          </button>
+          <a href="${m.camelRoomUrl}" target="_blank" rel="noopener noreferrer" class="cb-open-btn" style="padding:7px 11px;font-size:11px">
+            🌐 Open on Camel1
+          </a>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// TABS & FILTERS
+// ============================================================
 function switchMainTab(tab) {
   state.activeTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
 
   const isMatches = tab === 'matches';
+  const isCamel = tab === 'camel';
+  const isChannels = !isMatches && !isCamel;
+
   document.getElementById('matches-container').style.display = isMatches ? 'flex' : 'none';
   document.getElementById('chips-row').style.display = isMatches ? 'flex' : 'none';
-  document.getElementById('channels-container').style.display = isMatches ? 'none' : 'flex';
+  document.getElementById('camel-container').style.display = isCamel ? 'flex' : 'none';
+  document.getElementById('channels-container').style.display = isChannels ? 'flex' : 'none';
 
   if (isMatches) {
     renderMatches();
+  } else if (isCamel) {
+    renderCamelMatches();
   } else {
     renderChannels();
   }
@@ -1963,6 +2431,106 @@ document.getElementById('refresh-matches-btn').addEventListener('click', () => {
   fetchLiveProgramsAndMatches();
   if (state.currentChannel) updateActiveChannelGuideUI(state.currentChannel);
   renderChannels();
+  if (state.activeTab === 'camel') renderCamelMatches();
+});
+
+// ============================================================
+// VIP DYNAMIC LOGIN SYSTEM (USER: teklish / PASS: tek123)
+// ============================================================
+const AUTH_KEY = 'et_sports_vip';
+const VALID_USER = 'teklish';
+const VALID_PASS = 'tek123';
+
+function checkAuthStatus() {
+  const loginScreen = document.getElementById('login-screen');
+  const userPill = document.getElementById('vip-user-pill');
+  const raw = localStorage.getItem(AUTH_KEY);
+  
+  if (raw) {
+    try {
+      const data = JSON.parse(raw);
+      if (data && data.user === VALID_USER) {
+        loginScreen.classList.add('hidden');
+        userPill.style.display = 'inline-flex';
+        document.getElementById('vip-name-txt').textContent = data.user;
+        return true;
+      }
+    } catch(e) {}
+  }
+  
+  // Not logged in: show dynamic login screen
+  loginScreen.classList.remove('hidden');
+  userPill.style.display = 'none';
+  return false;
+}
+
+function showLoginAlert(msg, type) {
+  const el = document.getElementById('login-alert');
+  el.textContent = msg;
+  el.className = `login-alert ${type}`;
+  el.style.display = 'block';
+}
+
+function togglePasswordVisibility() {
+  const pwdInput = document.getElementById('login-password');
+  const btn = document.getElementById('toggle-pwd-btn');
+  if (pwdInput.type === 'password') {
+    pwdInput.type = 'text';
+    btn.textContent = '🔒';
+  } else {
+    pwdInput.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+function autofillLogin() {
+  document.getElementById('login-username').value = VALID_USER;
+  document.getElementById('login-password').value = VALID_PASS;
+  showLoginAlert('Autofilled: teklish / tek123 — Click Unlock below!', 'success');
+}
+
+document.getElementById('login-hint-chip').addEventListener('click', autofillLogin);
+document.getElementById('toggle-pwd-btn').addEventListener('click', togglePasswordVisibility);
+
+document.getElementById('login-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const u = document.getElementById('login-username').value.trim();
+  const p = document.getElementById('login-password').value.trim();
+
+  if (u.toLowerCase() === VALID_USER.toLowerCase() && p === VALID_PASS) {
+    showLoginAlert('✓ VIP Access Granted! Welcome, teklish 🎉', 'success');
+    localStorage.setItem(AUTH_KEY, JSON.stringify({ user: VALID_USER, loginTime: Date.now() }));
+    
+    setTimeout(() => {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('vip-user-pill').style.display = 'inline-flex';
+      document.getElementById('vip-name-txt').textContent = VALID_USER;
+      showToast('👑 VIP Member: teklish unlocked!');
+      if (state.allChannels.length > 0 && !state.currentChannel) {
+        updateActiveChannelGuideUI(state.allChannels[0]);
+      }
+    }, 600);
+  } else {
+    showLoginAlert('❌ Incorrect credentials! Required: teklish / tek123', 'error');
+  }
+});
+
+// Logout handler
+document.getElementById('vip-logout-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (confirm('Are you sure you want to log out from VIP session teklish?')) {
+    localStorage.removeItem(AUTH_KEY);
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-alert').style.display = 'none';
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('vip-user-pill').style.display = 'none';
+    showToast('Logged out of VIP session');
+  }
+});
+
+document.getElementById('vip-user-pill').addEventListener('click', () => {
+  showToast('👑 Active VIP Member: teklish (FHD Streaming Unlocked)');
 });
 
 // ============================================================
@@ -2026,11 +2594,13 @@ setInterval(() => {
   if (state.activeTab === 'matches') fetchLiveProgramsAndMatches();
   if (state.currentChannel) updateActiveChannelGuideUI(state.currentChannel);
   renderChannels();
+  if (state.activeTab === 'camel') renderCamelMatches();
 }, 60000);
 
 // ============================================================
 // INITIALIZATION
 // ============================================================
+checkAuthStatus();
 loadCustoms();
 fetchLiveProgramsAndMatches();
 renderChannels();
