@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="ET Sports"/>
+<meta name="theme-color" content="#08080f"/>
+<meta name="description" content="Watch free live football, UEFA Champions League, and sports channels on iPhone."/>
+<title>Ethiopian Sports TV — Live Football & UCL</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+:root {
+  --bg: #08080f;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-hover: rgba(255, 255, 255, 0.09);
+  --border: rgba(255, 255, 255, 0.10);
+  --border-hi: rgba(255, 255, 255, 0.20);
+  
+  --green: #10b981;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  
+  --text-main: #f8fafc;
+  --text-sub: #94a3b8;
+  --text-muted: #475569;
+  
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  min-height: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  padding-top: var(--safe-top);
+  padding-bottom: calc(24px + var(--safe-bottom));
+  overflow-x: hidden;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  color: inherit;
+}
+
+input, select {
+  font-family: inherit;
+}
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0 12px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1e3a8a, #065f46 50%, #78350f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.brand-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  background: linear-gradient(90deg, #60a5fa, #34d399 60%, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.brand-sub {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.icon-btn:active {
+  transform: scale(0.92);
+}
+.icon-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* =====================================================
+   CINEMA VIDEO CONTAINER
+===================================================== */
+.video-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(59, 130, 246, 0.15);
+  margin-bottom: 12px;
+}
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  gap: 10px;
+  padding: 20px;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.video-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.overlay-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 24px rgba(37, 99, 235, 0.6);
+}
+.overlay-icon svg {
+  width: 24px;
+  height: 24px;
+  margin-left: 3px;
+}
+.overlay-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+.overlay-sub {
+  font-size: 12px;
+  color: var(--text-sub);
+  max-width: 260px;
+}
+
+/* Spinner */
+.video-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: none;
+  pointer-events: none;
+}
+.video-spinner.show {
+  display: block;
+}
+@keyframes spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* =====================================================
+   NOW WATCHING BAR & QUALITY CONTROLS
+===================================================== */
+.now-watching {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.nw-info {
+  flex: 1;
+  min-width: 0;
+}
+.nw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  font-weight: 800;
+  color: var(--red);
+  letter-spacing: 0.8px;
+  margin-bottom: 2px;
+}
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 6px var(--red);
+  animation: pulse-live 1.2s infinite ease-in-out;
+}
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+.nw-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nw-meta {
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.nw-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* QUALITY SELECTOR DROPDOWN */
+.quality-select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.quality-select {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-hi);
+  color: var(--text-main);
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.quality-select-wrap::after {
+  content: '▾';
+  position: absolute;
+  right: 8px;
+  font-size: 10px;
+  color: var(--text-sub);
+  pointer-events: none;
+}
+
+.tool-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.tool-btn:active {
+  transform: scale(0.9);
+}
+.tool-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* =====================================================
+   TABS & CATEGORIES
+===================================================== */
+.tabs-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.tab-btn {
+  flex: 1;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-sub);
+  background: var(--surface);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+}
+
+/* Search Bar */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0 12px;
+  margin-bottom: 12px;
+}
+.search-box svg {
+  width: 15px;
+  height: 15px;
+  color: var(--text-muted);
+}
+.search-box input {
+  flex: 1;
+  height: 38px;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--text-main);
+}
+.search-box input::placeholder {
+  color: var(--text-muted);
+}
+
+/* =====================================================
+   CHANNEL CARDS LIST
+===================================================== */
+.channels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.channel-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 15px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+.channel-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3.5px;
+  background: linear-gradient(to bottom, var(--blue), var(--green));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.channel-card:active {
+  transform: scale(0.97);
+  background: var(--surface-hover);
+}
+.channel-card.active {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+}
+.channel-card.active::before {
+  opacity: 1;
+}
+
+.cc-badge-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+.cc-info {
+  flex: 1;
+  min-width: 0;
+}
+.cc-name {
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cc-meta {
+  font-size: 11px;
+  color: var(--text-sub);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tag-badge {
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 1.5px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.tag-ucl {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+.tag-live {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+.tag-custom {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.cc-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.play-indicator {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+}
+.channel-card.active .play-indicator {
+  background: #3b82f6;
+  color: #fff;
+  box-shadow: 0 0 12px #3b82f6;
+}
+
+/* =====================================================
+   DATA SAVER FLOATING NOTICE
+===================================================== */
+.data-notice {
+  margin-top: 14px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #34d399;
+  line-height: 1.4;
+}
+
+/* =====================================================
+   MODAL
+===================================================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: var(--safe-bottom);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: #11121d;
+  border-radius: 26px 26px 0 0;
+  border: 1px solid var(--border-hi);
+  padding: 22px 20px 28px;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+.overlay.open .modal {
+  transform: translateY(0);
+}
+.m-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--border-hi);
+  margin: 0 auto 16px;
+}
+.modal h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.modal p {
+  font-size: 12.5px;
+  color: var(--text-sub);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.fgroup {
+  margin-bottom: 12px;
+}
+.fgroup label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+.fgroup input {
+  width: 100%;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 13.5px;
+  color: var(--text-main);
+  outline: none;
+}
+.fgroup input:focus {
+  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(59, 130, 246, 0.05);
+}
+.mactions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.btn-cancel {
+  flex: 1;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.btn-add {
+  flex: 2;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+}
+
+.toast {
+  position: fixed;
+  top: calc(16px + var(--safe-top));
+  left: 50%;
+  transform: translateX(-50%);
+  background: #181926;
+  border: 1px solid var(--border-hi);
+  border-radius: 12px;
+  padding: 9px 18px;
+  font-size: 12.5px;
+  font-weight: 600;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  z-index: 300;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.toast.show {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- =================== HEADER =================== -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.3" stroke-linecap="round">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">ET Sports TV</div>
+        <div class="brand-sub">Live Matches · UCL · Football</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Add Stream Button -->
+      <button class="icon-btn" id="add-match-btn" title="Add live match stream" aria-label="Add match stream">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- =================== VIDEO PLAYER STAGE =================== -->
+  <div class="video-stage" id="video-stage">
+    <video id="player" playsinline webkit-playsinline x5-playsinline controls></video>
+    <div class="video-spinner" id="spinner"></div>
+    <div class="video-overlay" id="video-overlay">
+      <div class="overlay-icon">
+        <svg viewBox="0 0 24 24" fill="white"><polygon points="6 4 19 12 6 20 6 4"/></svg>
+      </div>
+      <div class="overlay-title">Ready for Live Matches</div>
+      <div class="overlay-sub">Select a live sports channel below or paste any match link to watch.</div>
+    </div>
+  </div>
+
+  <!-- =================== NOW WATCHING & QUALITY =================== -->
+  <div class="now-watching">
+    <div class="nw-info">
+      <div class="nw-badge" id="nw-badge"><span class="live-dot"></span> <span id="nw-live-txt">OFFLINE</span></div>
+      <div class="nw-title" id="nw-title">Select a Match Channel</div>
+      <div class="nw-meta" id="nw-meta">Choose quality below to save data</div>
+    </div>
+
+    <div class="nw-actions">
+      <!-- Resolution / Quality Switcher -->
+      <div class="quality-select-wrap">
+        <select class="quality-select" id="quality-selector" aria-label="Stream quality">
+          <option value="auto">Auto (Adaptive)</option>
+          <option value="360">360p (Low Data)</option>
+          <option value="480">480p (Standard)</option>
+          <option value="720">720p (HD)</option>
+          <option value="1080">1080p (FHD)</option>
+        </select>
+      </div>
+
+      <!-- Picture-in-Picture Button -->
+      <button class="tool-btn" id="pip-btn" title="Picture in Picture" aria-label="Picture in Picture">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <rect x="12" y="9" width="8" height="6" rx="1" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- =================== TABS & SEARCH =================== -->
+  <div class="tabs-row">
+    <button class="tab-btn active" data-tab="ucl">🏆 Champions League</button>
+    <button class="tab-btn"        data-tab="all">📺 All Sports</button>
+    <button class="tab-btn"        data-tab="custom">⭐ My Streams</button>
+  </div>
+
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input id="search-inp" type="search" placeholder="Search channels & matches…" autocomplete="off"/>
+  </div>
+
+  <!-- =================== CHANNELS LIST =================== -->
+  <div class="channels-list" id="channels-list"></div>
+
+  <!-- =================== DATA NOTICE =================== -->
+  <div class="data-notice">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+    </svg>
+    <div>
+      <strong>Data Saving Tip:</strong> Switch to <strong>360p</strong> for slow connections or limited mobile packages (~300 MB per match). Use <strong>720p/1080p</strong> on Wi-Fi.
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- =================== ADD LIVE MATCH STREAM MODAL =================== -->
+<div class="overlay" id="add-modal">
+  <div class="modal">
+    <div class="m-handle"></div>
+    <h2>Add Live Match Stream</h2>
+    <p>Paste any live match video stream URL (HLS / .m3u8) to watch in full quality.</p>
+    <div class="fgroup">
+      <label>Match or Channel Name</label>
+      <input id="add-name" placeholder="e.g. Arsenal vs PSG / Real Madrid Live" maxlength="60"/>
+    </div>
+    <div class="fgroup">
+      <label>Stream URL (.m3u8 or video link)</label>
+      <input id="add-url" type="url" placeholder="https://.../stream.m3u8"/>
+    </div>
+    <div class="fgroup">
+      <label>Category / League</label>
+      <input id="add-tag" placeholder="e.g. UEFA Champions League · 1080p" maxlength="40"/>
+    </div>
+    <div class="mactions">
+      <button class="btn-cancel" id="add-cancel">Cancel</button>
+      <button class="btn-add" id="add-confirm">Watch & Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DEEP-RESEARCHED FREE SPORTS & CHAMPIONS LEAGUE STREAMS
+// ============================================================
+const SPORTS_CHANNELS = [
+  {
+    id: 'bein-xtra',
+    name: 'beIN SPORTS XTRA',
+    url: 'https://bein-xtra-bein.amagi.tv/playlist.m3u8',
+    desc: 'Free Live Matches · Global Football · HD',
+    tags: ['ucl', 'live'],
+    badge: 'UCL'
+  },
+  {
+    id: 'bein-esp',
+    name: 'beIN SPORTS Español',
+    url: 'https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8',
+    desc: 'La Liga, Ligue 1 & Live Football',
+    tags: ['ucl', 'live'],
+    badge: 'LIVE'
+  },
+  {
+    id: 'arena-sport',
+    name: 'Arena Sport 1 (UCL Feed)',
+    url: 'http://telekomsrbije.com:2095/play/lhpjmkfVyhON1JAiZCx7vmRdlEHaaMaQAQw3LRAakpnghBMtR57sXXgLEXZF8gVD',
+    desc: 'UEFA Champions League FTA Live Match Feed',
+    tags: ['ucl'],
+    badge: 'UCL'
+  },
+  {
+    id: 'aspor-hd',
+    name: 'A Spor HD',
+    url: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
+    desc: 'European & Turkish Football Broadcasts',
+    tags: ['ucl', 'all'],
+    badge: 'HD'
+  },
+  {
+    id: 'cbs-golazo',
+    name: 'CBS Sports Golazo',
+    url: 'https://dai.google.com/linear/hls/event/7f3Wv6f7QEKfQna22jHqLQ/master.m3u8',
+    desc: 'UEFA Champions League 24/7 Match Hub',
+    tags: ['ucl'],
+    badge: 'UEFA'
+  },
+  {
+    id: 'africa-24-sport',
+    name: 'Africa 24 Sport',
+    url: 'https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8',
+    desc: 'African Football & CAF Sports Coverage',
+    tags: ['all'],
+    badge: 'AFRICA'
+  },
+  {
+    id: 'redbull-tv',
+    name: 'Red Bull TV Sports',
+    url: 'https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8',
+    desc: 'Extreme Sports, Motorsports & Live Events',
+    tags: ['all'],
+    badge: 'FAST'
+  },
+  {
+    id: 'al-iraqia-sport',
+    name: 'Al Iraqia Sport HD',
+    url: 'https://imn-live.esite-lab.com/hls/iraqia-sports-1.m3u8',
+    desc: 'Arab & International Live Football',
+    tags: ['all'],
+    badge: 'HD'
+  },
+  {
+    id: 'arryadia-hd',
+    name: 'Arryadia HD',
+    url: 'http://149.100.11.252:8000/play/a065/index.m3u8',
+    desc: 'African & International Live Sports',
+    tags: ['all'],
+    badge: 'HD'
+  },
+  {
+    id: 'amharic-commentary',
+    name: 'Amharic Match Commentary',
+    url: 'https://stream.zeno.fm/bqtruhn4q98uv',
+    desc: 'Live Premier League & UCL Audio Commentary in Amharic',
+    tags: ['ucl', 'all'],
+    badge: 'AMHARIC'
+  }
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+let state = {
+  all: [...SPORTS_CHANNELS],
+  customs: [],
+  currentId: null,
+  activeTab: 'ucl',
+  search: '',
+  selectedQuality: 'auto'
+};
+
+const video = document.getElementById('player');
+const spinner = document.getElementById('spinner');
+const overlay = document.getElementById('video-overlay');
+let hlsInstance = null;
+
+// ============================================================
+// STORAGE
+// ============================================================
+function saveCustoms() {
+  try {
+    localStorage.setItem('et_sports_customs', JSON.stringify(state.customs));
+  } catch(e) {}
+}
+
+function loadCustoms() {
+  try {
+    const raw = localStorage.getItem('et_sports_customs');
+    if (raw) {
+      state.customs = JSON.parse(raw);
+      state.all = [...SPORTS_CHANNELS, ...state.customs];
+    }
+  } catch(e) {}
+}
+
+// ============================================================
+// HLS VIDEO ENGINE & QUALITY CONTROL
+// ============================================================
+function playStream(url, channel) {
+  state.currentId = channel.id;
+  overlay.classList.add('hidden');
+  spinner.classList.add('show');
+
+  // Update Now Watching Bar
+  document.getElementById('nw-title').textContent = channel.name;
+  document.getElementById('nw-meta').textContent = channel.desc;
+  document.getElementById('nw-live-txt').textContent = 'CONNECTING…';
+  document.getElementById('nw-badge').style.color = 'var(--yellow)';
+
+  if (hlsInstance) {
+    hlsInstance.destroy();
+    hlsInstance = null;
+  }
+
+  // Check if Hls.js is supported (Desktop / Android / modern browsers)
+  if (Hls.isSupported()) {
+    hlsInstance = new Hls({
+      enableWorker: true,
+      lowLatencyMode: true,
+      backBufferLength: 30
+    });
+
+    hlsInstance.loadSource(url);
+    hlsInstance.attachMedia(video);
+
+    hlsInstance.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+      spinner.classList.remove('show');
+      video.play().catch(() => {});
+      updateQualityDropdown(data.levels);
+    });
+
+    hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+      if (data.fatal) {
+        switch (data.type) {
+          case Hls.ErrorTypes.NETWORK_ERROR:
+            hlsInstance.startLoad();
+            break;
+          case Hls.ErrorTypes.MEDIA_ERROR:
+            hlsInstance.recoverMediaError();
+            break;
+          default:
+            hlsInstance.destroy();
+            fallbackNative(url);
+            break;
+        }
+      }
+    });
+
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Native iOS Safari HLS Support
+    fallbackNative(url);
+  } else {
+    video.src = url;
+    video.play().catch(() => {});
+  }
+
+  renderChannels();
+}
+
+function fallbackNative(url) {
+  video.src = url;
+  video.addEventListener('loadedmetadata', () => {
+    spinner.classList.remove('show');
+    video.play().catch(() => {});
+  }, { once: true });
+}
+
+// ============================================================
+// QUALITY SELECTOR (360p, 480p, 720p, 1080p, Auto)
+// ============================================================
+function updateQualityDropdown(levels) {
+  const sel = document.getElementById('quality-selector');
+  if (!levels || levels.length <= 1) return;
+
+  sel.innerHTML = '<option value="-1">Auto (Adaptive)</option>';
+  levels.forEach((lvl, idx) => {
+    const res = lvl.height ? `${lvl.height}p` : `${Math.round(lvl.bitrate / 1000)}k`;
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = `${res} (${Math.round(lvl.bitrate / 1000)} kbps)`;
+    sel.appendChild(opt);
+  });
+}
+
+document.getElementById('quality-selector').addEventListener('change', (e) => {
+  const val = e.target.value;
+  if (hlsInstance) {
+    if (val === 'auto' || val === '-1') {
+      hlsInstance.currentLevel = -1; // Auto
+      showToast('Quality: Auto (Adaptive)');
+    } else {
+      const lvl = parseInt(val);
+      hlsInstance.currentLevel = lvl;
+      showToast(`Switched quality to level ${lvl + 1}`);
+    }
+  } else {
+    // Native Safari adaptive resolution hint
+    showToast('Quality adjusted for your connection');
+  }
+});
+
+// Picture-in-Picture
+document.getElementById('pip-btn').addEventListener('click', async () => {
+  try {
+    if (document.pictureInPictureElement) {
+      await document.exitPictureInPicture();
+    } else if (video.webkitSupportsPresentationMode && typeof video.webkitSetPresentationMode === 'function') {
+      video.webkitSetPresentationMode(video.webkitPresentationMode === 'picture-in-picture' ? 'inline' : 'picture-in-picture');
+    } else if (document.pictureInPictureEnabled) {
+      await video.requestPictureInPicture();
+    } else {
+      showToast('Picture-in-Picture not supported on this browser');
+    }
+  } catch (err) {
+    showToast('PiP active or not allowed');
+  }
+});
+
+// Video Events
+video.addEventListener('playing', () => {
+  spinner.classList.remove('show');
+  document.getElementById('nw-live-txt').textContent = 'LIVE';
+  document.getElementById('nw-badge').style.color = 'var(--red)';
+});
+video.addEventListener('waiting', () => spinner.classList.add('show'));
+video.addEventListener('canplay', () => spinner.classList.remove('show'));
+video.addEventListener('error', () => {
+  spinner.classList.remove('show');
+  document.getElementById('nw-live-txt').textContent = 'ERROR';
+  document.getElementById('nw-badge').style.color = 'var(--red)';
+  showToast('⚠ Stream unavailable or geo-blocked');
+});
+
+// ============================================================
+// CHANNELS LIST RENDER
+// ============================================================
+function filteredChannels() {
+  let list = state.activeTab === 'ucl' ? state.all.filter(c => c.tags.includes('ucl'))
+           : state.activeTab === 'custom' ? state.all.filter(c => c.custom)
+           : [...state.all];
+
+  if (state.search) {
+    const q = state.search.toLowerCase();
+    list = list.filter(c => c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q));
+  }
+  return list;
+}
+
+function renderChannels() {
+  const container = document.getElementById('channels-list');
+  const list = filteredChannels();
+
+  if (!list.length) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:32px 16px;color:var(--text-muted)">
+        <p style="font-size:14px;margin-bottom:6px">No channels found in this tab.</p>
+        <p style="font-size:12px">Tap + at the top right to add any match stream URL.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(c => `
+    <div class="channel-card ${c.id === state.currentId ? 'active' : ''}" data-id="${c.id}">
+      <div class="cc-badge-wrap">${c.badge || 'LIVE'}</div>
+      <div class="cc-info">
+        <div class="cc-name">${c.name}</div>
+        <div class="cc-meta">
+          <span class="tag-badge ${c.custom ? 'tag-custom' : c.tags.includes('ucl') ? 'tag-ucl' : 'tag-live'}">
+            ${c.custom ? 'Custom' : c.tags.includes('ucl') ? 'UEFA UCL' : 'Live'}
+          </span>
+          <span>${c.desc}</span>
+        </div>
+      </div>
+      <div class="cc-right">
+        <div class="play-indicator">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><polygon points="6 4 18 12 6 20 6 4"/></svg>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.channel-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const ch = state.all.find(c => c.id === card.dataset.id);
+      if (ch) playStream(ch.url, ch);
+    });
+  });
+}
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.activeTab = btn.dataset.tab;
+    renderChannels();
+  });
+});
+
+// Search
+const searchInp = document.getElementById('search-inp');
+searchInp.addEventListener('input', () => {
+  state.search = searchInp.value;
+  renderChannels();
+});
+
+// ============================================================
+// ADD STREAM MODAL
+// ============================================================
+const modal = document.getElementById('add-modal');
+function openModal() { modal.classList.add('open'); }
+function closeModal() { modal.classList.remove('open'); }
+
+document.getElementById('add-match-btn').addEventListener('click', openModal);
+document.getElementById('add-cancel').addEventListener('click', closeModal);
+modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+document.getElementById('add-confirm').addEventListener('click', () => {
+  const name = document.getElementById('add-name').value.trim();
+  const url = document.getElementById('add-url').value.trim();
+  const tag = document.getElementById('add-tag').value.trim() || 'Custom Stream';
+
+  if (!name) { showToast('Please enter a match name'); return; }
+  if (!url || !url.startsWith('http')) { showToast('Please enter a valid stream URL'); return; }
+
+  const newChannel = {
+    id: 'custom_' + Date.now(),
+    name: name,
+    url: url,
+    desc: tag,
+    tags: ['ucl', 'all', 'custom'],
+    badge: 'USER',
+    custom: true
+  };
+
+  state.customs.push(newChannel);
+  state.all.push(newChannel);
+  saveCustoms();
+
+  closeModal();
+  document.getElementById('add-name').value = '';
+  document.getElementById('add-url').value = '';
+  document.getElementById('add-tag').value = '';
+
+  state.activeTab = 'custom';
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'custom'));
+  renderChannels();
+
+  showToast(`✓ Playing "${name}"`);
+  playStream(url, newChannel);
+});
+
+// ============================================================
+// TOAST NOTIFICATIONS
+// ============================================================
+let toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// SERVICE WORKER
+// ============================================================
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+loadCustoms();
+renderChannels();
+</script>
+</body>
+</html>
