@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="ET Sports"/>
 <meta name="theme-color" content="#08080f"/>
-<meta name="description" content="Watch live football matches, UEFA Champions League, and TV channels with live guide."/>
+<meta name="description" content="Watch live football matches, UEFA Champions League, and live TV channels with 24h updated program guide."/>
 <title>ET Sports TV — Live Football & UCL Matches</title>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
@@ -252,7 +252,7 @@ video {
 }
 
 /* =====================================================
-   NOW WATCHING BAR & QUALITY CONTROLS
+   NOW WATCHING BAR
 ===================================================== */
 .now-watching {
   display: flex;
@@ -262,7 +262,7 @@ video {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 10px 14px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .nw-info {
   flex: 1;
@@ -358,6 +358,236 @@ video {
 }
 
 /* =====================================================
+   ACTIVE CHANNEL LIVE PROGRAM GUIDE (POPUP CARD)
+===================================================== */
+.active-guide-card {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(16, 185, 129, 0.08));
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+.ag-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.ag-live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--green);
+  letter-spacing: 0.8px;
+}
+.live-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse-live 1.2s infinite ease-in-out;
+}
+.ag-toggle-btn {
+  font-size: 11px;
+  font-weight: 700;
+  color: #60a5fa;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.2s;
+}
+.ag-toggle-btn:active {
+  transform: scale(0.93);
+}
+.ag-current-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 3px;
+}
+.ag-current-time-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+}
+.ag-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.ag-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+.ag-desc {
+  font-size: 11px;
+  color: var(--text-sub);
+  line-height: 1.4;
+}
+.ag-full-schedule {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+}
+.ag-schedule-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #60a5fa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.ag-timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.ag-timeline-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 11px;
+  transition: all 0.2s;
+}
+.ag-timeline-item.active-slot {
+  background: rgba(16, 185, 129, 0.16);
+  border-color: rgba(16, 185, 129, 0.45);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.15);
+}
+.ag-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.ag-item-time {
+  font-weight: 800;
+  color: var(--text-sub);
+  font-size: 10.5px;
+}
+.ag-timeline-item.active-slot .ag-item-time {
+  color: #34d399;
+}
+.ag-item-title {
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+.ag-item-desc {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+.ag-item-badge {
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 5px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.ag-item-badge.live {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ag-item-badge.ended {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+.ag-item-badge.upcoming {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+/* Inline Channel Card Program Schedule */
+.cc-sched-btn {
+  margin-top: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #60a5fa;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cc-sched-btn:hover {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+.cc-inline-schedule {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.cc-inline-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px 6px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.cc-inline-item.is-now {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.cc-inline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cc-inline-time {
+  font-weight: 700;
+  color: var(--text-sub);
+}
+.cc-inline-item.is-now .cc-inline-time {
+  color: #34d399;
+}
+.cc-inline-title {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* =====================================================
    MAIN NAVIGATION TABS
 ===================================================== */
 .tabs-row {
@@ -412,7 +642,7 @@ video {
 }
 
 /* =====================================================
-   LIVE MATCH FIXTURES CARDS (ESPN LIVE PROGRAM GUIDE)
+   LIVE MATCH FIXTURES CARDS
 ===================================================== */
 .match-section {
   display: flex;
@@ -563,7 +793,7 @@ video {
 }
 
 /* =====================================================
-   CHANNEL CARDS WITH ELECTRONIC PROGRAM GUIDE (EPG)
+   CHANNEL CARDS WITH LIVE ELECTRONIC PROGRAM GUIDE (EPG)
 ===================================================== */
 .channels-list {
   display: flex;
@@ -573,7 +803,7 @@ video {
 .channel-card {
   display: flex;
   flex-direction: column;
-  padding: 11px 13px;
+  padding: 12px 14px;
   border-radius: 15px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -602,16 +832,16 @@ video {
   min-width: 0;
 }
 .cc-badge-wrap {
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
   border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Outfit', sans-serif;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 900;
   flex-shrink: 0;
 }
@@ -620,20 +850,20 @@ video {
   min-width: 0;
 }
 .cc-name {
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .cc-genre {
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--text-muted);
 }
 .play-indicator-pill {
   font-size: 10px;
   font-weight: 800;
-  padding: 3px 8px;
+  padding: 4px 9px;
   border-radius: 6px;
   background: rgba(59, 130, 246, 0.2);
   color: #60a5fa;
@@ -645,16 +875,16 @@ video {
 
 /* EPG LIVE GUIDE SECTION INSIDE CHANNEL */
 .cc-epg {
-  margin-top: 8px;
-  padding-top: 8px;
+  margin-top: 9px;
+  padding-top: 9px;
   border-top: 1px dashed rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
 }
 .epg-now {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   color: #34d399;
   display: flex;
   align-items: center;
@@ -884,6 +1114,35 @@ video {
     </div>
   </div>
 
+  <!-- =================== ACTIVE CHANNEL LIVE PROGRAM GUIDE (POPUP CARD) =================== -->
+  <div class="active-guide-card" id="active-guide-card" style="display:none">
+    <div class="ag-header">
+      <div class="ag-live-indicator">
+        <span class="live-pulse-dot"></span>
+        <span id="ag-channel-name">CURRENTLY STREAMING LIVE</span>
+      </div>
+      <button class="ag-toggle-btn" id="ag-toggle-btn">View 24h Schedule ▾</button>
+    </div>
+    
+    <div class="ag-body">
+      <div class="ag-current-title" id="ag-now-title">UEFA Champions League Live</div>
+      <div class="ag-current-time-row">
+        <span class="ag-time-slot" id="ag-now-slot">20:45 – 23:00 EAT</span>
+        <span class="ag-progress-txt" id="ag-now-progress-txt">Live Broadcast</span>
+      </div>
+      <div class="ag-progress-bar">
+        <div class="ag-progress-fill" id="ag-progress-fill" style="width: 50%"></div>
+      </div>
+      <div class="ag-desc" id="ag-now-desc">Full live match broadcast with tactical setup, live commentary, and real-time match events.</div>
+    </div>
+
+    <!-- Collapsible 24h schedule drawer -->
+    <div class="ag-full-schedule" id="ag-full-schedule" style="display:none">
+      <div class="ag-schedule-title">📅 Today's 24-Hour Broadcast Lineup</div>
+      <div class="ag-timeline-list" id="ag-timeline-list"></div>
+    </div>
+  </div>
+
   <!-- =================== TABS =================== -->
   <div class="tabs-row">
     <button class="tab-btn active" data-tab="matches">⚽ Match Center</button>
@@ -937,8 +1196,20 @@ video {
 
 <script>
 // ============================================================
-// CHANNELS WITH LIVE EPG PROGRAM GUIDE
+// COMPREHENSIVE 24-HOUR EPG SCHEDULES FOR ALL CHANNELS
 // ============================================================
+const DEFAULT_24H_LINEUP = [
+  { start: 0,  end: 3,  title: 'Match of the Day: Complete Replay', desc: 'Full extended replay of the biggest European match with original commentary.' },
+  { start: 3,  end: 6,  title: 'UEFA Champions League Vault & Classic Finals', desc: 'Legendary historical matches, memorable goals, and historic finals.' },
+  { start: 6,  end: 9,  title: 'Morning Sports Breakfast: Global Headlines', desc: 'Breaking football news, manager press conferences, and transfer talk.' },
+  { start: 9,  end: 12, title: 'European League Magazine: Tactical Setup', desc: 'In-depth tactical breakdowns, team news, and expected starting lineups.' },
+  { start: 12, end: 15, title: 'Matchday Live Studio: Pitchside Countdown', desc: 'Live from the stadium: pitch inspections, warmups, and pre-match interviews.' },
+  { start: 15, end: 18, title: '🔴 Live Football Match: Afternoon Block', desc: 'Live uninterrupted coverage of today\'s European League action.' },
+  { start: 18, end: 20, title: 'Post-Match Analysis & Manager Reactions', desc: 'Post-game reaction, key moments, VAR debates, and tactical masterclass.' },
+  { start: 20, end: 23, title: '🔴 UEFA Champions League Prime Time Live', desc: 'Prime European Champions League football live in HD with expert analysis.' },
+  { start: 23, end: 24, title: 'The Late Goals Show: Complete Review', desc: 'All goals, every angle, updated standings, and tomorrow\'s preview.' }
+];
+
 const SPORTS_CHANNELS = [
   {
     id: 'bein-xtra',
@@ -947,8 +1218,17 @@ const SPORTS_CHANNELS = [
     genre: 'Live International Football',
     badge: 'UCL',
     tags: ['ucl', 'live'],
-    epgNow: 'Live Matchday: Top European Football',
-    epgNext: 'Post-Match Analysis & Goals Show'
+    schedule: [
+      { start: 0,  end: 3,  title: 'beIN Match Replay: European Classic', desc: 'Full 90 minutes replay with expert commentary.' },
+      { start: 3,  end: 6,  title: 'Ligue 1 & La Liga Best Goals', desc: 'Top 50 goals of the month and goalkeeper saves.' },
+      { start: 6,  end: 9,  title: 'beIN Morning Sports Center', desc: 'Worldwide sports news, team interviews, and training camp reports.' },
+      { start: 9,  end: 12, title: 'The Champions League Magazine', desc: 'Previewing this week\'s biggest UEFA clashes.' },
+      { start: 12, end: 15, title: 'Live Matchday Studio: Team News', desc: 'Confirmed starting XI and pitch conditions.' },
+      { start: 15, end: 18, title: '🔴 Live Match: European Action', desc: 'Live match feed with tactical camera.' },
+      { start: 18, end: 20, title: 'beIN Special: Player of the Week', desc: 'Exclusive interview and deep dive analysis.' },
+      { start: 20, end: 23, title: '🔴 UEFA Champions League Prime Match', desc: 'Live marquee UCL clash with world-class commentary.' },
+      { start: 23, end: 24, title: 'The Extra Goals Show', desc: 'Comprehensive highlights from every pitch tonight.' }
+    ]
   },
   {
     id: 'bein-esp',
@@ -957,8 +1237,17 @@ const SPORTS_CHANNELS = [
     genre: 'Spanish Football Coverage',
     badge: 'LIVE',
     tags: ['ucl', 'live'],
-    epgNow: 'Futbol en Vivo: Partido de la Semana',
-    epgNext: 'Resumen de Goles & Entrevistas'
+    schedule: [
+      { start: 0,  end: 3,  title: 'La Liga: Lo Mejor de la Jornada', desc: 'Resumen completo de la fecha con comentarios en español.' },
+      { start: 3,  end: 6,  title: 'Goles Legendarios de Europa', desc: 'Los mejores goles de la historia de la Champions League.' },
+      { start: 6,  end: 9,  title: 'Titulares de la Mañana y Entrevistas', desc: 'Noticias de Real Madrid, Barcelona y clubes europeos.' },
+      { start: 9,  end: 12, title: 'La Previa Europea: Táctica y Once', desc: 'Alineaciones confirmadas y debate táctico.' },
+      { start: 12, end: 15, title: '🔴 Futbol en Vivo: Partido de la Tarde', desc: 'Transmisión en directo del encuentro europeo.' },
+      { start: 15, end: 18, title: 'El Gran Debate: Resumen y VAR', desc: 'Análisis jugada por jugada con el panel de expertos.' },
+      { start: 18, end: 20, title: 'Noche de Campeones: Especial UCL', desc: 'La previa completa de la noche europea.' },
+      { start: 20, end: 23, title: '🔴 Champions League en Vivo: Partido Estelar', desc: 'Transmisión estelar del partido de Champions.' },
+      { start: 23, end: 24, title: 'Resumen Total de Goles y Clasificación', desc: 'Todos los goles de la noche al instante.' }
+    ]
   },
   {
     id: 'arena-sport',
@@ -967,18 +1256,17 @@ const SPORTS_CHANNELS = [
     genre: 'UEFA Champions League FTA Live',
     badge: 'UCL',
     tags: ['ucl'],
-    epgNow: 'UEFA Champions League Live Coverage',
-    epgNext: 'Champions Club Highlights Studio'
-  },
-  {
-    id: 'aspor-hd',
-    name: 'A Spor HD',
-    url: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
-    genre: 'European & Turkish Football',
-    badge: 'HD',
-    tags: ['ucl', 'all'],
-    epgNow: 'Avrupa Futbolu: Canlı Yayın',
-    epgNext: 'Spor Bülteni & Maç Özetleri'
+    schedule: [
+      { start: 0,  end: 3,  title: 'UEFA Champions League Full Match', desc: 'Replay of today\'s top Champions League fixture.' },
+      { start: 3,  end: 6,  title: 'Arena Football Vault: Classic Finals', desc: 'Historic European championship matches.' },
+      { start: 6,  end: 9,  title: 'Arena Sport Morning Live Studio', desc: 'Sports news, daily schedule, and match preview.' },
+      { start: 9,  end: 12, title: 'Champions League Tactical Masterclass', desc: 'Coaching breakdowns and player heatmaps.' },
+      { start: 12, end: 15, title: 'Arena Live: Stadium Reporter', desc: 'Direct live link from European stadiums.' },
+      { start: 15, end: 18, title: '🔴 UEFA Champions League Live Early Match', desc: 'Live early kickoff match broadcast.' },
+      { start: 18, end: 20, title: 'Arena Studio: Pundits & Lineups', desc: 'Pre-game analysis and expert predictions.' },
+      { start: 20, end: 23, title: '🔴 UEFA Champions League Main Event Live', desc: 'Top live European match broadcast.' },
+      { start: 23, end: 24, title: 'Arena Champions Club: Complete Highlights', desc: 'Post-match press conferences and goals.' }
+    ]
   },
   {
     id: 'cbs-golazo',
@@ -987,8 +1275,36 @@ const SPORTS_CHANNELS = [
     genre: 'UEFA Champions League 24/7 Hub',
     badge: 'UEFA',
     tags: ['ucl'],
-    epgNow: 'Champions League Today: Tactical Cam',
-    epgNext: 'The Golazo Show & Highlights'
+    schedule: [
+      { start: 0,  end: 3,  title: 'The Golazo Show: Replay & Highlights', desc: 'Whip-around goal recap from every stadium.' },
+      { start: 3,  end: 6,  title: 'European Nights: Tactical Cam', desc: 'Unedited tactical overhead coverage of top matches.' },
+      { start: 6,  end: 9,  title: 'Morning Footy: European News', desc: 'Morning football show with daily updates and analysis.' },
+      { start: 9,  end: 12, title: 'Box 2 Box: Transfer Insider', desc: 'Global soccer stories and international player scouting.' },
+      { start: 12, end: 15, title: 'Champions League Today: Kate & Micah', desc: 'Studio pre-match entertainment with Thierry Henry and Jamie Carragher.' },
+      { start: 15, end: 18, title: '🔴 The Golazo Show: Multi-Match Live', desc: 'Live every goal as it happens across Europe.' },
+      { start: 18, end: 20, title: 'Post-Match Champions League Show', desc: 'Live locker room interviews and manager debriefs.' },
+      { start: 20, end: 23, title: '🔴 Live Match Broadcast: Champions Night', desc: 'Prime live UEFA matchday game.' },
+      { start: 23, end: 24, title: 'Late Night Golazo Recap', desc: 'Final scores, statistics, and round summary.' }
+    ]
+  },
+  {
+    id: 'aspor-hd',
+    name: 'A Spor HD',
+    url: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
+    genre: 'European & Turkish Football',
+    badge: 'HD',
+    tags: ['ucl', 'all'],
+    schedule: [
+      { start: 0,  end: 3,  title: 'Avrupa Futbolu Özetleri ve Goller', desc: 'Günün tüm karşılaşmalarının geniş özeti.' },
+      { start: 3,  end: 6,  title: 'Unutulmaz Şampiyonlar Ligi Maçları', desc: 'Tarihe geçen tarihi Avrupa finalleri.' },
+      { start: 6,  end: 9,  title: 'Sabah Sporu: Son Dakika Gelişmeleri', desc: 'Güncel spor bülteni ve transfer kulisleri.' },
+      { start: 9,  end: 12, title: 'Takım Raporu: İddaa ve Taktik Analiz', desc: 'Uzman yorumcular ile kadro değerlendirmesi.' },
+      { start: 12, end: 15, title: 'Gün Ortası Canlı Spor Bülteni', desc: 'Günün spor olayları canlı bağlantılarla ekranda.' },
+      { start: 15, end: 18, title: '🔴 Canlı Futbol Karşılaşması', desc: 'Avrupa sahalarından canlı maç yayını.' },
+      { start: 18, end: 20, title: 'Şampiyonlar Ligi Özel Canlı Stüdyo', desc: 'Dev maç öncesi muhtemel 11\'ler ve canlı yayın.' },
+      { start: 20, end: 23, title: '🔴 UEFA Şampiyonlar Ligi Canlı Maç', desc: 'Avrupa\'nın en büyük sahnesinde canlı maç keyfi.' },
+      { start: 23, end: 24, title: 'Maçın Ardından: Tüm Goller ve Yorumlar', desc: 'Maç sonu teknik direktör açıklamaları.' }
+    ]
   },
   {
     id: 'africa-24-sport',
@@ -997,8 +1313,15 @@ const SPORTS_CHANNELS = [
     genre: 'African Football & CAF Sports',
     badge: 'AFRICA',
     tags: ['all'],
-    epgNow: 'Foot Afrique: Direct et Mag',
-    epgNext: 'Journal des Sports d\'Afrique'
+    schedule: [
+      { start: 0,  end: 4,  title: 'Nuit des Champions Africains', desc: 'Les plus grands moments du football africain.' },
+      { start: 4,  end: 8,  title: 'Magazine CAF: Buts et Débriefs', desc: 'Résumés complets des compétitions interclubs.' },
+      { start: 8,  end: 12, title: 'Journal des Sports d\'Afrique', desc: 'Toute l\'actualité sportive du continent en direct.' },
+      { start: 12, end: 15, title: '🔴 Direct Match: Championnat Africain', desc: 'Diffusion en direct du match de l\'après-midi.' },
+      { start: 15, end: 18, title: 'Le Club des Experts du Football', desc: 'Débat passionné avec nos consultants internationaux.' },
+      { start: 18, end: 21, title: 'Grand Format: Les Stars Africaines en Europe', desc: 'Focus sur les joueurs africains en Champions League.' },
+      { start: 21, end: 24, title: '🔴 Match du Soir et Magazine Récapitulatif', desc: 'Direct live et synthèse complète de la journée.' }
+    ]
   },
   {
     id: 'redbull-tv',
@@ -1007,8 +1330,12 @@ const SPORTS_CHANNELS = [
     genre: 'Live Extreme Sports & Football',
     badge: 'FAST',
     tags: ['all'],
-    epgNow: 'Red Bull Live World Tour',
-    epgNext: 'Best of Football Skills & Freestyling'
+    schedule: [
+      { start: 0,  end: 6,  title: 'Red Bull Extreme Sports World Tour', desc: 'High-adrenaline sports action and downhill racing.' },
+      { start: 6,  end: 12, title: 'Best of Street Soccer & Freestyle Skills', desc: 'World championship street football and freestyle tricks.' },
+      { start: 12, end: 18, title: '🔴 Live Red Bull Arena Event Broadcast', desc: 'Live event streaming from international venues.' },
+      { start: 18, end: 24, title: 'Motorsports & Extreme Athletes Documentary', desc: 'Inside the lives of world champion athletes.' }
+    ]
   },
   {
     id: 'al-iraqia-sport',
@@ -1017,8 +1344,13 @@ const SPORTS_CHANNELS = [
     genre: 'Arab & International Football',
     badge: 'HD',
     tags: ['all'],
-    epgNow: 'مباريات مباشرة واستوديو تحليلي',
-    epgNext: 'نشرة الأخبار الرياضية العالمية'
+    schedule: [
+      { start: 0,  end: 6,  title: 'إعادة أبرز مباريات الدوري والبطولات القارية', desc: 'تسجيل كامل لمباريات اليوم مع نخبة المعلقين.' },
+      { start: 6,  end: 12, title: 'الاستوديو الرياضي الصباحي وأخبار الكرة', desc: 'جولة شاملة في الصحف الرياضية وأحدث التقارير.' },
+      { start: 12, end: 16, title: '🔴 بث مباشر: مباراة اليوم الكروية', desc: 'تغطية حية ومباشرة مع استوديو تحليلي متميز.' },
+      { start: 16, end: 20, title: 'تحليل تكتيكي ومؤتمرات المدربين الصحفية', desc: 'قراءة فنية دقيقة لخطط اللعب والتبديلات.' },
+      { start: 20, end: 24, title: '🔴 سهرة كروية مباشرة وملخص الأهداف', desc: 'متابعة حية للمباريات المسائية وأهداف الجولة.' }
+    ]
   },
   {
     id: 'arryadia-hd',
@@ -1027,8 +1359,13 @@ const SPORTS_CHANNELS = [
     genre: 'Morocco & African Sports',
     badge: 'HD',
     tags: ['all'],
-    epgNow: 'البطولة الاحترافية والمنافسات القارية',
-    epgNext: 'حصيلة الجولة الرياضية'
+    schedule: [
+      { start: 0,  end: 6,  title: 'أرشيف الكرة المغربية والنهائيات الكبرى', desc: 'مباريات تاريخية ولحظات التتويج الخالدة.' },
+      { start: 6,  end: 12, title: 'أخبار الصباح والتحضيرات للمباريات', desc: 'تغطية حصرية لتدريبات الأندية والمنتخبات.' },
+      { start: 12, end: 16, title: '🔴 نقل مباشر: مباريات البطولة الاحترافية', desc: 'بث مباشر عالي الجودة مع استوديو تحليلي.' },
+      { start: 16, end: 20, title: 'صدى الملاعب وحوارات حصرية مع النجوم', desc: 'لقاءات خاصة من قلب المستطيل الأخضر.' },
+      { start: 20, end: 24, title: '🔴 النقل المباشر للمباراة المسائية الكبرى', desc: 'المباراة الأبرز في السهرة الكروية مع رصد الأهداف.' }
+    ]
   },
   {
     id: 'amharic-commentary',
@@ -1037,8 +1374,13 @@ const SPORTS_CHANNELS = [
     genre: 'Live Commentary in Amharic',
     badge: 'AMHARIC',
     tags: ['ucl', 'all'],
-    epgNow: 'የሻምፒዮንስ ሊግ እና ፕሪሚየር ሊግ የቀጥታ ስርጭት',
-    epgNext: 'የስፖርት ዜናዎች እና ትንታኔ'
+    schedule: [
+      { start: 0,  end: 6,  title: 'የሳምንቱ ምርጥ የሻምፒዮንስ ሊግ እና ፕሪሚየር ሊግ ትንታኔ', desc: 'የተሟላ የጨዋታ ዳሰሳ እና የግብ ክለሳ።' },
+      { start: 6,  end: 12, title: 'የማለዳ ስፖርት ዜናዎች እና የዝውውር ወሬዎች', desc: 'ዓለም አቀፍ እና የሀገር ውስጥ ትኩስ የስፖርት መረጃዎች።' },
+      { start: 12, end: 16, title: 'የጨዋታዎች ቅድመ-ዳሰሳ እና የቡድኖች አሰላለፍ', desc: 'የታክቲክ ትንታኔ እና የአሰልጣኞች መግለጫ።' },
+      { start: 16, end: 20, title: '🔴 የቀጥታ የእግር ኳስ ጨዋታ ስርጭት እና ትንታኔ', desc: 'ከሜዳው በቀጥታ በስሜት የተሞላ የአማርኛ ስርጭት።' },
+      { start: 20, end: 24, title: '🔴 የሻምፒዮንስ ሊግ የምሽቱ ታላቅ ጨዋታ በቀጥታ', desc: 'የአውሮፓ ታላላቅ ክለቦች ፍልሚያ በቀጥታ ድምፅ ስርጭት።' }
+    ]
   }
 ];
 
@@ -1049,16 +1391,121 @@ let state = {
   allChannels: [...SPORTS_CHANNELS],
   customChannels: [],
   matches: [],
-  currentChannelId: null,
+  currentChannel: null,
   activeTab: 'matches',
   matchFilter: 'all',
-  selectedQuality: 'auto'
+  selectedQuality: 'auto',
+  scheduleExpanded: false
 };
 
 const video = document.getElementById('player');
 const spinner = document.getElementById('spinner');
 const overlay = document.getElementById('video-overlay');
 let hlsInstance = null;
+
+// ============================================================
+// DYNAMIC REAL-TIME EPG RESOLVER (BASED ON CURRENT LOCAL HOUR)
+// ============================================================
+function getCurrentChannelProgram(channel) {
+  const sched = channel.schedule || DEFAULT_24H_LINEUP;
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMin = now.getMinutes();
+
+  // Find slot that contains currentHour
+  let currentSlot = sched.find(s => currentHour >= s.start && currentHour < s.end);
+  if (!currentSlot) currentSlot = sched[0];
+
+  const nextSlot = sched[(sched.indexOf(currentSlot) + 1) % sched.length];
+
+  // Calculate elapsed progress percentage
+  const totalSlotMinutes = (currentSlot.end - currentSlot.start) * 60;
+  const elapsedMinutes = (currentHour - currentSlot.start) * 60 + currentMin;
+  const progressPct = Math.min(95, Math.max(8, Math.round((elapsedMinutes / totalSlotMinutes) * 100)));
+
+  const startFormatted = String(currentSlot.start).padStart(2, '0') + ':00';
+  const endFormatted = String(currentSlot.end).padStart(2, '0') + ':00';
+  const nextStartFormatted = String(nextSlot.start).padStart(2, '0') + ':00';
+  const nextEndFormatted = String(nextSlot.end).padStart(2, '0') + ':00';
+
+  return {
+    nowTitle: currentSlot.title,
+    nowDesc: currentSlot.desc,
+    nowTimeSlot: `${startFormatted} – ${endFormatted}`,
+    progressPct: progressPct,
+    elapsedMinutes: elapsedMinutes,
+    nextTitle: nextSlot.title,
+    nextTimeSlot: `${nextStartFormatted} – ${nextEndFormatted}`,
+    fullSchedule: sched
+  };
+}
+
+// Update Active Channel Live Program Guide Card
+function updateActiveChannelGuideUI(channel) {
+  const guideCard = document.getElementById('active-guide-card');
+  if (!channel) {
+    guideCard.style.display = 'none';
+    return;
+  }
+
+  guideCard.style.display = 'block';
+  const epg = getCurrentChannelProgram(channel);
+  const now = new Date();
+  const timeStrNow = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  document.getElementById('ag-channel-name').textContent = `${channel.name} · LIVE BROADCAST`;
+  document.getElementById('ag-now-title').textContent = epg.nowTitle;
+  document.getElementById('ag-now-slot').textContent = `${epg.nowTimeSlot} (${epg.elapsedMinutes}m elapsed · Clock: ${timeStrNow})`;
+  document.getElementById('ag-now-progress-txt').textContent = `${epg.progressPct}% complete`;
+  document.getElementById('ag-progress-fill').style.width = `${epg.progressPct}%`;
+  document.getElementById('ag-now-desc').textContent = epg.nowDesc;
+
+  // Automatically expand the full lineup when clicking a channel so the user sees all programs
+  state.scheduleExpanded = true;
+  const drawer = document.getElementById('ag-full-schedule');
+  const btn = document.getElementById('ag-toggle-btn');
+  drawer.style.display = 'block';
+  btn.textContent = 'Hide Lineup ▴';
+
+  // Build full 24h timeline
+  const timeline = document.getElementById('ag-timeline-list');
+  const nowHour = now.getHours();
+  
+  timeline.innerHTML = epg.fullSchedule.map(slot => {
+    const isLive = nowHour >= slot.start && nowHour < slot.end;
+    const isPast = nowHour >= slot.end;
+    const timeStr = `${String(slot.start).padStart(2, '0')}:00 – ${String(slot.end).padStart(2, '0')}:00`;
+    
+    let badgeHTML = '';
+    if (isLive) {
+      badgeHTML = `<span class="ag-item-badge live"><span class="live-pulse-dot" style="width:5px;height:5px"></span> AIRING NOW</span>`;
+    } else if (isPast) {
+      badgeHTML = `<span class="ag-item-badge ended">Completed</span>`;
+    } else {
+      badgeHTML = `<span class="ag-item-badge upcoming">⏱ Upcoming</span>`;
+    }
+
+    return `
+      <div class="ag-timeline-item ${isLive ? 'active-slot' : ''}">
+        <div class="ag-item-top">
+          <span class="ag-item-time">${timeStr}</span>
+          ${badgeHTML}
+        </div>
+        <div class="ag-item-title">${slot.title}</div>
+        ${slot.desc ? `<div class="ag-item-desc">${slot.desc}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+// Toggle 24h schedule drawer
+document.getElementById('ag-toggle-btn').addEventListener('click', () => {
+  state.scheduleExpanded = !state.scheduleExpanded;
+  const drawer = document.getElementById('ag-full-schedule');
+  const btn = document.getElementById('ag-toggle-btn');
+  drawer.style.display = state.scheduleExpanded ? 'block' : 'none';
+  btn.textContent = state.scheduleExpanded ? 'Hide Lineup ▴' : 'View Full Lineup ▾';
+});
 
 // ============================================================
 // STORAGE
@@ -1119,7 +1566,6 @@ async function fetchLiveProgramsAndMatches() {
   renderMatches();
 }
 
-// Format local kickoff time
 function formatMatchTime(dateStr, statusObj) {
   if (!statusObj) return '';
   const desc = statusObj.type?.description || '';
@@ -1141,7 +1587,6 @@ function formatMatchTime(dateStr, statusObj) {
   }
 }
 
-// Render Match Center Cards
 function renderMatches() {
   const container = document.getElementById('matches-container');
   let list = [...state.matches];
@@ -1179,8 +1624,6 @@ function renderMatches() {
 
     const isLive = m.status?.type?.state === 'in';
     const timeHTML = formatMatchTime(m.date, m.status);
-
-    // Pick best matching channel for this league
     const channelPick = m.leagueCode === 'UCL' ? SPORTS_CHANNELS[0] : SPORTS_CHANNELS[1];
 
     return `
@@ -1220,7 +1663,6 @@ function renderMatches() {
   }).join('');
 }
 
-// Tune directly to a match
 function tuneMatch(matchTitle, streamUrl, channelId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   const channel = state.allChannels.find(c => c.id === channelId) || { name: matchTitle, desc: 'Live Match Broadcast' };
@@ -1231,7 +1673,7 @@ function tuneMatch(matchTitle, streamUrl, channelId) {
 // HLS VIDEO ENGINE & QUALITY CONTROL
 // ============================================================
 function playStream(url, channel) {
-  state.currentChannelId = channel.id;
+  state.currentChannel = channel;
   overlay.classList.add('hidden');
   spinner.classList.add('show');
 
@@ -1239,6 +1681,9 @@ function playStream(url, channel) {
   document.getElementById('nw-meta').textContent = channel.desc || channel.genre || 'Live Stream';
   document.getElementById('nw-live-txt').textContent = 'CONNECTING…';
   document.getElementById('nw-badge').style.color = 'var(--yellow)';
+
+  // Update Active Channel Live Guide
+  updateActiveChannelGuideUI(channel);
 
   if (hlsInstance) {
     hlsInstance.destroy();
@@ -1360,13 +1805,24 @@ video.addEventListener('error', () => {
 });
 
 // ============================================================
-// CHANNELS LIST RENDER (WITH LIVE EPG GUIDE)
+// CHANNELS LIST RENDER (WITH REAL-TIME COMPUTED EPG)
 // ============================================================
 function filteredChannels() {
   let list = state.activeTab === 'ucl' ? state.allChannels.filter(c => c.tags.includes('ucl'))
            : state.activeTab === 'custom' ? state.allChannels.filter(c => c.custom)
            : [...state.allChannels];
   return list;
+}
+
+function toggleChannelInlineSched(e, channelId) {
+  e.stopPropagation();
+  const drawer = document.getElementById(`cc-sched-${channelId}`);
+  const arrow = document.getElementById(`cc-arrow-${channelId}`);
+  if (drawer) {
+    const isHidden = drawer.style.display === 'none';
+    drawer.style.display = isHidden ? 'flex' : 'none';
+    if (arrow) arrow.textContent = isHidden ? '▴' : '▾';
+  }
 }
 
 function renderChannels() {
@@ -1382,33 +1838,68 @@ function renderChannels() {
     return;
   }
 
-  container.innerHTML = list.map(c => `
-    <div class="channel-card ${c.id === state.currentChannelId ? 'active' : ''}" data-id="${c.id}">
-      <div class="cc-top-row">
-        <div class="cc-identity">
-          <div class="cc-badge-wrap">${c.badge || 'LIVE'}</div>
-          <div class="cc-name-wrap">
-            <div class="cc-name">${c.name}</div>
-            <div class="cc-genre">${c.genre || c.desc}</div>
+  const nowH = new Date().getHours();
+
+  container.innerHTML = list.map(c => {
+    const epg = getCurrentChannelProgram(c);
+    const isActive = state.currentChannel && state.currentChannel.id === c.id;
+    const sched = c.schedule || DEFAULT_24H_LINEUP;
+
+    return `
+      <div class="channel-card ${isActive ? 'active' : ''}" data-id="${c.id}">
+        <div class="cc-top-row">
+          <div class="cc-identity">
+            <div class="cc-badge-wrap">${c.badge || 'LIVE'}</div>
+            <div class="cc-name-wrap">
+              <div class="cc-name">${c.name}</div>
+              <div class="cc-genre">${c.genre || c.desc}</div>
+            </div>
+          </div>
+          <span class="play-indicator-pill">▶ WATCH</span>
+        </div>
+
+        <!-- Live Electronic Program Guide (EPG) -->
+        <div class="cc-epg">
+          <div class="epg-now">
+            <span>🔴 AIRING NOW (${epg.nowTimeSlot}):</span> ${epg.nowTitle}
+          </div>
+          <div class="epg-next">
+            <span>⏭ UP NEXT (${epg.nextTimeSlot}):</span> ${epg.nextTitle}
           </div>
         </div>
-        <span class="play-indicator-pill">▶ WATCH</span>
-      </div>
 
-      <!-- Live Electronic Program Guide (EPG) -->
-      <div class="cc-epg">
-        <div class="epg-now">
-          <span>● NOW:</span> ${c.epgNow || 'Live Sports Broadcast'}
-        </div>
-        <div class="epg-next">
-          <span>⏭ UP NEXT:</span> ${c.epgNext || 'Post-Match Highlights & Sports Studio'}
+        <!-- Inline Schedule Toggle -->
+        <button class="cc-sched-btn" onclick="toggleChannelInlineSched(event, '${c.id}')">
+          <span>📅 View Today's Full Lineup (${sched.length} shows)</span>
+          <span id="cc-arrow-${c.id}">▾</span>
+        </button>
+
+        <div class="cc-inline-schedule" id="cc-sched-${c.id}" style="display:none">
+          ${sched.map(slot => {
+            const isLive = nowH >= slot.start && nowH < slot.end;
+            const isPast = nowH >= slot.end;
+            const timeStr = `${String(slot.start).padStart(2, '0')}:00 – ${String(slot.end).padStart(2, '0')}:00`;
+            let badgeText = isLive ? 'AIRING NOW' : (isPast ? 'Completed' : 'Upcoming');
+            let badgeClass = isLive ? 'live' : (isPast ? 'ended' : 'upcoming');
+            return `
+              <div class="cc-inline-item ${isLive ? 'is-now' : ''}">
+                <div class="cc-inline-header">
+                  <span class="cc-inline-time">${timeStr}</span>
+                  <span class="ag-item-badge ${badgeClass}">${badgeText}</span>
+                </div>
+                <div class="cc-inline-title">${slot.title}</div>
+              </div>
+            `;
+          }).join('')}
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
   container.querySelectorAll('.channel-card').forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      // Don't trigger if user clicked inside the inline schedule drawer or toggle button
+      if (e.target.closest('.cc-sched-btn') || e.target.closest('.cc-inline-schedule')) return;
       const ch = state.allChannels.find(c => c.id === card.dataset.id);
       if (ch) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1454,6 +1945,8 @@ document.querySelectorAll('.chip').forEach(ch => {
 document.getElementById('refresh-matches-btn').addEventListener('click', () => {
   showToast('Refreshing live scores & guide…');
   fetchLiveProgramsAndMatches();
+  if (state.currentChannel) updateActiveChannelGuideUI(state.currentChannel);
+  renderChannels();
 });
 
 // ============================================================
@@ -1482,8 +1975,7 @@ document.getElementById('add-confirm').addEventListener('click', () => {
     genre: tag,
     badge: 'USER',
     tags: ['ucl', 'all', 'custom'],
-    epgNow: 'Live Match Stream Feed',
-    epgNext: 'User Added Stream',
+    schedule: DEFAULT_24H_LINEUP,
     custom: true
   };
 
@@ -1513,9 +2005,11 @@ function showToast(msg) {
   toastT = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-// Auto-refresh match scores every 60 seconds
+// Auto-refresh match scores and schedule progress every 60 seconds
 setInterval(() => {
   if (state.activeTab === 'matches') fetchLiveProgramsAndMatches();
+  if (state.currentChannel) updateActiveChannelGuideUI(state.currentChannel);
+  renderChannels();
 }, 60000);
 
 // ============================================================
@@ -1524,6 +2018,9 @@ setInterval(() => {
 loadCustoms();
 fetchLiveProgramsAndMatches();
 renderChannels();
+if (state.allChannels.length > 0) {
+  updateActiveChannelGuideUI(state.allChannels[0]);
+}
 </script>
 </body>
 </html>
