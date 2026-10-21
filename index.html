@@ -1212,21 +1212,40 @@ const DEFAULT_24H_LINEUP = [
 
 const SPORTS_CHANNELS = [
   {
+    id: 'trt-1-ucl',
+    name: 'TRT 1 HD (UEFA Champions League FTA)',
+    url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8',
+    genre: 'Official UEFA Champions League FTA Broadcast',
+    badge: 'UCL',
+    tags: ['ucl', 'live'],
+    schedule: [
+      { start: 0,  end: 3,  title: 'UEFA Champions League Full Match Replay', desc: 'Full 90 minutes replay of top European Champions League clashes.' },
+      { start: 3,  end: 6,  title: 'Champions League Vault: Historic Finals', desc: 'Classic European football finals and legendary goals.' },
+      { start: 6,  end: 9,  title: 'Sabah Sporu: European Football Breakfast', desc: 'Worldwide morning sports news, UEFA previews, and team press conferences.' },
+      { start: 9,  end: 12, title: 'UEFA Champions League Matchday Magazine', desc: 'In-depth tactical breakdowns, team news, and expected starting lineups.' },
+      { start: 12, end: 15, title: 'Matchday Live Countdown: Pitchside Report', desc: 'Live from the stadium: pitch inspections, team arrivals, and warmups.' },
+      { start: 15, end: 18, title: '🔴 Live Football Match: European Action', desc: 'Live uninterrupted coverage of today\'s top European fixture.' },
+      { start: 18, end: 20, title: 'UCL Studio: Lineups & Pundit Analysis', desc: 'Expert tactics, confirmed starting lineups, and manager interviews.' },
+      { start: 20, end: 23, title: '🔴 UEFA Champions League Prime Match Live', desc: 'Prime European Champions League live marquee match with high-definition multi-camera feed.' },
+      { start: 23, end: 24, title: 'The Champions Club: All Goals & Review', desc: 'Every goal, every save, updated group standings, and post-match reactions.' }
+    ]
+  },
+  {
     id: 'bein-xtra',
     name: 'beIN SPORTS XTRA HD',
-    url: 'https://bein-xtra-bein.amagi.tv/playlist.m3u8',
-    genre: 'Live International Football',
+    url: 'https://bein-xtra-xumo.amagi.tv/playlistR720P.m3u8',
+    genre: 'Live International Football & Highlights',
     badge: 'UCL',
     tags: ['ucl', 'live'],
     schedule: [
       { start: 0,  end: 3,  title: 'beIN Match Replay: European Classic', desc: 'Full 90 minutes replay with expert commentary.' },
-      { start: 3,  end: 6,  title: 'Ligue 1 & La Liga Best Goals', desc: 'Top 50 goals of the month and goalkeeper saves.' },
+      { start: 3,  end: 6,  title: 'Ligue 1 & European Best Goals Show', desc: 'Top 50 goals of the month and goalkeeper saves.' },
       { start: 6,  end: 9,  title: 'beIN Morning Sports Center', desc: 'Worldwide sports news, team interviews, and training camp reports.' },
       { start: 9,  end: 12, title: 'The Champions League Magazine', desc: 'Previewing this week\'s biggest UEFA clashes.' },
       { start: 12, end: 15, title: 'Live Matchday Studio: Team News', desc: 'Confirmed starting XI and pitch conditions.' },
       { start: 15, end: 18, title: '🔴 Live Match: European Action', desc: 'Live match feed with tactical camera.' },
       { start: 18, end: 20, title: 'beIN Special: Player of the Week', desc: 'Exclusive interview and deep dive analysis.' },
-      { start: 20, end: 23, title: '🔴 UEFA Champions League Prime Match', desc: 'Live marquee UCL clash with world-class commentary.' },
+      { start: 20, end: 23, title: '🔴 Live Football Match: Prime Time', desc: 'Live marquee football clash with world-class commentary.' },
       { start: 23, end: 24, title: 'The Extra Goals Show', desc: 'Comprehensive highlights from every pitch tonight.' }
     ]
   },
@@ -1234,7 +1253,7 @@ const SPORTS_CHANNELS = [
     id: 'bein-esp',
     name: 'beIN SPORTS Español',
     url: 'https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8',
-    genre: 'Spanish Football Coverage',
+    genre: 'Spanish & European Football Coverage',
     badge: 'LIVE',
     tags: ['ucl', 'live'],
     schedule: [
@@ -1250,48 +1269,10 @@ const SPORTS_CHANNELS = [
     ]
   },
   {
-    id: 'arena-sport',
-    name: 'Arena Sport 1 (UCL Feed)',
-    url: 'http://telekomsrbije.com:2095/play/lhpjmkfVyhON1JAiZCx7vmRdlEHaaMaQAQw3LRAakpnghBMtR57sXXgLEXZF8gVD',
-    genre: 'UEFA Champions League FTA Live',
-    badge: 'UCL',
-    tags: ['ucl'],
-    schedule: [
-      { start: 0,  end: 3,  title: 'UEFA Champions League Full Match', desc: 'Replay of today\'s top Champions League fixture.' },
-      { start: 3,  end: 6,  title: 'Arena Football Vault: Classic Finals', desc: 'Historic European championship matches.' },
-      { start: 6,  end: 9,  title: 'Arena Sport Morning Live Studio', desc: 'Sports news, daily schedule, and match preview.' },
-      { start: 9,  end: 12, title: 'Champions League Tactical Masterclass', desc: 'Coaching breakdowns and player heatmaps.' },
-      { start: 12, end: 15, title: 'Arena Live: Stadium Reporter', desc: 'Direct live link from European stadiums.' },
-      { start: 15, end: 18, title: '🔴 UEFA Champions League Live Early Match', desc: 'Live early kickoff match broadcast.' },
-      { start: 18, end: 20, title: 'Arena Studio: Pundits & Lineups', desc: 'Pre-game analysis and expert predictions.' },
-      { start: 20, end: 23, title: '🔴 UEFA Champions League Main Event Live', desc: 'Top live European match broadcast.' },
-      { start: 23, end: 24, title: 'Arena Champions Club: Complete Highlights', desc: 'Post-match press conferences and goals.' }
-    ]
-  },
-  {
-    id: 'cbs-golazo',
-    name: 'CBS Sports Golazo',
-    url: 'https://dai.google.com/linear/hls/event/7f3Wv6f7QEKfQna22jHqLQ/master.m3u8',
-    genre: 'UEFA Champions League 24/7 Hub',
-    badge: 'UEFA',
-    tags: ['ucl'],
-    schedule: [
-      { start: 0,  end: 3,  title: 'The Golazo Show: Replay & Highlights', desc: 'Whip-around goal recap from every stadium.' },
-      { start: 3,  end: 6,  title: 'European Nights: Tactical Cam', desc: 'Unedited tactical overhead coverage of top matches.' },
-      { start: 6,  end: 9,  title: 'Morning Footy: European News', desc: 'Morning football show with daily updates and analysis.' },
-      { start: 9,  end: 12, title: 'Box 2 Box: Transfer Insider', desc: 'Global soccer stories and international player scouting.' },
-      { start: 12, end: 15, title: 'Champions League Today: Kate & Micah', desc: 'Studio pre-match entertainment with Thierry Henry and Jamie Carragher.' },
-      { start: 15, end: 18, title: '🔴 The Golazo Show: Multi-Match Live', desc: 'Live every goal as it happens across Europe.' },
-      { start: 18, end: 20, title: 'Post-Match Champions League Show', desc: 'Live locker room interviews and manager debriefs.' },
-      { start: 20, end: 23, title: '🔴 Live Match Broadcast: Champions Night', desc: 'Prime live UEFA matchday game.' },
-      { start: 23, end: 24, title: 'Late Night Golazo Recap', desc: 'Final scores, statistics, and round summary.' }
-    ]
-  },
-  {
     id: 'aspor-hd',
     name: 'A Spor HD',
     url: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
-    genre: 'European & Turkish Football',
+    genre: 'European & Cup Football Live',
     badge: 'HD',
     tags: ['ucl', 'all'],
     schedule: [
@@ -1307,9 +1288,25 @@ const SPORTS_CHANNELS = [
     ]
   },
   {
+    id: 'atv-hd',
+    name: 'ATV HD (Cup & League Live)',
+    url: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/atv/atv.m3u8',
+    genre: 'UEFA Europa League & Domestic Cups',
+    badge: 'UEFA',
+    tags: ['ucl', 'all'],
+    schedule: [
+      { start: 0,  end: 4,  title: 'Avrupa Kupaları Maç Özetleri', desc: 'Günün Avrupa maçlarının geniş özetleri ve analizi.' },
+      { start: 4,  end: 8,  title: 'Günün Golleri ve Spor Bülteni', desc: 'Avrupa liglerinden en güzel goller.' },
+      { start: 8,  end: 12, title: 'Gün Ortası Spor ve Magazin', desc: 'Spor dünyasından sıcak haberler ve röportajlar.' },
+      { start: 12, end: 16, title: '🔴 Kupa Futbolu Canlı Karşılaşma', desc: 'Canlı kupa maçı yayını ve stüdyo yorumları.' },
+      { start: 16, end: 20, title: 'Maç Önü Canlı Bağlantılar', desc: 'Stadyumdan canlı görüntüler ve kadrolar.' },
+      { start: 20, end: 24, title: '🔴 Canlı Avrupa Karşılaşması ve Final', desc: 'Dev maç canlı yayını ve tüm heyecan.' }
+    ]
+  },
+  {
     id: 'africa-24-sport',
     name: 'Africa 24 Sport',
-    url: 'https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8',
+    url: 'https://edge15.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8',
     genre: 'African Football & CAF Sports',
     badge: 'AFRICA',
     tags: ['all'],
@@ -1353,33 +1350,17 @@ const SPORTS_CHANNELS = [
     ]
   },
   {
-    id: 'arryadia-hd',
-    name: 'Arryadia HD',
-    url: 'http://149.100.11.252:8000/play/a065/index.m3u8',
-    genre: 'Morocco & African Sports',
+    id: 'trt-haber',
+    name: 'TRT Haber HD (Sports & Events)',
+    url: 'https://tv-trthaber.medya.trt.com.tr/master.m3u8',
+    genre: 'Live Sports News & European Events',
     badge: 'HD',
     tags: ['all'],
     schedule: [
-      { start: 0,  end: 6,  title: 'أرشيف الكرة المغربية والنهائيات الكبرى', desc: 'مباريات تاريخية ولحظات التتويج الخالدة.' },
-      { start: 6,  end: 12, title: 'أخبار الصباح والتحضيرات للمباريات', desc: 'تغطية حصرية لتدريبات الأندية والمنتخبات.' },
-      { start: 12, end: 16, title: '🔴 نقل مباشر: مباريات البطولة الاحترافية', desc: 'بث مباشر عالي الجودة مع استوديو تحليلي.' },
-      { start: 16, end: 20, title: 'صدى الملاعب وحوارات حصرية مع النجوم', desc: 'لقاءات خاصة من قلب المستطيل الأخضر.' },
-      { start: 20, end: 24, title: '🔴 النقل المباشر للمباراة المسائية الكبرى', desc: 'المباراة الأبرز في السهرة الكروية مع رصد الأهداف.' }
-    ]
-  },
-  {
-    id: 'amharic-commentary',
-    name: 'Amharic Match Commentary',
-    url: 'https://stream.zeno.fm/bqtruhn4q98uv',
-    genre: 'Live Commentary in Amharic',
-    badge: 'AMHARIC',
-    tags: ['ucl', 'all'],
-    schedule: [
-      { start: 0,  end: 6,  title: 'የሳምንቱ ምርጥ የሻምፒዮንስ ሊግ እና ፕሪሚየር ሊግ ትንታኔ', desc: 'የተሟላ የጨዋታ ዳሰሳ እና የግብ ክለሳ።' },
-      { start: 6,  end: 12, title: 'የማለዳ ስፖርት ዜናዎች እና የዝውውር ወሬዎች', desc: 'ዓለም አቀፍ እና የሀገር ውስጥ ትኩስ የስፖርት መረጃዎች።' },
-      { start: 12, end: 16, title: 'የጨዋታዎች ቅድመ-ዳሰሳ እና የቡድኖች አሰላለፍ', desc: 'የታክቲክ ትንታኔ እና የአሰልጣኞች መግለጫ።' },
-      { start: 16, end: 20, title: '🔴 የቀጥታ የእግር ኳስ ጨዋታ ስርጭት እና ትንታኔ', desc: 'ከሜዳው በቀጥታ በስሜት የተሞላ የአማርኛ ስርጭት።' },
-      { start: 20, end: 24, title: '🔴 የሻምፒዮንስ ሊግ የምሽቱ ታላቅ ጨዋታ በቀጥታ', desc: 'የአውሮፓ ታላላቅ ክለቦች ፍልሚያ በቀጥታ ድምፅ ስርጭት።' }
+      { start: 0,  end: 6,  title: 'Günün Spor Olayları ve Goller', desc: 'Avrupa ve dünya liglerinden tüm gelişmeler.' },
+      { start: 6,  end: 12, title: 'Sabah Spor Bülteni ve Basın Turu', desc: 'Günün öne çıkan spor manşetleri.' },
+      { start: 12, end: 18, title: '🔴 Canlı Yayın: Spor Güncesi', desc: 'Canlı bağlantılar ve son dakika gelişmeleri.' },
+      { start: 18, end: 24, title: '🔴 Akşam Spor Raporu ve Maç Değerlendirmesi', desc: 'Günün tüm maç sonuçları ve analizleri.' }
     ]
   }
 ];
@@ -1690,7 +1671,10 @@ function playStream(url, channel) {
     hlsInstance = null;
   }
 
-  if (Hls.isSupported()) {
+  // Detect iOS (iPhone / iPad / iPod) or Safari native HLS
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (!isIOS && Hls.isSupported()) {
     hlsInstance = new Hls({
       enableWorker: true,
       lowLatencyMode: true,
@@ -1702,21 +1686,41 @@ function playStream(url, channel) {
 
     hlsInstance.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
       spinner.classList.remove('show');
-      video.play().catch(() => {});
+      const p = video.play();
+      if (p !== undefined) {
+        p.catch(() => {
+          video.muted = true;
+          video.play().then(() => {
+            setTimeout(() => { video.muted = false; }, 400);
+          }).catch(() => {
+            showToast('Tap on the video player to play');
+          });
+        });
+      }
       updateQualityDropdown(data.levels);
     });
 
+    let networkRetry = 0;
     hlsInstance.on(Hls.Events.ERROR, (event, data) => {
       if (data.fatal) {
         switch (data.type) {
           case Hls.ErrorTypes.NETWORK_ERROR:
-            hlsInstance.startLoad();
+            networkRetry++;
+            if (networkRetry <= 2) {
+              hlsInstance.startLoad();
+            } else {
+              console.warn('Hls network error, falling back to native player:', data);
+              hlsInstance.destroy();
+              hlsInstance = null;
+              fallbackNative(url);
+            }
             break;
           case Hls.ErrorTypes.MEDIA_ERROR:
             hlsInstance.recoverMediaError();
             break;
           default:
             hlsInstance.destroy();
+            hlsInstance = null;
             fallbackNative(url);
             break;
         }
@@ -1724,11 +1728,10 @@ function playStream(url, channel) {
     });
 
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    // Native iOS Safari HLS Support
+    // Native iOS Safari HLS Support (Hardware-accelerated on iPhone)
     fallbackNative(url);
   } else {
-    video.src = url;
-    video.play().catch(() => {});
+    fallbackNative(url);
   }
 
   renderChannels();
@@ -1736,10 +1739,23 @@ function playStream(url, channel) {
 
 function fallbackNative(url) {
   video.src = url;
-  video.addEventListener('loadedmetadata', () => {
-    spinner.classList.remove('show');
-    video.play().catch(() => {});
-  }, { once: true });
+  video.load();
+  const playPromise = video.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      spinner.classList.remove('show');
+    }).catch(err => {
+      console.warn('Native autoplay prevented, trying muted:', err);
+      video.muted = true;
+      video.play().then(() => {
+        spinner.classList.remove('show');
+        setTimeout(() => { video.muted = false; }, 400);
+      }).catch(e => {
+        spinner.classList.remove('show');
+        showToast('Tap video screen to start stream');
+      });
+    });
+  }
 }
 
 function updateQualityDropdown(levels) {
