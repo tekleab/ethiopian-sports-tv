@@ -243,6 +243,28 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+}
+
+.live-pill.is-live {
+  background: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.live-pill.is-upcoming {
+  background: #2563eb;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+.live-pill.is-channel {
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.live-pill.is-finished {
+  background: #64748b;
+  box-shadow: none;
 }
 
 .now-playing-title {

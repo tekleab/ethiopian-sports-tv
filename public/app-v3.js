@@ -442,8 +442,21 @@ class SportsApp {
     servers.forEach((s, idx) => {
       const btn = document.createElement('button');
       btn.className = `server-btn ${idx === this.activeServerIndex ? 'active' : ''}`;
+
+      // Clean up server title and channel name
+      let channelLabel = s.name || s.channelName || '';
+      if (!channelLabel && s.serverLabel) {
+        const parts = s.serverLabel.split('•');
+        if (parts.length > 1) {
+          channelLabel = parts[1].replace(/\([^)]*\)/g, '').trim();
+        }
+      }
+      if (!channelLabel || channelLabel.includes('undefined')) {
+        channelLabel = `Feed Server ${idx + 1}`;
+      }
+
       btn.innerHTML = `
-        <span>${s.serverLabel || s.name}</span>
+        <span>Server ${idx + 1} • ${channelLabel}</span>
         <span class="quality-badge">${s.quality || 'HD'}</span>
       `;
       btn.addEventListener('click', () => this.playServer(idx));
@@ -456,7 +469,25 @@ class SportsApp {
     this.currentChannel = null;
 
     this.playerTitle.textContent = `${match.home_team} vs ${match.away_team}`;
-    this.playerSubtitle.textContent = `${match.competition} • ${match.status === 'LIVE' ? match.minute : 'Upcoming'}`;
+
+    const badge = document.getElementById('player-status-badge');
+    const badgeText = document.getElementById('player-status-text');
+
+    if (match.status === 'LIVE') {
+      if (badge) badge.className = 'live-pill is-live';
+      if (badgeText) badgeText.textContent = `LIVE ${match.minute || ''}`.trim();
+      this.playerSubtitle.textContent = `${match.competition} • LIVE NOW (${match.minute || 'In Progress'}) • Score: ${match.score_home || 0} - ${match.score_away || 0}`;
+    } else if (match.status === 'UPCOMING') {
+      if (badge) badge.className = 'live-pill is-upcoming';
+      if (badgeText) badgeText.textContent = 'UPCOMING';
+      const kickoffInfo = match.kickoff_formatted || (match.start_time ? new Date(match.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Scheduled');
+      this.playerSubtitle.textContent = `${match.competition} • Kickoff: ${kickoffInfo} • Broadcaster Feed On Air`;
+      this.showFailover(`Match is Upcoming (${kickoffInfo}). Broadcaster stream is active.`);
+    } else {
+      if (badge) badge.className = 'live-pill is-finished';
+      if (badgeText) badgeText.textContent = 'FINISHED';
+      this.playerSubtitle.textContent = `${match.competition} • Full Time (${match.score_home || 0} - ${match.score_away || 0})`;
+    }
 
     document.querySelectorAll('.match-card').forEach(c => {
       c.classList.toggle('is-selected', c.dataset.id === match.id);
@@ -477,14 +508,20 @@ class SportsApp {
     this.currentChannel = channel;
     this.currentMatch = null;
 
+    const badge = document.getElementById('player-status-badge');
+    const badgeText = document.getElementById('player-status-text');
+    if (badge) badge.className = 'live-pill is-channel';
+    if (badgeText) badgeText.textContent = '24/7 ON AIR';
+
     this.playerTitle.textContent = channel.name;
-    this.playerSubtitle.textContent = `24/7 Sports Stream • ${channel.country || 'Global'} (${channel.quality || '1080p'})`;
+    this.playerSubtitle.textContent = `24/7 Sports Stream • ${channel.country || 'Global'} (${channel.quality || '1080p'}) • Verified Active`;
 
     // Map ALL available channels as servers so the user can switch feeds instantly
     this.currentServers = this.directChannels.map((c, idx) => ({
       serverId: `server-${idx + 1}`,
       serverLabel: `Server ${idx + 1} • ${c.name} (${c.quality})`,
       name: c.name,
+      channelName: c.name,
       quality: c.quality,
       directUrl: c.url,
       proxyUrl: c.proxyUrl || `/api/proxy/stream.m3u8?url=${encodeURIComponent(c.url)}`,
@@ -563,6 +600,7 @@ class SportsApp {
     const mappedServers = FALLBACK_DIRECT_STREAMS.map((s, idx) => ({
       serverId: `srv-${idx}`,
       serverLabel: `Server ${idx + 1} • ${s.name} (${s.quality})`,
+      name: s.name,
       channelName: s.name,
       country: s.country,
       quality: s.quality,
@@ -610,6 +648,12 @@ class SportsApp {
           let status = 'UPCOMING';
           let minuteDisplay = 'Scheduled';
 
+          const mDate = new Date(evt.date);
+          const isToday = mDate.toDateString() === new Date().toDateString();
+          const dayStr = isToday ? 'Today' : mDate.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+          const timeStr = mDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const kickoffFormatted = `${dayStr} • ${timeStr}`;
+
           if (state === 'in') {
             status = 'LIVE';
             minuteDisplay = clock ? `${clock}'` : 'LIVE';
@@ -617,7 +661,7 @@ class SportsApp {
             status = 'FINISHED';
             minuteDisplay = 'FT';
           } else {
-            minuteDisplay = new Date(evt.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            minuteDisplay = kickoffFormatted;
           }
 
           // Extract real broadcasters from ESPN competition feed
@@ -645,12 +689,17 @@ class SportsApp {
             streamOptions = [mappedServers[2], ...mappedServers.filter((_, idx) => idx !== 2)];
           }
 
-          // Format labels with Server number
-          const formattedStreams = streamOptions.map((s, sIdx) => ({
-            ...s,
-            serverId: `server-${sIdx + 1}`,
-            serverLabel: `Server ${sIdx + 1} • ${s.name} (${s.quality})`
-          }));
+          // Format labels with Server number & clean name
+          const formattedStreams = streamOptions.map((s, sIdx) => {
+            const chanName = s.name || s.channelName || `Server ${sIdx + 1}`;
+            return {
+              ...s,
+              serverId: `server-${sIdx + 1}`,
+              name: chanName,
+              channelName: chanName,
+              serverLabel: `Server ${sIdx + 1} • ${chanName} (${s.quality || 'HD'})`
+            };
+          });
 
           realMatches.push({
             id: `espn-${evt.id}`,
@@ -663,6 +712,7 @@ class SportsApp {
             start_time: evt.date || new Date().toISOString(),
             status: status,
             minute: minuteDisplay,
+            kickoff_formatted: kickoffFormatted,
             score_home: parseInt(home.score, 10) || 0,
             score_away: parseInt(away.score, 10) || 0,
             broadcasters: broadcasterList.length > 0 ? broadcasterList : ['A Spor', 'Esport3', 'TNT Sports'],
@@ -752,7 +802,7 @@ class SportsApp {
             </div>
           ` : `
             <div style="font-size:0.75rem; color:var(--text-muted); font-weight:600">
-              ${new Date(m.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              ${m.kickoff_formatted || new Date(m.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </div>
           `}
         </div>

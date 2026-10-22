@@ -51,7 +51,12 @@ class EspnProvider {
           status = 'FINISHED';
         }
 
-        const clockDisplay = evt.status?.displayClock ? `${evt.status.displayClock}'` : (status === 'LIVE' ? 'LIVE' : 'Scheduled');
+        const mDate = new Date(evt.date || comp.date);
+        const isToday = mDate.toDateString() === new Date().toDateString();
+        const dayStr = isToday ? 'Today' : mDate.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+        const timeStr = mDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const kickoffDisplay = `${dayStr} • ${timeStr}`;
+        const clockDisplay = evt.status?.displayClock ? `${evt.status.displayClock}'` : (status === 'LIVE' ? 'LIVE' : kickoffDisplay);
 
         // Extract broadcasters
         const broadcasterList = [];
@@ -74,6 +79,7 @@ class EspnProvider {
           start_time: evt.date || comp.date || new Date().toISOString(),
           status,
           minute: clockDisplay,
+          kickoff_formatted: kickoffDisplay,
           score_home: parseInt(home.score, 10) || 0,
           score_away: parseInt(away.score, 10) || 0,
           broadcasters: broadcasterList,
