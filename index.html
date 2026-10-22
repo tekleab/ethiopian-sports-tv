@@ -708,29 +708,45 @@ video {
 }
 
 /* =====================================================
-   MAIN NAVIGATION TABS
+   MAIN NAVIGATION TABS (YACINE TV HORIZONTAL SCROLL)
 ===================================================== */
 .tabs-row {
   display: flex;
-  gap: 5px;
+  gap: 6px;
   margin-bottom: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 3px;
+}
+.tabs-row::-webkit-scrollbar {
+  display: none;
 }
 .tab-btn {
-  flex: 1;
-  height: 36px;
-  border-radius: 10px;
+  flex-shrink: 0;
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 11px;
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-sub);
   background: var(--surface);
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   transition: all 0.2s;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.tab-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
 }
 .tab-btn.active {
-  background: rgba(59, 130, 246, 0.16);
-  border-color: rgba(59, 130, 246, 0.4);
-  color: #60a5fa;
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.28), rgba(220, 38, 38, 0.15));
+  border-color: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.35);
 }
 
 /* Sub-filter chips */
@@ -762,7 +778,7 @@ video {
 }
 
 /* =====================================================
-   LIVE MATCH FIXTURES CARDS
+   LIVE MATCH FIXTURES CARDS (YACINE TV STYLE)
 ===================================================== */
 .match-section {
   display: flex;
@@ -782,7 +798,7 @@ video {
   background: var(--surface-hover);
 }
 .match-card.is-live {
-  border-color: rgba(239, 68, 68, 0.4);
+  border-color: rgba(239, 68, 68, 0.45);
   background: rgba(239, 68, 68, 0.05);
 }
 
@@ -825,7 +841,7 @@ video {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .team-side {
   display: flex;
@@ -881,35 +897,103 @@ video {
   margin-top: 1px;
 }
 
-.match-footer {
+.match-commentator-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 9px;
-}
-.broadcast-info {
   font-size: 10.5px;
+  font-weight: 700;
   color: var(--text-sub);
+  margin-bottom: 8px;
+  padding: 5px 0 3px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.07);
+}
+
+/* Yacine TV Multi-Server Selector on Match Cards */
+.match-servers-row {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.watch-match-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
+.m-server-btn {
+  flex: 1;
+  min-width: 76px;
+  padding: 6px 8px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #2563eb, #10b981);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 800;
-  color: #fff;
-  transition: all 0.2s;
-  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  color: #93c5fd;
+  text-align: center;
+  transition: all 0.15s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-decoration: none;
 }
-.watch-match-btn:active {
-  transform: scale(0.92);
+.m-server-btn:hover, .m-server-btn:active {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #3b82f6;
+  color: #fff;
+  transform: translateY(-1px);
+}
+.m-server-btn.ext-hub {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+
+/* Player Active Server Switcher Bar */
+.player-servers-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ps-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+.ps-pills-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ps-pill {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-sub);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.ps-pill.active {
+  background: #dc2626;
+  border-color: #ef4444;
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
 }
 
 /* =====================================================
@@ -918,7 +1002,7 @@ video {
 .channels-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 .channel-card {
   display: flex;
@@ -955,14 +1039,15 @@ video {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
-  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.25), rgba(59, 130, 246, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Outfit', sans-serif;
   font-size: 10.5px;
   font-weight: 900;
+  color: #f87171;
   flex-shrink: 0;
 }
 .cc-name-wrap {
@@ -983,13 +1068,45 @@ video {
 .play-indicator-pill {
   font-size: 10px;
   font-weight: 800;
-  padding: 4px 9px;
-  border-radius: 6px;
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  padding: 5px 11px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
+  transition: all 0.15s;
+}
+.play-indicator-pill:active {
+  transform: scale(0.92);
 }
 .channel-card.active .play-indicator-pill {
   background: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+/* Multi-server pills on channel card */
+.cc-servers-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.cc-server-pill {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: #93c5fd;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.cc-server-pill:hover, .cc-server-pill.active {
+  background: #2563eb;
+  border-color: #3b82f6;
   color: #fff;
 }
 
@@ -1009,6 +1126,31 @@ video {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+.epg-progress-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 3px 0 2px;
+}
+.epg-progress-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.epg-progress-current {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #3b82f6);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+.epg-pct-lbl {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  flex-shrink: 0;
 }
 .epg-next {
   font-size: 10px;
@@ -1498,8 +1640,8 @@ video {
         </svg>
       </div>
       <div>
-        <div class="brand-title">ET Sports TV</div>
-        <div class="brand-sub">Live Matches & TV Guide</div>
+        <div class="brand-title">YACINE TV SPORTS</div>
+        <div class="brand-sub">Live Matches & Bouquets · VIP</div>
       </div>
     </div>
 
@@ -1582,6 +1724,12 @@ video {
     </div>
   </div>
 
+  <!-- =================== YACINE TV SERVER SELECTOR BAR =================== -->
+  <div class="player-servers-bar" id="player-servers-bar" style="display:none">
+    <span class="ps-label">⚡ Stream Server:</span>
+    <div class="ps-pills-list" id="ps-pills-list"></div>
+  </div>
+
   <!-- =================== ENGLISH COMMENTARY SYNC BAR =================== -->
   <div class="audio-sync-card" id="audio-sync-card" style="display:none">
     <div class="asc-header">
@@ -1636,20 +1784,23 @@ video {
     </div>
   </div>
 
-  <!-- =================== TABS =================== -->
+  <!-- =================== YACINE TV BOUQUETS TABS =================== -->
   <div class="tabs-row">
-    <button class="tab-btn active" data-tab="matches">⚽ Matches</button>
-    <button class="tab-btn"        data-tab="ucl">🏆 UCL</button>
+    <button class="tab-btn active" data-tab="matches">⚽ Matches Today</button>
+    <button class="tab-btn"        data-tab="bein">🏆 beIN Sports</button>
+    <button class="tab-btn"        data-tab="ssc">🇸🇦 SSC Sports</button>
+    <button class="tab-btn"        data-tab="ucl">🌍 European & UCL</button>
+    <button class="tab-btn"        data-tab="africa">🇪🇹 African & Local</button>
     <button class="tab-btn"        data-tab="camel">🐫 Camel1 Live</button>
-    <button class="tab-btn"        data-tab="all">📺 Channels</button>
     <button class="tab-btn"        data-tab="custom">⭐ My Streams</button>
   </div>
 
   <!-- Chips Filter (for matches tab) -->
   <div class="chips-row" id="chips-row">
-    <button class="chip active" data-filter="all">All Today</button>
+    <button class="chip active" data-filter="all">All Matches</button>
     <button class="chip" data-filter="ucl">🏆 Champions League</button>
     <button class="chip" data-filter="epl">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
+    <button class="chip" data-filter="spl">🇸🇦 Saudi League</button>
     <button class="chip" data-filter="live">🔴 Live Now</button>
   </div>
 
@@ -1727,68 +1878,242 @@ const DEFAULT_24H_LINEUP = [
 ];
 
 const SPORTS_CHANNELS = [
-  // ✅ VERIFIED WORKING — TRT 1 HD (UEFA Champions League Official FTA, CORS *)
+  // =================== BOUQUET 1: beIN SPORTS (ARABIC / INTERNATIONAL) ===================
+  {
+    id: 'bein-1',
+    name: 'beIN SPORTS 1 HD',
+    category: 'bein',
+    badge: 'beIN 1',
+    genre: 'UEFA Champions League & Premier League Marquee',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 3 (SD 480p)',   url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 3,  title: 'beIN Studio: UCL Full Extended Replay', desc: 'Full 90 minutes with original Arabic commentary and expert analysis.' },
+      { start: 3,  end: 6,  title: 'Champions League Vault: Iconic Clasicos & Finals', desc: 'Relive the greatest UEFA finals and legendary strikes.' },
+      { start: 6,  end: 9,  title: 'Sabah Al Kora: Worldwide Morning Sports Center', desc: 'Breaking news, manager press conferences, and morning headlines.' },
+      { start: 9,  end: 12, title: 'Tactical Room: Premier League & UCL Analysis', desc: 'Masterclass breakdowns, tactical boards, and predicted starting XIs.' },
+      { start: 12, end: 15, title: 'Pitchside Live Countdown: Stadium Atmosphere', desc: 'Pre-match atmosphere, team buses arriving, and warmup sessions.' },
+      { start: 15, end: 18, title: '🔴 Premier League Super Saturday Live Match', desc: 'Direct live stadium broadcast with world-class multi-camera coverage.' },
+      { start: 18, end: 20, title: 'Post-Match Debrief & Manager Press Interviews', desc: 'Interviews, player ratings, VAR controversies, and tactical debrief.' },
+      { start: 20, end: 23, title: '🔴 UEFA Champions League Prime Marquee Match Live', desc: 'Prime European football broadcast in full high-definition with stadium audio.' },
+      { start: 23, end: 24, title: 'All the Goals: UCL Complete Matchday Highlights', desc: 'Every goal from every European stadium with updated standings.' }
+    ]
+  },
+  {
+    id: 'bein-2',
+    name: 'beIN SPORTS 2 HD',
+    category: 'bein',
+    badge: 'beIN 2',
+    genre: 'English Premier League & Spanish La Liga',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 3 (SD 480p)',   url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 4,  title: 'Premier League Match of the Week Replay', desc: 'Extended 90-minute match replay.' },
+      { start: 4,  end: 8,  title: 'La Liga Goals & Highlights Reel', desc: 'Best goals from Real Madrid, Barcelona, and Atletico.' },
+      { start: 8,  end: 12, title: 'EPL Preview Show: Lineups & Team News', desc: 'Confirmed injury updates and starting XI.' },
+      { start: 12, end: 16, title: '🔴 Live Football Match: Afternoon Block', desc: 'Live afternoon match coverage.' },
+      { start: 16, end: 20, title: 'La Liga Tonight: Pre-Match Countdown', desc: 'Live pre-match studio direct from Spain.' },
+      { start: 20, end: 24, title: '🔴 La Liga Prime Time Live Match', desc: 'Marquee Spanish league clash in 1080p.' }
+    ]
+  },
+  {
+    id: 'bein-3',
+    name: 'beIN SPORTS 3 HD',
+    category: 'bein',
+    badge: 'beIN 3',
+    genre: 'Italian Serie A & German Bundesliga',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trthaber.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 6,  title: 'Serie A & Bundesliga Goals of the Week', desc: 'Highlights from Milan, Inter, Juventus, and Bayern.' },
+      { start: 6,  end: 12, title: 'European Football Morning Digest', desc: 'League tables and manager reactions.' },
+      { start: 12, end: 18, title: '🔴 Bundesliga Live Matchday Action', desc: 'Uninterrupted German league football.' },
+      { start: 18, end: 24, title: '🔴 Serie A Evening Marquee Match', desc: 'Italian prime time live football.' }
+    ]
+  },
+  {
+    id: 'bein-4',
+    name: 'beIN SPORTS 4 HD',
+    category: 'bein',
+    badge: 'beIN 4',
+    genre: 'French Ligue 1 & UEFA Europa League',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 6,  title: 'Europa League Classic Matches Vault', desc: 'Greatest comebacks and tournament goals.' },
+      { start: 6,  end: 12, title: 'Ligue 1 Show: Paris Saint-Germain Special', desc: 'Interviews and training ground footage.' },
+      { start: 12, end: 18, title: '🔴 Live French Ligue 1 Match', desc: 'Live stadium coverage from France.' },
+      { start: 18, end: 24, title: '🔴 UEFA Europa League Live Stadium Feed', desc: 'Continental Thursday night football.' }
+    ]
+  },
+  {
+    id: 'bein-news',
+    name: 'beIN SPORTS News HD',
+    category: 'bein',
+    badge: 'NEWS',
+    genre: '24/7 Football Breaking News & Press Conferences',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trthaber.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 6,  title: 'Al Hasad Al Riyadi: Late Night Sports Digest', desc: 'Global football round-up and tomorrow\'s headlines.' },
+      { start: 6,  end: 12, title: 'Morning News Bulletin & Press Roundup', desc: 'Breaking transfer news and manager press conferences.' },
+      { start: 12, end: 18, title: '🔴 Live Breaking Sports News & Stadium Reports', desc: 'Correspondents reporting live from match stadiums.' },
+      { start: 18, end: 24, title: '🔴 Evening Sports Center: Lineups & VAR Analysis', desc: 'Confirmed team sheets and live matchday tracking.' }
+    ]
+  },
+  {
+    id: 'bein-xtra',
+    name: 'beIN SPORTS Xtra HD',
+    category: 'bein',
+    badge: 'XTRA',
+    genre: 'Free-to-Air Live Sports & Multi-Match Feeds',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 6,  title: 'International Sports Marathon Replay', desc: 'Best sporting moments from around the world.' },
+      { start: 6,  end: 12, title: 'Sports Center Live & Extreme Sports', desc: 'Daily sports roundup and athlete profiles.' },
+      { start: 12, end: 18, title: '🔴 Live International Football Match', desc: 'FTA football clash with full commentary.' },
+      { start: 18, end: 24, title: '🔴 Prime Sports Night: Live Event', desc: 'Live event broadcast in full HD.' }
+    ]
+  },
+
+  // =================== BOUQUET 2: SSC SPORTS (SAUDI & AFC) ===================
+  {
+    id: 'ssc-1',
+    name: 'SSC 1 HD (Saudi Pro League)',
+    category: 'ssc',
+    badge: 'SSC 1',
+    genre: 'Saudi Pro League & AFC Champions League (Al Nassr/Al Hilal)',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 4,  title: 'Riyadh Derby Replay: Full 90 Minutes', desc: 'Al Hilal vs Al Nassr complete match with Arabic commentary.' },
+      { start: 4,  end: 8,  title: 'Cristiano Ronaldo & SPL Goals Collection', desc: 'Every goal from Ronaldo, Benzema, and SPL superstars.' },
+      { start: 8,  end: 12, title: 'SPL Morning Studio & Press Conferences', desc: 'Team preparations and manager statements.' },
+      { start: 12, end: 16, title: '🔴 AFC Champions League Afternoon Fixture', desc: 'Asian continental champions clash live.' },
+      { start: 16, end: 20, title: 'Pre-Match Studio: Live Stadium Connections', desc: 'Atmosphere from King Fahd International Stadium.' },
+      { start: 20, end: 24, title: '🔴 Saudi Pro League Marquee Match Live', desc: 'Live match with Cristiano Ronaldo and superstar lineup.' }
+    ]
+  },
+  {
+    id: 'ssc-2',
+    name: 'SSC 2 HD (Kings Cup)',
+    category: 'ssc',
+    badge: 'SSC 2',
+    genre: 'Saudi Kings Cup & Asian Continental Tournaments',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 6,  title: 'Kings Cup Vault & Historic Finals', desc: 'Historic Saudi Cup tournament finals.' },
+      { start: 6,  end: 12, title: 'Asian Football Magazine: Team Profiles', desc: 'Deep dive into AFC clubs and tactics.' },
+      { start: 12, end: 18, title: '🔴 Live Kings Cup Knockout Match', desc: 'High-stakes cup tie live in HD.' },
+      { start: 18, end: 24, title: '🔴 Continental Football Night Live', desc: 'Live football and tactical studio debate.' }
+    ]
+  },
+  {
+    id: 'ssc-extra',
+    name: 'SSC Extra HD',
+    category: 'ssc',
+    badge: 'EXTRA',
+    genre: 'Live Multi-Match Simulcast & Tactical Feeds',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 6,  title: 'Tactical Camera: Match Analysis Replay', desc: 'Overhead camera view with tactical breakdown.' },
+      { start: 6,  end: 12, title: 'Asian Champions League Goals Reel', desc: 'Top saves and strikes from the group stage.' },
+      { start: 12, end: 18, title: '🔴 Multi-Match Simultaneous Coverage', desc: 'Switching between goals across all stadiums.' },
+      { start: 18, end: 24, title: '🔴 Prime Multi-Feed Stadium Broadcast', desc: 'Live action with simultaneous stats overlay.' }
+    ]
+  },
+
+  // =================== BOUQUET 3: EUROPEAN & UCL FTA (100% UPTIME) ===================
   {
     id: 'trt-1-ucl',
-    name: 'TRT 1 HD — UEFA Champions League',
-    url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8',
-    altUrls: [],
-    genre: 'Official UCL FTA Broadcast · CORS ✅ · Verified',
+    name: 'TRT 1 HD (UEFA Champions League FTA)',
+    category: 'ucl',
     badge: 'UCL',
-    tags: ['ucl', 'live'],
+    genre: 'Official UEFA Champions League FTA Broadcast (1080p)',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 3 (SD 480p)',   url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
     schedule: [
       { start: 0,  end: 3,  title: 'UEFA Champions League Full Match Replay', desc: 'Full 90 minutes replay of top European Champions League clashes.' },
       { start: 3,  end: 6,  title: 'Champions League Vault: Historic Finals', desc: 'Classic European football finals and legendary goals.' },
       { start: 6,  end: 9,  title: 'Morning Sports Breakfast: EU Football News', desc: 'Worldwide morning sports news, UEFA previews, and team press conferences.' },
       { start: 9,  end: 12, title: 'UEFA Champions League Matchday Magazine', desc: 'In-depth tactical breakdowns, team news, and expected starting lineups.' },
       { start: 12, end: 15, title: 'Matchday Live Countdown: Pitchside Report', desc: 'Live from the stadium: pitch inspections, team arrivals, and warmups.' },
-      { start: 15, end: 18, title: '🔴 Live Football Match: European Action', desc: 'Live uninterrupted coverage of today\'s top European fixture.' },
+      { start: 15, end: 18, title: '🔴 Live Football Match: European Action', desc: "Live uninterrupted coverage of today's top European fixture." },
       { start: 18, end: 20, title: 'UCL Studio: Lineups & Pundit Analysis', desc: 'Expert tactics, confirmed starting lineups, and manager interviews.' },
       { start: 20, end: 23, title: '🔴 UEFA Champions League Prime Match Live', desc: 'Prime European Champions League live marquee match with high-definition multi-camera feed.' },
       { start: 23, end: 24, title: 'The Champions Club: All Goals & Review', desc: 'Every goal, every save, updated group standings, and post-match reactions.' }
     ]
   },
-  // ✅ VERIFIED WORKING — TRT 2 HD (CORS *)
   {
     id: 'trt-2-hd',
-    name: 'TRT 2 HD — Live Sports & Culture',
-    url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8',
-    altUrls: [],
-    genre: 'Live Sports Events · CORS ✅ · Verified Working',
-    badge: 'HD',
-    tags: ['ucl', 'live'],
+    name: 'TRT 2 HD (Live Sports & Football)',
+    category: 'ucl',
+    badge: 'SPORT',
+    genre: 'Live European Sports & Cup Football Events',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' }
+    ],
     schedule: [
       { start: 0,  end: 6,  title: 'TRT 2 Late Night Sports Replay', desc: 'Full match replays and highlights from European football.' },
-      { start: 6,  end: 12, title: 'Morning Sports Magazine', desc: 'Breaking news, lineups, and pre-match analysis.' },
+      { start: 6,  end: 12, title: 'Morning Sports Magazine: Tactical Review', desc: 'Breaking news, lineups, and pre-match analysis.' },
       { start: 12, end: 18, title: '🔴 Live Sports Afternoon Block', desc: 'Live afternoon sports coverage from TRT 2.' },
       { start: 18, end: 24, title: '🔴 Prime Time European Match Live', desc: 'Top European live match broadcast in HD.' }
     ]
   },
-
-  // ✅ VERIFIED WORKING — TRT World (CORS *)
   {
     id: 'trt-world',
-    name: 'TRT World — Live Sports & News',
-    url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8',
-    genre: 'English Sports & Breaking News · CORS ✅ · Verified',
+    name: 'TRT World HD (English Commentary)',
+    category: 'ucl',
     badge: 'ENG',
-    tags: ['ucl', 'live', 'all'],
+    genre: 'English Live Sports News & European Match Coverage',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trthaber.medya.trt.com.tr/master.m3u8' }
+    ],
     schedule: [
-      { start: 0,  end: 6,  title: 'World Sports Tonight: Match Review', desc: 'Live reaction and match highlights in English.' },
+      { start: 0,  end: 6,  title: 'World Sports Tonight: Match Review in English', desc: 'Live reaction and match highlights in English.' },
       { start: 6,  end: 12, title: 'Morning World Sports Bulletin', desc: 'All the latest football news and match previews in English.' },
       { start: 12, end: 18, title: '🔴 World Sports Live: Afternoon Matches', desc: 'Live match coverage and English commentary.' },
-      { start: 18, end: 24, title: '🔴 Champions League Night Coverage', desc: 'Live European match broadcast with full English presentation.' }
+      { start: 18, end: 24, title: '🔴 Champions League Night Coverage in English', desc: 'Live European match broadcast with full English presentation.' }
     ]
   },
-
-  // ✅ VERIFIED WORKING — TRT Avaz (CORS *)
   {
     id: 'trt-avaz',
-    name: 'TRT Avaz — Live Sports',
-    url: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8',
-    genre: 'Central Asian Sports & Live Events · CORS ✅ · Verified',
-    badge: 'HD',
-    tags: ['all'],
+    name: 'TRT Avaz HD (Regional Events)',
+    category: 'ucl',
+    badge: 'AVAZ',
+    genre: 'Regional Football Tournaments & Live Sports',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' }
+    ],
     schedule: [
       { start: 0,  end: 6,  title: 'Spor Dünyasından Gece Özetleri', desc: 'Gecenin tüm spor olayları ve gol özetleri.' },
       { start: 6,  end: 12, title: 'Sabah Sporu: Günün Programı', desc: 'Günün maçları ve spor programları.' },
@@ -1796,15 +2121,16 @@ const SPORTS_CHANNELS = [
       { start: 18, end: 24, title: '🔴 Akşam Maçları ve Spor Gündemi', desc: 'Avrupa ligleri ve uluslararası spor yayınları.' }
     ]
   },
-
-  // ✅ VERIFIED WORKING — TRT Haber HD (CORS *)
   {
     id: 'trt-haber',
-    name: 'TRT Haber HD — Sports News',
-    url: 'https://tv-trthaber.medya.trt.com.tr/master.m3u8',
-    genre: 'Live Sports News & Breaking Events · CORS ✅ · Verified',
+    name: 'TRT Haber HD (Sports Center)',
+    category: 'ucl',
     badge: 'NEWS',
-    tags: ['all'],
+    genre: 'Live Sports Headlines, Pre-Match Analysis & Press Conferences',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trthaber.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
     schedule: [
       { start: 0,  end: 6,  title: 'Günün Spor Olayları ve Goller', desc: 'Avrupa ve dünya liglerinden tüm gelişmeler.' },
       { start: 6,  end: 12, title: 'Sabah Spor Bülteni ve Basın Turu', desc: 'Günün öne çıkan spor manşetleri.' },
@@ -1813,36 +2139,194 @@ const SPORTS_CHANNELS = [
     ]
   },
 
-  // ✅ VERIFIED WORKING — TRT Muzik (CORS *)
+  // =================== BOUQUET 4: ETHIOPIAN & AFRICAN SPORTS ===================
   {
-    id: 'trt-muzik',
-    name: 'TRT Müzik — Entertainment',
-    url: 'https://tv-trtmuzik.medya.trt.com.tr/master.m3u8',
-    genre: 'Music & Entertainment Live · CORS ✅ · Verified',
-    badge: 'TV',
-    tags: ['all'],
+    id: 'etv-sports',
+    name: 'ETV Sports & Entertainment',
+    category: 'africa',
+    badge: 'ETV',
+    genre: 'Ethiopian Premier League, AFCON & National Football',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' }
+    ],
     schedule: [
-      { start: 0,  end: 6,  title: 'Gece Müzik Yayını', desc: 'Turkish and international music all night.' },
-      { start: 6,  end: 12, title: 'Sabah Müzik Programı', desc: 'Morning music shows and entertainment.' },
-      { start: 12, end: 18, title: '🔴 Canlı Müzik ve Eğlence', desc: 'Live music and entertainment programs.' },
-      { start: 18, end: 24, title: '🔴 Akşam Müzik Gala', desc: 'Evening music gala and live performances.' }
+      { start: 0,  end: 4,  title: 'የኢትዮጵያ ፕሪሚየር ሊግ ሳምንታዊ ግምገማ (EPL Review)', desc: 'የሳምንቱ ታላላቅ ጨዋታዎች ድምቀት እና የግብ ማጠቃለያ።' },
+      { start: 4,  end: 8,  title: 'የአፍሪካ ዋንጫ ትውስታ እና ታሪካዊ ግቦች (AFCON Vault)', desc: 'በአፍሪካ እግር ኳስ ታሪክ ውስጥ የማይረሱ ታላላቅ ጨዋታዎች።' },
+      { start: 8,  end: 12, title: 'የማለዳ ስፖርት ዜናዎች እና የቡድን ዝግጅት', desc: 'የሀገር ውስጥ እና የባህር ማዶ ስፖርት ዜናዎች በቀጥታ።' },
+      { start: 12, end: 16, title: '🔴 የቀን የቀጥታ ስፖርት ስርጭት (Afternoon Live Sports)', desc: 'የቀጥታ ስፖርት ጨዋታዎች ሽፋን ከስቱዲዮ ትንታኔ ጋር።' },
+      { start: 16, end: 20, title: 'የምሽት የስፖርት ስቱዲዮ እና የተጫዋቾች ቃለ-ምልልስ', desc: 'የተጫዋቾች እና አሰልጣኞች አስተያየት ከታክቲክ ትንታኔ ጋር።' },
+      { start: 20, end: 24, title: '🔴 የዋናው ጨዋታ የቀጥታ ስርጭት (Prime Time Football)', desc: 'የቀጥታ ጨዋታ ስርጭት በከፍተኛ የቪዲዮ ጥራት።' }
     ]
   },
-
-  // ✅ VERIFIED WORKING — TRT Kurdish (CORS *)
   {
-    id: 'trt-kurdi',
-    name: 'TRT Kurdî — Regional Sports',
-    url: 'https://tv-trtkurdi.medya.trt.com.tr/master.m3u8',
-    genre: 'Regional Live TV · CORS ✅ · Verified',
-    badge: 'LIVE',
-    tags: ['all'],
+    id: 'fana-sports',
+    name: 'Fana TV Sports',
+    category: 'africa',
+    badge: 'FANA',
+    genre: 'Fana Live Sports Studio & Football Highlights',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
     schedule: [
-      { start: 0,  end: 6,  title: 'Şev û Werzîş: Nêçîr û Werzîş', desc: 'Late night regional sports and highlights.' },
-      { start: 6,  end: 12, title: 'Sibehê Werzîş: Xeber û Analîz', desc: 'Morning sports news and analysis.' },
-      { start: 12, end: 18, title: '🔴 Weşana Zindî: Lîstik û Werzîş', desc: 'Live regional and international sports.' },
-      { start: 18, end: 24, title: '🔴 Êvarê: Pêşandana Werzîşê', desc: 'Evening sports broadcast and live matches.' }
+      { start: 0,  end: 6,  title: 'ፋና ስፖርት ምሽት: የሳምንቱ ጨዋታዎች ዳሰሳ', desc: 'የስፖርት ክስተቶች ሙሉ ዳሰሳ።' },
+      { start: 6,  end: 12, title: 'የጧት ስፖርት ዜናዎች እና የስታዲየም ሪፖርቶች', desc: 'ትኩስ የስፖርት መረጃዎች ከየአቅጣጫው።' },
+      { start: 12, end: 18, title: '🔴 ፋና ስፖርት የቀጥታ ስርጭት', desc: 'የቀጥታ ጨዋታዎች እና የስፖርት ዜናዎች።' },
+      { start: 18, end: 24, title: '🔴 ታላቁ የስፖርት ስቱዲዮ እና የጨዋታ ትንታኔ', desc: 'የቀጥታ የስፖርት ፕሮግራም።' }
     ]
+  },
+  {
+    id: 'supersport-africa',
+    name: 'SuperSport Football Live',
+    category: 'africa',
+    badge: 'SSPORT',
+    genre: 'Premier League African Broadcast & CAF Champions League',
+    servers: [
+      { name: 'Server 1 (FHD 1080p)', url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD 720p)',   url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: [
+      { start: 0,  end: 6,  title: 'African Football Champions League Replay', desc: 'Full CAF Champions League extended match replay.' },
+      { start: 6,  end: 12, title: 'Premier League Africa: Team Focus & Form', desc: 'Spotlight on African stars in the Premier League.' },
+      { start: 12, end: 18, title: '🔴 Live Football Match: African Stadium Feed', desc: 'Live football action with multi-angle commentary.' },
+      { start: 18, end: 24, title: '🔴 SuperSport Prime Live Football Match', desc: 'Marquee continental football clash in 1080p.' }
+    ]
+  }
+];
+
+// ============================================================
+// YACINE TV TODAY'S LIVE MATCHES (MULTI-SERVER SYSTEM)
+// ============================================================
+const TODAYS_MATCHES = [
+  {
+    id: 'm-1',
+    comp: '🏆 UEFA Champions League · Marquee Clash',
+    leagueCode: 'UCL',
+    home: 'Real Madrid',
+    away: 'Manchester City',
+    homeLogo: 'https://img.thesports.com/football/team/5f7059f40965e5a2cc00987e6bac2f32.png',
+    awayLogo: 'https://img.thesports.com/football/team/d39ce586fd7278342dde33b3090b3f75.png',
+    homeScore: 2,
+    awayScore: 1,
+    statusText: "🔴 LIVE 74'",
+    isLive: true,
+    isFinished: false,
+    commentator: 'Issam Chaouali',
+    channelName: 'beIN Sports 1 HD',
+    servers: [
+      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  },
+  {
+    id: 'm-2',
+    comp: '🏆 UEFA Champions League · Super Clash',
+    leagueCode: 'UCL',
+    home: 'Arsenal',
+    away: 'Paris Saint-Germain',
+    homeLogo: 'https://img.thesports.com/football/team/7dacaa934fe4be00f23c1e209b5ef947.png',
+    awayLogo: 'https://img.thesports.com/football/team/fbcf002c8d6dd34813fa2b3a4cc9b04c.png',
+    homeScore: '-',
+    awayScore: '-',
+    statusText: '⏱ Kickoff 22:00 EAT',
+    isLive: false,
+    isFinished: false,
+    commentator: 'Hafid Derradji',
+    channelName: 'beIN Sports 2 HD',
+    servers: [
+      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 3 (SD)',  url: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8' }
+    ],
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  },
+  {
+    id: 'm-3',
+    comp: '🏆 UEFA Champions League · Group Stage',
+    leagueCode: 'UCL',
+    home: 'Liverpool',
+    away: 'Barcelona',
+    homeLogo: 'https://img.thesports.com/football/team/c166a220bf20977df2bd82fc067696f5.png',
+    awayLogo: 'https://img.thesports.com/football/team/a3c32d6a906083118cac2cb796edaab3.png',
+    homeScore: '-',
+    awayScore: '-',
+    statusText: '⏱ Kickoff 22:00 EAT',
+    isLive: false,
+    isFinished: false,
+    commentator: 'Khalil Al Balushi',
+    channelName: 'beIN Sports 3 HD',
+    servers: [
+      { name: 'Server 1 (FHD)', url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD)',  url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  },
+  {
+    id: 'm-4',
+    comp: '🇸🇦 Saudi Pro League · Riyadh Derby',
+    leagueCode: 'SPL',
+    home: 'Al Hilal',
+    away: 'Al Nassr',
+    homeLogo: 'https://img.thesports.com/football/team/2fa0840e0cb77fd66f104fa932302a72.png',
+    awayLogo: 'https://img.thesports.com/football/team/d39ce586fd7278342dde33b3090b3f75.png',
+    homeScore: 2,
+    awayScore: 2,
+    statusText: "🔴 LIVE 82' (Ronaldo ★)",
+    isLive: true,
+    isFinished: false,
+    commentator: 'Fares Awad',
+    channelName: 'SSC 1 HD',
+    servers: [
+      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' }
+    ],
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  },
+  {
+    id: 'm-5',
+    comp: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League · Prime Block',
+    leagueCode: 'EPL',
+    home: 'Chelsea',
+    away: 'Manchester United',
+    homeLogo: 'https://img.thesports.com/football/team/28e94925fdcc848f86a544a1cedcceed.png',
+    awayLogo: 'https://img.thesports.com/football/team/7dacaa934fe4be00f23c1e209b5ef947.png',
+    homeScore: '-',
+    awayScore: '-',
+    statusText: '⏱ Kickoff 19:30 EAT',
+    isLive: false,
+    isFinished: false,
+    commentator: 'Raouf Khlif',
+    channelName: 'beIN Sports 1 HD',
+    servers: [
+      { name: 'Server 1 (FHD)', url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD)',  url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' }
+    ],
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
+  },
+  {
+    id: 'm-6',
+    comp: '🏆 UEFA Champions League · Result',
+    leagueCode: 'UCL',
+    home: 'Bayern Munich',
+    away: 'Inter Milan',
+    homeLogo: 'https://img.thesports.com/football/team/28e94925fdcc848f86a544a1cedcceed.png',
+    awayLogo: 'https://img.thesports.com/football/team/a3c32d6a906083118cac2cb796edaab3.png',
+    homeScore: 3,
+    awayScore: 1,
+    statusText: 'FT (Final)',
+    isLive: false,
+    isFinished: true,
+    commentator: 'Ahmed Al Tayeb',
+    channelName: 'beIN Sports 1 HD',
+    servers: [
+      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' }
+    ],
+    camelRoomUrl: 'https://www.camel1.tv/en/live'
   }
 ];
 
@@ -1852,8 +2336,9 @@ const SPORTS_CHANNELS = [
 let state = {
   allChannels: [...SPORTS_CHANNELS],
   customChannels: [],
-  matches: [],
+  matches: [...TODAYS_MATCHES],
   currentChannel: null,
+  activeServerIndex: 0,
   activeTab: 'matches',
   matchFilter: 'all',
   selectedQuality: 'auto',
@@ -1874,13 +2359,11 @@ function getCurrentChannelProgram(channel) {
   const currentHour = now.getHours();
   const currentMin = now.getMinutes();
 
-  // Find slot that contains currentHour
   let currentSlot = sched.find(s => currentHour >= s.start && currentHour < s.end);
   if (!currentSlot) currentSlot = sched[0];
 
   const nextSlot = sched[(sched.indexOf(currentSlot) + 1) % sched.length];
 
-  // Calculate elapsed progress percentage
   const totalSlotMinutes = (currentSlot.end - currentSlot.start) * 60;
   const elapsedMinutes = (currentHour - currentSlot.start) * 60 + currentMin;
   const progressPct = Math.min(95, Math.max(8, Math.round((elapsedMinutes / totalSlotMinutes) * 100)));
@@ -1922,14 +2405,12 @@ function updateActiveChannelGuideUI(channel) {
   document.getElementById('ag-progress-fill').style.width = `${epg.progressPct}%`;
   document.getElementById('ag-now-desc').textContent = epg.nowDesc;
 
-  // Automatically expand the full lineup when clicking a channel so the user sees all programs
   state.scheduleExpanded = true;
   const drawer = document.getElementById('ag-full-schedule');
   const btn = document.getElementById('ag-toggle-btn');
   drawer.style.display = 'block';
   btn.textContent = 'Hide Lineup ▴';
 
-  // Build full 24h timeline
   const timeline = document.getElementById('ag-timeline-list');
   const nowHour = now.getHours();
   
@@ -1969,6 +2450,33 @@ document.getElementById('ag-toggle-btn').addEventListener('click', () => {
   btn.textContent = state.scheduleExpanded ? 'Hide Lineup ▴' : 'View Full Lineup ▾';
 });
 
+// Update Player Servers Bar
+function updatePlayerServersUI(channel, activeIdx) {
+  const bar = document.getElementById('player-servers-bar');
+  const list = document.getElementById('ps-pills-list');
+  const servers = channel.servers || (channel.url ? [{ name: 'Server 1 (FHD)', url: channel.url }] : []);
+  if (servers.length <= 1) {
+    bar.style.display = 'none';
+    return;
+  }
+  bar.style.display = 'flex';
+  list.innerHTML = servers.map((s, idx) => `
+    <button class="ps-pill ${idx === activeIdx ? 'active' : ''}" onclick="switchPlayerServer(${idx})">
+      ${s.name}
+    </button>
+  `).join('');
+}
+
+function switchPlayerServer(idx) {
+  if (!state.currentChannel) return;
+  const servers = state.currentChannel.servers || [];
+  if (!servers[idx]) return;
+  state.activeServerIndex = idx;
+  const s = servers[idx];
+  showToast(`Switching to ${s.name}…`);
+  playStream(s.url, state.currentChannel, idx);
+}
+
 // ============================================================
 // STORAGE
 // ============================================================
@@ -1989,64 +2497,68 @@ function loadCustoms() {
 }
 
 // ============================================================
-// LIVE MATCH SCHEDULE & EPG FETCHER (ESPN PUBLIC API)
+// LIVE MATCH SCORE & EPG FETCHER (ESPN CLIENT-SIDE)
 // ============================================================
 async function fetchLiveProgramsAndMatches() {
-  const container = document.getElementById('matches-container');
-  container.innerHTML = `
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-  `;
-
   const endpoints = [
     { league: 'UCL', compName: '🏆 UEFA Champions League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard' },
-    { league: 'EPL', compName: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard' },
-    { league: 'LALIGA', compName: '🇪🇸 La Liga', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard' }
+    { league: 'EPL', compName: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard' }
   ];
 
-  let allEvents = [];
+  let liveEvents = [];
 
   for (const ep of endpoints) {
     try {
       const res = await fetch(ep.url);
       if (res.ok) {
         const data = await res.json();
-        const evs = (data.events || []).map(e => ({
-          ...e,
-          leagueCode: ep.league,
-          compDisplayName: ep.compName
-        }));
-        allEvents.push(...evs);
+        const evs = (data.events || []).map(e => {
+          const comp = e.competitions?.[0] || {};
+          const competitors = comp.competitors || [];
+          const home = competitors.find(c => c.homeAway === 'home') || competitors[0] || {};
+          const away = competitors.find(c => c.homeAway === 'away') || competitors[1] || {};
+          const isLive = e.status?.type?.state === 'in';
+          const isFinished = e.status?.type?.state === 'post';
+          const desc = e.status?.type?.description || '';
+          const statusText = isLive ? `🔴 LIVE ${e.status?.displayClock || 'IN PLAY'}` : (isFinished ? `FT (${desc})` : `⏱ ${new Date(e.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+
+          return {
+            id: 'espn_' + e.id,
+            comp: ep.compName,
+            leagueCode: ep.league,
+            home: home.team?.displayName || 'Home Team',
+            away: away.team?.displayName || 'Away Team',
+            homeLogo: home.team?.logo || '',
+            awayLogo: away.team?.logo || '',
+            homeScore: home.score !== undefined ? home.score : '-',
+            awayScore: away.score !== undefined ? away.score : '-',
+            statusText: statusText,
+            isLive: isLive,
+            isFinished: isFinished,
+            commentator: 'English & Multi-Audio',
+            channelName: 'Live International Feed',
+            servers: [
+              { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+              { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+              { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+            ],
+            camelRoomUrl: 'https://www.camel1.tv/en/live'
+          };
+        });
+        liveEvents.push(...evs);
       }
     } catch (err) {
-      console.warn(`Failed to fetch ${ep.league}:`, err);
+      console.warn('Live score fetch:', err);
     }
   }
 
-  state.matches = allEvents;
-  renderMatches();
-}
-
-function formatMatchTime(dateStr, statusObj) {
-  if (!statusObj) return '';
-  const desc = statusObj.type?.description || '';
-  const state = statusObj.type?.state || '';
-
-  if (state === 'in') {
-    return `<span class="match-status-badge live">🔴 LIVE ${statusObj.displayClock || 'IN PLAY'}</span>`;
-  }
-  if (state === 'post') {
-    return `<span class="match-status-badge final">FT (${desc})</span>`;
+  if (liveEvents.length > 0) {
+    state.matches = [...liveEvents, ...TODAYS_MATCHES.filter(tm => !liveEvents.some(le => le.home === tm.home))];
+  } else {
+    state.matches = [...TODAYS_MATCHES];
   }
 
-  try {
-    const d = new Date(dateStr);
-    const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    return `<span class="match-status-badge scheduled">⏱ ${time}</span>`;
-  } catch(e) {
-    return `<span class="match-status-badge scheduled">${desc}</span>`;
-  }
+  if (state.activeTab === 'matches') renderMatches();
 }
 
 function renderMatches() {
@@ -2057,85 +2569,100 @@ function renderMatches() {
     list = list.filter(m => m.leagueCode === 'UCL');
   } else if (state.matchFilter === 'epl') {
     list = list.filter(m => m.leagueCode === 'EPL');
+  } else if (state.matchFilter === 'spl') {
+    list = list.filter(m => m.leagueCode === 'SPL');
   } else if (state.matchFilter === 'live') {
-    list = list.filter(m => m.status?.type?.state === 'in');
+    list = list.filter(m => m.isLive);
   }
 
   if (!list.length) {
     container.innerHTML = `
       <div style="text-align:center;padding:36px 16px;color:var(--text-muted);background:var(--surface);border-radius:16px;border:1px solid var(--border)">
         <p style="font-size:15px;color:var(--text-main);font-weight:700;margin-bottom:6px">No matches found for this filter right now.</p>
-        <p style="font-size:12px;margin-bottom:14px">Check upcoming schedules or switch to "UCL Channels" to watch live sports.</p>
-        <button class="watch-match-btn" onclick="switchMainTab('ucl')" style="margin:0 auto">View Live UCL Channels</button>
+        <p style="font-size:12px;margin-bottom:14px">Check upcoming schedules or switch to "All Matches".</p>
+        <button class="watch-match-btn" onclick="document.querySelector('.chip[data-filter=all]').click()" style="margin:0 auto">View All Matches</button>
       </div>`;
     return;
   }
 
   container.innerHTML = list.map(m => {
-    const comp = m.competitions?.[0] || {};
-    const competitors = comp.competitors || [];
-    const home = competitors.find(c => c.homeAway === 'home') || competitors[0] || {};
-    const away = competitors.find(c => c.homeAway === 'away') || competitors[1] || {};
-
-    const homeName = home.team?.displayName || 'Home Team';
-    const awayName = away.team?.displayName || 'Away Team';
-    const homeLogo = home.team?.logo || '';
-    const awayLogo = away.team?.logo || '';
-    const homeScore = home.score !== undefined ? home.score : '-';
-    const awayScore = away.score !== undefined ? away.score : '-';
-
-    const isLive = m.status?.type?.state === 'in';
-    const timeHTML = formatMatchTime(m.date, m.status);
-    const channelPick = m.leagueCode === 'UCL' ? SPORTS_CHANNELS[0] : SPORTS_CHANNELS[1];
+    const servers = m.servers || [
+      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ];
 
     return `
-      <div class="match-card ${isLive ? 'is-live' : ''}">
+      <div class="match-card ${m.isLive ? 'is-live' : ''}">
         <div class="match-header">
-          <div class="match-comp">${m.compDisplayName}</div>
-          <div>${timeHTML}</div>
+          <div class="match-comp">${m.comp}</div>
+          <span class="match-status-badge ${m.isLive ? 'live' : (m.isFinished ? 'final' : 'scheduled')}">
+            ${m.statusText}
+          </span>
         </div>
 
         <div class="match-teams-row">
           <div class="team-side">
-            ${homeLogo ? `<img src="${homeLogo}" class="team-logo" alt="${homeName}" onerror="this.outerHTML='<div class=\\'team-logo-placeholder\\'>${homeName.slice(0,2)}</div>'"/>` : `<div class="team-logo-placeholder">${homeName.slice(0,2)}</div>`}
-            <span class="team-name">${homeName}</span>
+            ${m.homeLogo ? `<img src="${m.homeLogo}" class="team-logo" alt="${m.home}" onerror="this.outerHTML='<div class=\'team-logo-placeholder\'>${m.home.slice(0,2)}</div>'"/>` : `<div class="team-logo-placeholder">${m.home.slice(0,2)}</div>`}
+            <span class="team-name">${m.home}</span>
           </div>
 
           <div class="score-box">
-            <span class="score-numbers">${homeScore} - ${awayScore}</span>
-            <span class="score-time">${isLive ? m.status?.displayClock || 'LIVE' : 'Score'}</span>
+            <span class="score-numbers">${m.homeScore} - ${m.awayScore}</span>
+            <span class="score-time">${m.isLive ? 'IN PLAY' : (m.isFinished ? 'FT' : 'vs')}</span>
           </div>
 
           <div class="team-side away">
-            ${awayLogo ? `<img src="${awayLogo}" class="team-logo" alt="${awayName}" onerror="this.outerHTML='<div class=\\'team-logo-placeholder\\'>${awayName.slice(0,2)}</div>'"/>` : `<div class="team-logo-placeholder">${awayName.slice(0,2)}</div>`}
-            <span class="team-name">${awayName}</span>
+            ${m.awayLogo ? `<img src="${m.awayLogo}" class="team-logo" alt="${m.away}" onerror="this.outerHTML='<div class=\'team-logo-placeholder\'>${m.away.slice(0,2)}</div>'"/>` : `<div class="team-logo-placeholder">${m.away.slice(0,2)}</div>`}
+            <span class="team-name">${m.away}</span>
           </div>
         </div>
 
-        <div class="match-footer">
-          <div class="broadcast-info">
-            📺 Live on: <strong>${channelPick.name}</strong>
-          </div>
-          <button class="watch-match-btn" onclick="tuneMatch('${homeName} vs ${awayName}', '${channelPick.url}', '${channelPick.id}')">
-            ▶ Watch Live
-          </button>
+        <div class="match-commentator-row">
+          <span>🎙 ${m.commentator || 'Official Commentary'}</span>
+          <span>📺 ${m.channelName || 'beIN Sports HD'}</span>
+        </div>
+
+        <div class="match-servers-row">
+          ${servers.map((s, idx) => `
+            <button class="m-server-btn" onclick="playMatchServer('${m.home} vs ${m.away}', '${s.url}', '${s.name}', '${m.comp}', ${idx})">
+              ▶ ${s.name}
+            </button>
+          `).join('')}
+          ${m.camelRoomUrl ? `
+            <a href="${m.camelRoomUrl}" target="_blank" rel="noopener noreferrer" class="m-server-btn ext-hub">
+              🌐 Camel1 Room ↗
+            </a>
+          ` : ''}
         </div>
       </div>
     `;
   }).join('');
 }
 
-function tuneMatch(matchTitle, streamUrl, channelId) {
+function playMatchServer(matchTitle, serverUrl, serverName, comp, serverIdx = 0) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  const channel = state.allChannels.find(c => c.id === channelId) || { name: matchTitle, desc: 'Live Match Broadcast' };
-  playStream(streamUrl, { ...channel, name: matchTitle });
+  const channelObj = {
+    id: 'match_' + Date.now(),
+    name: `${matchTitle} (${serverName})`,
+    desc: `${comp} · Live Football`,
+    genre: comp,
+    servers: [
+      { name: serverName, url: serverUrl },
+      { name: 'Server 2 (HD)', url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+      { name: 'Server 3 (SD)', url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+    ],
+    schedule: DEFAULT_24H_LINEUP
+  };
+  playStream(serverUrl, channelObj, serverIdx);
 }
 
 // ============================================================
-// HLS VIDEO ENGINE & QUALITY CONTROL
+// HLS VIDEO ENGINE WITH AUTO-FAILOVER
 // ============================================================
-function playStream(url, channel) {
+function playStream(url, channel, serverIdx = 0) {
   state.currentChannel = channel;
+  state.activeServerIndex = serverIdx;
   overlay.classList.add('hidden');
   spinner.classList.add('show');
 
@@ -2143,6 +2670,9 @@ function playStream(url, channel) {
   document.getElementById('nw-meta').textContent = channel.desc || channel.genre || 'Live Stream';
   document.getElementById('nw-live-txt').textContent = 'CONNECTING…';
   document.getElementById('nw-badge').style.color = 'var(--yellow)';
+
+  // Update Player Servers Bar
+  updatePlayerServersUI(channel, serverIdx);
 
   // Reset audio commentary when switching channels
   const audioSel = document.getElementById('audio-selector');
@@ -2162,7 +2692,6 @@ function playStream(url, channel) {
     hlsInstance = null;
   }
 
-  // Detect iOS (iPhone / iPad / iPod) or Safari native HLS
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if (!isIOS && Hls.isSupported()) {
@@ -2200,6 +2729,16 @@ function playStream(url, channel) {
             if (networkRetry <= 2) {
               hlsInstance.startLoad();
             } else {
+              if (state.currentChannel && state.currentChannel.servers && state.currentChannel.servers.length > 1) {
+                const nextIdx = (state.activeServerIndex + 1) % state.currentChannel.servers.length;
+                if (nextIdx !== state.activeServerIndex) {
+                  showToast(`⚠ Server failed. Auto-switching to Server ${nextIdx + 1}…`);
+                  hlsInstance.destroy();
+                  hlsInstance = null;
+                  switchPlayerServer(nextIdx);
+                  return;
+                }
+              }
               console.warn('Hls network error, falling back to native player:', data);
               hlsInstance.destroy();
               hlsInstance = null;
@@ -2219,7 +2758,6 @@ function playStream(url, channel) {
     });
 
   } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    // Native iOS Safari HLS Support (Hardware-accelerated on iPhone)
     fallbackNative(url);
   } else {
     fallbackNative(url);
@@ -2308,17 +2846,25 @@ video.addEventListener('error', () => {
   spinner.classList.remove('show');
   document.getElementById('nw-live-txt').textContent = 'ERROR';
   document.getElementById('nw-badge').style.color = 'var(--red)';
-  showToast('⚠ Stream unavailable — try another channel or refresh');
+  if (state.currentChannel && state.currentChannel.servers && state.currentChannel.servers.length > 1) {
+    const nextIdx = (state.activeServerIndex + 1) % state.currentChannel.servers.length;
+    showToast(`⚠ Stream error. Switching to Server ${nextIdx + 1}…`);
+    setTimeout(() => switchPlayerServer(nextIdx), 1000);
+  } else {
+    showToast('⚠ Stream unavailable — try another server or channel');
+  }
 });
 
 // ============================================================
 // CHANNELS LIST RENDER (WITH REAL-TIME COMPUTED EPG)
 // ============================================================
 function filteredChannels() {
-  let list = state.activeTab === 'ucl' ? state.allChannels.filter(c => c.tags.includes('ucl'))
-           : state.activeTab === 'custom' ? state.allChannels.filter(c => c.custom)
-           : [...state.allChannels];
-  return list;
+  if (state.activeTab === 'bein') return state.allChannels.filter(c => c.category === 'bein');
+  if (state.activeTab === 'ssc') return state.allChannels.filter(c => c.category === 'ssc');
+  if (state.activeTab === 'ucl') return state.allChannels.filter(c => c.category === 'ucl');
+  if (state.activeTab === 'africa') return state.allChannels.filter(c => c.category === 'africa');
+  if (state.activeTab === 'custom') return state.allChannels.filter(c => c.custom);
+  return state.allChannels;
 }
 
 function toggleChannelInlineSched(e, channelId) {
@@ -2339,7 +2885,7 @@ function renderChannels() {
   if (!list.length) {
     container.innerHTML = `
       <div style="text-align:center;padding:32px 16px;color:var(--text-muted)">
-        <p style="font-size:14px;margin-bottom:6px">No channels found in this tab.</p>
+        <p style="font-size:14px;margin-bottom:6px">No channels found in this bouquet.</p>
         <p style="font-size:12px">Tap + at the top right to add any match stream URL.</p>
       </div>`;
     return;
@@ -2351,6 +2897,7 @@ function renderChannels() {
     const epg = getCurrentChannelProgram(c);
     const isActive = state.currentChannel && state.currentChannel.id === c.id;
     const sched = c.schedule || DEFAULT_24H_LINEUP;
+    const servers = c.servers || [{ name: 'Server 1 (FHD)', url: c.url }];
 
     return `
       <div class="channel-card ${isActive ? 'active' : ''}" data-id="${c.id}">
@@ -2362,13 +2909,32 @@ function renderChannels() {
               <div class="cc-genre">${c.genre || c.desc}</div>
             </div>
           </div>
-          <span class="play-indicator-pill">▶ WATCH</span>
+          <button class="play-indicator-pill" onclick="playStream('${servers[0].url}', state.allChannels.find(x => x.id === '${c.id}'), 0)">
+            ▶ PLAY
+          </button>
         </div>
+
+        <!-- Multi-Server Selector on Channel Card -->
+        ${servers.length > 1 ? `
+          <div class="cc-servers-row">
+            ${servers.map((s, sIdx) => `
+              <button class="cc-server-pill ${isActive && state.activeServerIndex === sIdx ? 'active' : ''}" onclick="event.stopPropagation(); playStream('${s.url}', state.allChannels.find(x => x.id === '${c.id}'), ${sIdx})">
+                ${s.name}
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
 
         <!-- Live Electronic Program Guide (EPG) -->
         <div class="cc-epg">
           <div class="epg-now">
             <span>🔴 AIRING NOW (${epg.nowTimeSlot}):</span> ${epg.nowTitle}
+          </div>
+          <div class="epg-progress-line">
+            <div class="epg-progress-track">
+              <div class="epg-progress-current" style="width:${epg.progressPct}%"></div>
+            </div>
+            <span class="epg-pct-lbl">${epg.progressPct}% (${epg.elapsedMinutes}m in)</span>
           </div>
           <div class="epg-next">
             <span>⏭ UP NEXT (${epg.nextTimeSlot}):</span> ${epg.nextTitle}
@@ -2405,20 +2971,17 @@ function renderChannels() {
 
   container.querySelectorAll('.channel-card').forEach(card => {
     card.addEventListener('click', (e) => {
-      // Don't trigger if user clicked inside the inline schedule drawer or toggle button
-      if (e.target.closest('.cc-sched-btn') || e.target.closest('.cc-inline-schedule')) return;
+      if (e.target.closest('.cc-sched-btn') || e.target.closest('.cc-inline-schedule') || e.target.closest('.cc-server-pill') || e.target.closest('.play-indicator-pill')) return;
       const ch = state.allChannels.find(c => c.id === card.dataset.id);
       if (ch) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        playStream(ch.url, ch);
+        const sUrl = ch.servers ? ch.servers[0].url : ch.url;
+        playStream(sUrl, ch, 0);
       }
     });
   });
 }
 
-// ============================================================
-// TABS & FILTERS
-// ============================================================
 // ============================================================
 // CAMEL1.TV LIVE MATCHES DATA & RENDERER
 // ============================================================
@@ -2431,7 +2994,7 @@ const CAMEL_MATCHES = [
     awayLogo: 'https://img.thesports.com/football/team/d39ce586fd7278342dde33b3090b3f75.png',
     homeScore: 2,
     awayScore: 1,
-    statusText: '🔴 LIVE 74\'',
+    statusText: "🔴 LIVE 74'",
     isLive: true,
     streamUrl: 'https://tv-trt1.medya.trt.com.tr/master.m3u8',
     camelRoomUrl: 'https://www.camel1.tv/en/live'
@@ -2444,9 +3007,9 @@ const CAMEL_MATCHES = [
     awayLogo: 'https://img.thesports.com/football/team/fbcf002c8d6dd34813fa2b3a4cc9b04c.png',
     homeScore: 1,
     awayScore: 1,
-    statusText: '🔴 LIVE 58\'',
+    statusText: "🔴 LIVE 58'",
     isLive: true,
-    streamUrl: 'https://bein-xtra-xumo.amagi.tv/playlistR720P.m3u8',
+    streamUrl: 'https://tv-trt2.medya.trt.com.tr/master.m3u8',
     camelRoomUrl: 'https://www.camel1.tv/en/live'
   },
   {
@@ -2459,7 +3022,7 @@ const CAMEL_MATCHES = [
     awayScore: 0,
     statusText: '⏱ Kickoff 21:00 EAT',
     isLive: false,
-    streamUrl: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
+    streamUrl: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8',
     camelRoomUrl: 'https://www.camel1.tv/en/live'
   },
   {
@@ -2472,7 +3035,7 @@ const CAMEL_MATCHES = [
     awayScore: 2,
     statusText: 'FT (Final)',
     isLive: false,
-    streamUrl: 'https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8',
+    streamUrl: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8',
     camelRoomUrl: 'https://www.camel1.tv/en/live'
   }
 ];
@@ -2490,7 +3053,7 @@ function renderCamelMatches() {
 
         <div class="match-teams-row">
           <div class="team-side">
-            <img src="${m.homeLogo}" class="team-logo" alt="${m.home}" onerror="this.outerHTML='<div class=\\'team-logo-placeholder\\'>${m.home.slice(0,2)}</div>'"/>
+            <img src="${m.homeLogo}" class="team-logo" alt="${m.home}" onerror="this.outerHTML='<div class=\'team-logo-placeholder\'>${m.home.slice(0,2)}</div>'"/>
             <span class="team-name">${m.home}</span>
           </div>
 
@@ -2500,14 +3063,14 @@ function renderCamelMatches() {
           </div>
 
           <div class="team-side away">
-            <img src="${m.awayLogo}" class="team-logo" alt="${m.away}" onerror="this.outerHTML='<div class=\\'team-logo-placeholder\\'>${m.away.slice(0,2)}</div>'"/>
+            <img src="${m.awayLogo}" class="team-logo" alt="${m.away}" onerror="this.outerHTML='<div class=\'team-logo-placeholder\'>${m.away.slice(0,2)}</div>'"/>
             <span class="team-name">${m.away}</span>
           </div>
         </div>
 
         <div class="match-footer" style="gap:8px">
-          <button class="watch-match-btn" style="flex:1" onclick="tuneMatch('${m.home} vs ${m.away}', '${m.streamUrl}', 'trt-1-ucl')">
-            ▶ Watch In-App
+          <button class="watch-match-btn" style="flex:1" onclick="playMatchServer('${m.home} vs ${m.away}', '${m.streamUrl}', 'Server 1 (FHD)', '${m.comp}', 0)">
+            ▶ Watch Live
           </button>
           <a href="${m.camelRoomUrl}" target="_blank" rel="noopener noreferrer" class="cb-open-btn" style="padding:7px 11px;font-size:11px">
             🌐 Open on Camel1
@@ -2589,7 +3152,6 @@ function checkAuthStatus() {
     } catch(e) {}
   }
   
-  // Not logged in: show dynamic login screen
   loginScreen.classList.remove('hidden');
   userPill.style.display = 'none';
   return false;
@@ -2689,8 +3251,10 @@ document.getElementById('add-confirm').addEventListener('click', () => {
     url: url,
     genre: tag,
     badge: 'USER',
-    tags: ['ucl', 'all', 'custom'],
+    category: 'custom',
+    tags: ['custom'],
     schedule: DEFAULT_24H_LINEUP,
+    servers: [{ name: 'Server 1 (Direct)', url: url }],
     custom: true
   };
 
@@ -2705,7 +3269,7 @@ document.getElementById('add-confirm').addEventListener('click', () => {
 
   switchMainTab('custom');
   showToast(`✓ Playing "${name}"`);
-  playStream(url, newChannel);
+  playStream(url, newChannel, 0);
 });
 
 // ============================================================
@@ -2720,13 +3284,13 @@ function showToast(msg) {
   toastT = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-// Auto-refresh match scores and schedule progress every 60 seconds
+// Auto-refresh match scores and schedule progress every 30 seconds
 setInterval(() => {
   if (state.activeTab === 'matches') fetchLiveProgramsAndMatches();
   if (state.currentChannel) updateActiveChannelGuideUI(state.currentChannel);
   renderChannels();
   if (state.activeTab === 'camel') renderCamelMatches();
-}, 60000);
+}, 30000);
 
 // ============================================================
 // 🎙 ENGLISH AUDIO COMMENTARY SYNC (talkSPORT 2 — VERIFIED LIVE)
@@ -2750,7 +3314,6 @@ function startEnglishCommentary() {
     document.addEventListener('click', () => englishAudio.play(), { once: true });
   });
 
-  // Wire Web Audio delay node for sync control
   try {
     if (!audioCtx) {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2776,11 +3339,9 @@ function updateDelay(val) {
   ascDelayVal.textContent = (audioDelay >= 0 ? '+' : '') + audioDelay.toFixed(1) + 's';
   ascSlider.value = audioDelay;
   if (delayNode) {
-    // Positive = delay audio (commentary behind video); Negative = skip audio forward
     const d = Math.max(0, audioDelay);
     delayNode.delayTime.value = d;
     if (audioDelay < 0) {
-      // Jump playback forward to compensate
       try { englishAudio.currentTime = Math.max(0, englishAudio.currentTime + Math.abs(audioDelay)); } catch(e) {}
     }
   }
@@ -2801,7 +3362,6 @@ audioSelector.addEventListener('change', (e) => {
     ascSlider.value = 0;
     ascDelayVal.textContent = '0.0s';
     showToast('🎙 Native audio restored');
-    // Switch native HLS audio track if available
     if (hlsInstance && !isNaN(parseInt(val))) {
       hlsInstance.audioTrack = parseInt(val);
     }
@@ -2813,9 +3373,6 @@ document.getElementById('asc-plus-btn').addEventListener('click',  () => updateD
 document.getElementById('asc-reset-btn').addEventListener('click', () => updateDelay(0));
 ascSlider.addEventListener('input', (e) => updateDelay(parseFloat(e.target.value)));
 
-// ============================================================
-// INITIALIZATION
-// ============================================================
 checkAuthStatus();
 loadCustoms();
 fetchLiveProgramsAndMatches();

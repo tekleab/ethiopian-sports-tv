@@ -1,4 +1,4 @@
-const CACHE_NAME = 'et-sports-v1';
+const CACHE_NAME = 'et-yacine-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -23,12 +23,18 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Never cache live video segments or manifests
-  if (e.request.url.includes('.m3u8') || e.request.url.includes('.ts') || e.request.url.includes('stream')) {
+  // Never cache live video segments, manifests, or audio streams
+  if (e.request.url.includes('.m3u8') || e.request.url.includes('.ts') || e.request.url.includes('stream') || e.request.url.includes('broadcasting.news')) {
+    return;
+  }
+  // Network first for HTML navigation
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match('./index.html'))
+    );
     return;
   }
   e.respondWith(
     caches.match(e.request).then(r => r || fetch(e.request))
   );
 });
-

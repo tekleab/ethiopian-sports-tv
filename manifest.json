@@ -1,7 +1,7 @@
 {
-  "name": "Ethiopian Sports TV — Live Football & UCL",
-  "short_name": "ET Sports TV",
-  "description": "Free live football, UEFA Champions League, and sports streaming for iPhone",
+  "name": "Yacine Sports TV — Live Football & Bouquets",
+  "short_name": "Yacine TV",
+  "description": "Free live football streaming with beIN, SSC, European UCL, and African bouquets",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -23,4 +23,3 @@
     }
   ]
 }
-
