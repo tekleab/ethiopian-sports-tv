@@ -4,14 +4,22 @@
  */
 
 const LEAGUES = [
+  { id: 'uefa.europa', name: 'UEFA Europa League' },
+  { id: 'uefa.europa.conf', name: 'UEFA Conference League' },
   { id: 'uefa.champions', name: 'UEFA Champions League' },
   { id: 'eng.1', name: 'Premier League' },
   { id: 'esp.1', name: 'La Liga' },
   { id: 'ita.1', name: 'Serie A' },
   { id: 'ger.1', name: 'Bundesliga' },
   { id: 'fra.1', name: 'Ligue 1' },
-  { id: 'tur.1', name: 'Süper Lig' },
-  { id: 'caf.champions', name: 'CAF Champions League' }
+  { id: 'tur.1', name: 'Turkish Süper Lig' },
+  { id: 'caf.champions', name: 'CAF Champions League' },
+  { id: 'conmebol.libertadores', name: 'Copa Libertadores' },
+  { id: 'conmebol.sudamericana', name: 'Copa Sudamericana' },
+  { id: 'ned.1', name: 'Eredivisie' },
+  { id: 'por.1', name: 'Primeira Liga' },
+  { id: 'bel.1', name: 'Belgian Pro League' },
+  { id: 'sco.1', name: 'Scottish Premiership' }
 ];
 
 class EspnProvider {

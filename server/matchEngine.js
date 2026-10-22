@@ -10,7 +10,6 @@ const ApiFootballProvider = require('./providers/apiFootball');
 const FootballDataProvider = require('./providers/footballData');
 const TheSportsDbProvider = require('./providers/theSportsDb');
 const EspnProvider = require('./providers/espnProvider');
-const { getCuratedFixtures } = require('./providers/curatedFixtures');
 
 class MatchMatchingEngine {
   constructor() {
@@ -214,10 +213,7 @@ class MatchMatchingEngine {
 
     const rawFixtures = [];
 
-    // 1. Curated marquee fixtures (ensures UEFA Champions League & derby coverage)
-    rawFixtures.push(...getCuratedFixtures());
-
-    // 2. ESPN free real-time scores
+    // 1. ESPN free real-time scores across all leagues
     try {
       const espnMatches = await this.espn.fetchAllFixtures();
       rawFixtures.push(...espnMatches);

@@ -468,12 +468,13 @@ class SportsApp {
 
   /**
    * Standalone GitHub Pages / iPhone Safari Mode
+   * Fetches 100% REAL LIVE FIXTURES directly from ESPN public API without any fake/demo matches.
    */
   async loadStandaloneMode() {
-    console.log('[App] Running in Standalone Safari / GitHub Pages PWA Mode');
+    console.log('[App] Loading REAL live fixtures from ESPN API (CORS enabled)...');
     this.directChannels = FALLBACK_DIRECT_STREAMS;
     if (this.statActive) this.statActive.textContent = `${FALLBACK_DIRECT_STREAMS.length} Verified Channels`;
-    if (this.statTotal) this.statTotal.textContent = `Safari PWA Engine Active`;
+    if (this.statTotal) this.statTotal.textContent = `Live ESPN Sync Active`;
 
     const mappedServers = FALLBACK_DIRECT_STREAMS.map((s, idx) => ({
       serverId: `srv-${idx}`,
@@ -488,126 +489,116 @@ class SportsApp {
       status: 'active'
     }));
 
-    // Curated Marquee Matches
-    const curated = [
-      {
-        id: 'cl-live-1',
-        competition: 'UEFA Champions League',
-        competition_logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/UEFA_Champions_League_logo_2.svg/320px-UEFA_Champions_League_logo_2.svg.png',
-        home_team: 'Real Madrid',
-        away_team: 'Borussia Dortmund',
-        home_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/86.png',
-        away_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/124.png',
-        start_time: new Date().toISOString(),
-        status: 'LIVE',
-        minute: "54'",
-        score_home: 2,
-        score_away: 1,
-        broadcasters: ['Esport3', 'A Spor', 'TNT Sports 1'],
-        streams: mappedServers.slice(0, 4)
-      },
-      {
-        id: 'cl-live-2',
-        competition: 'UEFA Champions League',
-        competition_logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/bf/UEFA_Champions_League_logo_2.svg/320px-UEFA_Champions_League_logo_2.svg.png',
-        home_team: 'Barcelona',
-        away_team: 'Bayern Munich',
-        home_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/83.png',
-        away_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/132.png',
-        start_time: new Date().toISOString(),
-        status: 'LIVE',
-        minute: "28'",
-        score_home: 1,
-        score_away: 0,
-        broadcasters: ['Esport3', 'A Spor', 'DAZN 1'],
-        streams: mappedServers.slice(0, 4)
-      },
-      {
-        id: 'tur-live-1',
-        competition: 'Turkish Süper Lig',
-        competition_logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/87/S%C3%BCper_Lig_logo.svg/320px-S%C3%BCper_Lig_logo.svg.png',
-        home_team: 'Galatasaray',
-        away_team: 'Fenerbahçe',
-        home_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/436.png',
-        away_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/435.png',
-        start_time: new Date().toISOString(),
-        status: 'LIVE',
-        minute: "76'",
-        score_home: 2,
-        score_away: 2,
-        broadcasters: ['A Spor', 'TRT Spor'],
-        streams: [mappedServers[0], mappedServers[3], mappedServers[1]]
-      },
-      {
-        id: 'epl-up-1',
-        competition: 'Premier League',
-        competition_logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Premier_League_Logo.svg/320px-Premier_League_Logo.svg.png',
-        home_team: 'Arsenal',
-        away_team: 'Liverpool',
-        home_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/359.png',
-        away_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/364.png',
-        start_time: new Date(Date.now() + 7200000).toISOString(),
-        status: 'UPCOMING',
-        minute: 'Scheduled',
-        score_home: 0,
-        score_away: 0,
-        broadcasters: ['A Spor', 'Esport3', 'Sky Sports'],
-        streams: mappedServers.slice(0, 4)
-      },
-      {
-        id: 'caf-up-1',
-        competition: 'CAF Champions League',
-        competition_logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/CAF_Champions_League_logo.svg/320px-CAF_Champions_League_logo.svg.png',
-        home_team: 'Al Ahly SC',
-        away_team: 'Mamelodi Sundowns',
-        home_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/3142.png',
-        away_logo: 'https://a.espncdn.com/i/teamlogos/soccer/500/3748.png',
-        start_time: new Date(Date.now() + 10800000).toISOString(),
-        status: 'UPCOMING',
-        minute: 'Scheduled',
-        score_home: 0,
-        score_away: 0,
-        broadcasters: ['Africa 24 Sport', 'Bahrain Sports 1'],
-        streams: [mappedServers[2], mappedServers[3], mappedServers[0]]
-      }
+    const REAL_LEAGUES = [
+      { id: 'uefa.europa', name: 'UEFA Europa League', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/2310.png' },
+      { id: 'uefa.europa.conf', name: 'UEFA Conference League', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/20296.png' },
+      { id: 'uefa.champions', name: 'UEFA Champions League', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/2.png' },
+      { id: 'eng.1', name: 'Premier League', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/23.png' },
+      { id: 'esp.1', name: 'La Liga', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/15.png' },
+      { id: 'ita.1', name: 'Serie A', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/12.png' },
+      { id: 'ger.1', name: 'Bundesliga', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/10.png' },
+      { id: 'fra.1', name: 'Ligue 1', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/9.png' },
+      { id: 'tur.1', name: 'Turkish Süper Lig', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/19.png' },
+      { id: 'caf.champions', name: 'CAF Champions League', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/2056.png' },
+      { id: 'conmebol.libertadores', name: 'Copa Libertadores', logo: 'https://a.espncdn.com/i/leaguelogos/soccer/500/2312.png' }
     ];
 
-    // Try live fetch from ESPN scoreboard directly in browser
-    try {
-      const espnRes = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard');
-      if (espnRes.ok) {
-        const data = await espnRes.json();
+    const realMatches = [];
+
+    // Fetch real fixtures across all active leagues concurrently
+    const promises = REAL_LEAGUES.map(async (league) => {
+      try {
+        const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${league.id}/scoreboard`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const data = await res.json();
         const events = data.events || [];
+
         events.forEach(evt => {
           const comp = evt.competitions?.[0] || {};
           const home = comp.competitors?.find(c => c.homeAway === 'home') || comp.competitors?.[0];
           const away = comp.competitors?.find(c => c.homeAway === 'away') || comp.competitors?.[1];
-          if (home && away) {
-            curated.push({
-              id: `espn-${evt.id}`,
-              competition: 'Premier League',
-              competition_logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Premier_League_Logo.svg/320px-Premier_League_Logo.svg.png',
-              home_team: home.team?.displayName || 'Home',
-              away_team: away.team?.displayName || 'Away',
-              home_logo: home.team?.logo,
-              away_logo: away.team?.logo,
-              start_time: evt.date || new Date().toISOString(),
-              status: evt.status?.type?.state === 'in' ? 'LIVE' : (evt.status?.type?.state === 'post' ? 'FINISHED' : 'UPCOMING'),
-              minute: evt.status?.displayClock ? `${evt.status.displayClock}'` : 'Scheduled',
-              score_home: parseInt(home.score, 10) || 0,
-              score_away: parseInt(away.score, 10) || 0,
-              broadcasters: ['A Spor', 'Esport3'],
-              streams: mappedServers.slice(0, 4)
+
+          if (!home || !away) return;
+
+          const state = evt.status?.type?.state || 'pre';
+          const clock = evt.status?.displayClock;
+          let status = 'UPCOMING';
+          let minuteDisplay = 'Scheduled';
+
+          if (state === 'in') {
+            status = 'LIVE';
+            minuteDisplay = clock ? `${clock}'` : 'LIVE';
+          } else if (state === 'post' || evt.status?.type?.completed) {
+            status = 'FINISHED';
+            minuteDisplay = 'FT';
+          } else {
+            minuteDisplay = new Date(evt.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          }
+
+          // Extract real broadcasters from ESPN competition feed
+          const broadcasterList = [];
+          if (comp.broadcasts) {
+            comp.broadcasts.forEach(b => {
+              if (Array.isArray(b.names)) broadcasterList.push(...b.names);
             });
           }
-        });
-      }
-    } catch (e) {
-      console.log('[App] Public scoreboard fetch optional:', e);
-    }
 
-    this.matches = curated;
-    const liveCount = curated.filter(m => m.status === 'LIVE').length;
+          // Smart channel routing for streams
+          const homeName = (home.team?.displayName || '').toLowerCase();
+          const awayName = (away.team?.displayName || '').toLowerCase();
+          const leagueName = (league.name || '').toLowerCase();
+
+          let streamOptions = [...mappedServers];
+          if (leagueName.includes('turk') || homeName.includes('besiktas') || homeName.includes('trabzon') || awayName.includes('besiktas') || awayName.includes('trabzon')) {
+            // Priority to A Spor (Turkey)
+            streamOptions = [mappedServers[0], mappedServers[1], mappedServers[3], mappedServers[4]];
+          } else if (leagueName.includes('la liga') || homeName.includes('celta') || homeName.includes('sociedad') || homeName.includes('getafe') || awayName.includes('sociedad')) {
+            // Priority to Esport3 (Spain)
+            streamOptions = [mappedServers[1], mappedServers[0], mappedServers[3], mappedServers[5]];
+          } else if (leagueName.includes('caf') || homeName.includes('ahly') || awayName.includes('sundowns')) {
+            // Priority to Africa 24 Sport
+            streamOptions = [mappedServers[2], mappedServers[3], mappedServers[0], mappedServers[1]];
+          }
+
+          realMatches.push({
+            id: `espn-${evt.id}`,
+            competition: league.name,
+            competition_logo: data.leagues?.[0]?.logos?.[0]?.href || league.logo,
+            home_team: home.team?.displayName || 'Home Team',
+            away_team: away.team?.displayName || 'Away Team',
+            home_logo: home.team?.logo || `https://a.espncdn.com/i/teamlogos/soccer/500/${home.id}.png`,
+            away_logo: away.team?.logo || `https://a.espncdn.com/i/teamlogos/soccer/500/${away.id}.png`,
+            start_time: evt.date || new Date().toISOString(),
+            status: status,
+            minute: minuteDisplay,
+            score_home: parseInt(home.score, 10) || 0,
+            score_away: parseInt(away.score, 10) || 0,
+            broadcasters: broadcasterList.length > 0 ? broadcasterList : ['A Spor', 'Esport3', 'TNT Sports'],
+            streams: streamOptions.slice(0, 4)
+          });
+        });
+      } catch (err) {
+        console.warn(`[App] League ${league.id} fetch skipped:`, err.message);
+      }
+    });
+
+    await Promise.allSettled(promises);
+
+    // Sort matches: LIVE first, then UPCOMING (closest kickoff), then FINISHED
+    realMatches.sort((a, b) => {
+      const order = { LIVE: 0, UPCOMING: 1, FINISHED: 2 };
+      if (order[a.status] !== order[b.status]) {
+        return order[a.status] - order[b.status];
+      }
+      return new Date(a.start_time) - new Date(b.start_time);
+    });
+
+    this.matches = realMatches;
+    const liveCount = realMatches.filter(m => m.status === 'LIVE').length;
+    this.updateTabCounters(liveCount, realMatches.length);
+    console.log(`[App] Successfully populated ${realMatches.length} 100% REAL fixtures!`);
+  }
     this.updateTabCounters(liveCount, curated.length);
   }
 
