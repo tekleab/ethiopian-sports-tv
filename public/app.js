@@ -113,6 +113,9 @@ class SportsApp {
     this.playerOverlay = document.getElementById('player-overlay');
     this.failoverBanner = document.getElementById('failover-banner');
     this.failoverMsg = document.getElementById('failover-msg');
+    this.broadcasterNotice = document.getElementById('broadcaster-notice-banner');
+    this.broadcasterNoticeNetworks = document.getElementById('broadcaster-notice-networks');
+    this.serverControlLabel = document.getElementById('server-control-label');
     this.serverGroup = document.getElementById('server-selector-group');
     this.qualitySelect = document.getElementById('quality-select');
     this.proxyCheckbox = document.getElementById('proxy-toggle-checkbox');
@@ -455,9 +458,27 @@ class SportsApp {
         channelLabel = `Feed Server ${idx + 1}`;
       }
 
+      let badgeClass = 'pill-sports';
+      let badgeText = s.contentBadge || '24/7 Sports';
+      if (s.contentType === 'LIVE_MATCH') {
+        badgeClass = 'pill-live-match';
+        badgeText = 'Live Match';
+      } else if (s.contentType === 'STUDIO_ANALYSIS') {
+        badgeClass = 'pill-studio';
+        badgeText = 'Studio / Analysis';
+      }
+
+      const region = s.regionLanguage || (s.country ? `${s.country} • Regional` : 'Global');
+
       btn.innerHTML = `
-        <span>Server ${idx + 1} • ${channelLabel}</span>
-        <span class="quality-badge">${s.quality || 'HD'}</span>
+        <div class="server-btn-header">
+          <span>Server ${idx + 1} • ${channelLabel}</span>
+        </div>
+        <div class="server-btn-meta">
+          <span class="${badgeClass}">${badgeText}</span>
+          <span class="region-pill">${region}</span>
+          <span class="quality-badge">${s.quality || '1080p FHD'}</span>
+        </div>
       `;
       btn.addEventListener('click', () => this.playServer(idx));
       this.serverGroup.appendChild(btn);
@@ -489,6 +510,23 @@ class SportsApp {
       this.playerSubtitle.textContent = `${match.competition} • Full Time (${match.score_home || 0} - ${match.score_away || 0})`;
     }
 
+    // Broadcaster Schedule Notice (Strict Validation against Official TV Guides)
+    if (match.has_direct_broadcaster) {
+      if (this.broadcasterNotice) this.broadcasterNotice.classList.add('hidden');
+      if (this.serverControlLabel) this.serverControlLabel.textContent = 'Verified Match Broadcasters & Feeds:';
+    } else {
+      if (this.broadcasterNotice) {
+        this.broadcasterNotice.classList.remove('hidden');
+        if (this.broadcasterNoticeNetworks) {
+          const bcList = (match.broadcasters && match.broadcasters.length > 0)
+            ? match.broadcasters.join(', ')
+            : 'Regional Pay-TV Networks (Paramount+, TNT Sports, Sky Sport, Canal+)';
+          this.broadcasterNoticeNetworks.textContent = `Official TV Rights: ${bcList}`;
+        }
+      }
+      if (this.serverControlLabel) this.serverControlLabel.textContent = 'Studio / Analysis Feeds & 24/7 Channels:';
+    }
+
     document.querySelectorAll('.match-card').forEach(c => {
       c.classList.toggle('is-selected', c.dataset.id === match.id);
     });
@@ -508,6 +546,9 @@ class SportsApp {
     this.currentChannel = channel;
     this.currentMatch = null;
 
+    if (this.broadcasterNotice) this.broadcasterNotice.classList.add('hidden');
+    if (this.serverControlLabel) this.serverControlLabel.textContent = 'All Available Feed Servers:';
+
     const badge = document.getElementById('player-status-badge');
     const badgeText = document.getElementById('player-status-text');
     if (badge) badge.className = 'live-pill is-channel';
@@ -522,6 +563,10 @@ class SportsApp {
       serverLabel: `Server ${idx + 1} • ${c.name} (${c.quality})`,
       name: c.name,
       channelName: c.name,
+      regionLanguage: c.country ? `${c.country} • Sports` : 'Global',
+      contentType: 'GENERAL_SPORTS',
+      contentBadge: '24/7 Sports Feed',
+      isDirectBroadcaster: false,
       quality: c.quality,
       directUrl: c.url,
       proxyUrl: c.proxyUrl || `/api/proxy/stream.m3u8?url=${encodeURIComponent(c.url)}`,
@@ -672,32 +717,102 @@ class SportsApp {
             });
           }
 
-          // Smart channel routing for streams
-          const homeName = (home.team?.displayName || '').toLowerCase();
-          const awayName = (away.team?.displayName || '').toLowerCase();
-          const leagueName = (league.name || '').toLowerCase();
+          // Strict Channel Schedule Verification & Categorization
+          const homeLower = (home.team?.displayName || '').toLowerCase();
+          const awayLower = (away.team?.displayName || '').toLowerCase();
+          const leagueLower = (league.name || '').toLowerCase();
+          const bcLower = broadcasterList.map(b => b.toLowerCase());
 
-          let streamOptions = [...mappedServers];
-          if (leagueName.includes('turk') || homeName.includes('besiktas') || homeName.includes('trabzon') || awayName.includes('besiktas') || awayName.includes('trabzon')) {
-            // Priority to A Spor (Turkey), then all other servers
-            streamOptions = [mappedServers[0], ...mappedServers.filter((_, idx) => idx !== 0)];
-          } else if (leagueName.includes('la liga') || homeName.includes('celta') || homeName.includes('sociedad') || homeName.includes('getafe') || awayName.includes('sociedad')) {
-            // Priority to Esport3 (Spain), then all other servers
-            streamOptions = [mappedServers[1], ...mappedServers.filter((_, idx) => idx !== 1)];
-          } else if (leagueName.includes('caf') || homeName.includes('ahly') || awayName.includes('sundowns')) {
-            // Priority to Africa 24 Sport, then all other servers
-            streamOptions = [mappedServers[2], ...mappedServers.filter((_, idx) => idx !== 2)];
-          }
+          // Score and classify each available channel
+          const evaluatedStreams = mappedServers.map(s => {
+            const sNameLower = s.name.toLowerCase();
+            let contentType = 'GENERAL_SPORTS';
+            let contentBadge = '24/7 Sports';
+            let priority = 10;
+            let isDirect = false;
+            let regionLanguage = 'Global';
+
+            if (sNameLower.includes('aspor')) {
+              regionLanguage = 'TR • Turkish';
+              const isBroadcasterListed = bcLower.some(b => b.includes('spor') || b.includes('trt') || b.includes('atv'));
+              const isTurkishFixture = leagueLower.includes('turk') || homeLower.includes('besiktas') || awayLower.includes('besiktas') || homeLower.includes('galatasaray') || awayLower.includes('galatasaray') || homeLower.includes('fenerbahce') || awayLower.includes('fenerbahce') || homeLower.includes('trabzon') || awayLower.includes('trabzon');
+
+              if (isBroadcasterListed || (isTurkishFixture && leagueLower.includes('kupa'))) {
+                contentType = 'LIVE_MATCH';
+                contentBadge = 'Live Match';
+                priority = 100;
+                isDirect = true;
+              } else if (isTurkishFixture || leagueLower.includes('uefa') || leagueLower.includes('europa') || leagueLower.includes('champions')) {
+                contentType = 'STUDIO_ANALYSIS';
+                contentBadge = 'Studio / Analysis';
+                priority = 75;
+              }
+            } else if (sNameLower.includes('esport3')) {
+              regionLanguage = 'ES • Catalan/Spanish';
+              const isBroadcasterListed = bcLower.some(b => b.includes('esport') || b.includes('tv3') || b.includes('movistar') || b.includes('dazn'));
+              const isSpanishFixture = leagueLower.includes('la liga') || leagueLower.includes('copa') || homeLower.includes('celta') || awayLower.includes('celta') || homeLower.includes('sociedad') || awayLower.includes('sociedad') || homeLower.includes('getafe') || awayLower.includes('getafe');
+
+              if (isBroadcasterListed) {
+                contentType = 'LIVE_MATCH';
+                contentBadge = 'Live Match';
+                priority = 95;
+                isDirect = true;
+              } else if (isSpanishFixture || leagueLower.includes('europa') || leagueLower.includes('conf')) {
+                contentType = 'STUDIO_ANALYSIS';
+                contentBadge = 'Studio / Analysis';
+                priority = 70;
+              }
+            } else if (sNameLower.includes('africa24') || sNameLower.includes('africa 24')) {
+              regionLanguage = 'Pan-African • FR/EN';
+              const isAfricanFixture = leagueLower.includes('caf') || leagueLower.includes('african') || homeLower.includes('pirates') || awayLower.includes('stars') || homeLower.includes('ahly') || awayLower.includes('sundowns');
+
+              if (isAfricanFixture) {
+                contentType = 'STUDIO_ANALYSIS';
+                contentBadge = 'Studio / Analysis';
+                priority = 85;
+              }
+            } else if (sNameLower.includes('bahrain')) {
+              regionLanguage = 'BH • Arabic';
+              const isGulfOrAsian = leagueLower.includes('afc') || leagueLower.includes('gulf') || leagueLower.includes('saudi');
+              if (isGulfOrAsian) {
+                contentType = 'STUDIO_ANALYSIS';
+                contentBadge = 'Studio / Analysis';
+                priority = 70;
+              }
+            } else if (sNameLower.includes('turkmenistan')) {
+              regionLanguage = 'TM • Turkmen';
+            } else if (sNameLower.includes('red bull')) {
+              regionLanguage = 'Global • English';
+            } else if (sNameLower.includes('ebs')) {
+              regionLanguage = 'ET • Amharic';
+            } else if (sNameLower.includes('addis')) {
+              regionLanguage = 'ET • Amharic';
+            }
+
+            return {
+              ...s,
+              regionLanguage,
+              contentType,
+              contentBadge,
+              isDirectBroadcaster: isDirect,
+              priority
+            };
+          });
+
+          // Sort streams by priority: LIVE_MATCH (100) -> STUDIO_ANALYSIS (70-85) -> GENERAL_SPORTS (10)
+          evaluatedStreams.sort((a, b) => b.priority - a.priority);
+
+          const hasDirectBroadcaster = evaluatedStreams.some(s => s.isDirectBroadcaster);
 
           // Format labels with Server number & clean name
-          const formattedStreams = streamOptions.map((s, sIdx) => {
+          const formattedStreams = evaluatedStreams.map((s, sIdx) => {
             const chanName = s.name || s.channelName || `Server ${sIdx + 1}`;
             return {
               ...s,
               serverId: `server-${sIdx + 1}`,
               name: chanName,
               channelName: chanName,
-              serverLabel: `Server ${sIdx + 1} • ${chanName} (${s.quality || 'HD'})`
+              serverLabel: `Server ${sIdx + 1} • ${chanName} (${s.quality || '1080p FHD'})`
             };
           });
 
@@ -715,8 +830,9 @@ class SportsApp {
             kickoff_formatted: kickoffFormatted,
             score_home: parseInt(home.score, 10) || 0,
             score_away: parseInt(away.score, 10) || 0,
-            broadcasters: broadcasterList.length > 0 ? broadcasterList : ['A Spor', 'Esport3', 'TNT Sports'],
-            streams: formattedStreams
+            broadcasters: broadcasterList.length > 0 ? broadcasterList : ['Paramount+', 'TNT Sports', 'Sky Sport', 'A Spor'],
+            streams: formattedStreams,
+            has_direct_broadcaster: hasDirectBroadcaster
           });
         });
       } catch (err) {
@@ -826,14 +942,22 @@ class SportsApp {
 
         <div class="match-footer">
           <div class="broadcaster-tags">
-            ${broadcasters.slice(0, 2).map(b => `<span class="bc-tag">${b}</span>`).join('')}
-            ${streamsCount > 0 ? `<span class="bc-tag" style="color:var(--primary); border-color:var(--border-active)">${streamsCount} Servers</span>` : ''}
+            ${m.has_direct_broadcaster
+              ? '<span class="match-bc-pill bc-live">🟢 Official Match Feed</span>'
+              : '<span class="match-bc-pill bc-studio">🔵 Studio / Analysis</span>'
+            }
+            ${broadcasters.length > 0 ? `<span class="bc-tag">${broadcasters[0]}</span>` : ''}
           </div>
           <button class="btn-watch">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
             Watch
           </button>
         </div>
+        ${broadcasters.length > 0 ? `
+          <div class="official-rights-tag" title="${broadcasters.join(', ')}">
+            TV Rights: ${broadcasters.slice(0, 3).join(', ')}
+          </div>
+        ` : ''}
       `;
 
       card.addEventListener('click', () => this.selectMatch(m));

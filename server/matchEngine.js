@@ -94,7 +94,45 @@ class MatchMatchingEngine {
   }
 
   /**
+   * Return metadata (region, language, content type) for a stream
+   */
+  getChannelMetadata(stream) {
+    const sName = (stream.name || '').toLowerCase();
+    const cCode = (stream.country || '').toUpperCase();
+
+    if (sName.includes('aspor')) {
+      return { regionLanguage: 'TR • Turkish', defaultType: 'STUDIO_ANALYSIS' };
+    }
+    if (sName.includes('esport3')) {
+      return { regionLanguage: 'ES • Catalan/Spanish', defaultType: 'STUDIO_ANALYSIS' };
+    }
+    if (sName.includes('africa24') || sName.includes('africa 24')) {
+      return { regionLanguage: 'Pan-African • FR/EN', defaultType: 'STUDIO_ANALYSIS' };
+    }
+    if (sName.includes('bahrain')) {
+      return { regionLanguage: 'BH • Arabic', defaultType: 'STUDIO_ANALYSIS' };
+    }
+    if (sName.includes('turkmenistan')) {
+      return { regionLanguage: 'TM • Turkmen/Russian', defaultType: 'GENERAL_SPORTS' };
+    }
+    if (sName.includes('red bull') || sName.includes('redbull')) {
+      return { regionLanguage: 'Global • English', defaultType: 'GENERAL_SPORTS' };
+    }
+    if (sName.includes('ebs')) {
+      return { regionLanguage: 'ET • Amharic', defaultType: 'GENERAL_SPORTS' };
+    }
+    if (sName.includes('addis')) {
+      return { regionLanguage: 'ET • Amharic', defaultType: 'GENERAL_SPORTS' };
+    }
+    return {
+      regionLanguage: `${cCode || 'Global'} • Sports`,
+      defaultType: 'GENERAL_SPORTS'
+    };
+  }
+
+  /**
    * Map active streams from SQLite database to a given match fixture
+   * Enforces strict validation: direct live match broadcasters vs studio/analysis vs 24/7 feeds
    */
   mapStreamsToFixture(fixture, activeStreams) {
     if (!activeStreams || activeStreams.length === 0) {
@@ -104,99 +142,121 @@ class MatchMatchingEngine {
     const matchedStreams = [];
     const usedStreamIds = new Set();
     const broadcasters = Array.isArray(fixture.broadcasters) ? fixture.broadcasters : [];
+    const compLower = (fixture.competition || '').toLowerCase();
+    const homeLower = (fixture.home_team || '').toLowerCase();
+    const awayLower = (fixture.away_team || '').toLowerCase();
 
-    // 1. Broadcaster Match: Match explicit broadcasters listed for the fixture
+    // 1. Direct Official Broadcaster Match: Match explicit broadcasters listed in TV guide
     for (const bName of broadcasters) {
       for (const stream of activeStreams) {
         if (usedStreamIds.has(stream.id)) continue;
         const score = this.calculateMatchScore(bName, stream);
         if (score >= 80) {
+          const meta = this.getChannelMetadata(stream);
           matchedStreams.push({
             stream,
-            score,
-            reason: `Broadcaster match: "${bName}"`
+            score: 100,
+            contentType: 'LIVE_MATCH',
+            contentBadge: 'Live Match Broadcaster',
+            isDirectBroadcaster: true,
+            regionLanguage: meta.regionLanguage,
+            reason: `Official TV Broadcaster Match: "${bName}"`
           });
           usedStreamIds.add(stream.id);
         }
       }
     }
 
-    // 2. League / Regional Affinity Match (if more streams needed)
-    const compLower = (fixture.competition || '').toLowerCase();
-    if (matchedStreams.length < 3) {
-      for (const stream of activeStreams) {
-        if (usedStreamIds.has(stream.id)) continue;
+    // 2. Tournament & League Affinity: Verified Studio / Analysis Feeds
+    for (const stream of activeStreams) {
+      if (usedStreamIds.has(stream.id)) continue;
 
-        let affinity = 0;
-        let reason = '';
+      const sClean = (stream.clean_name || stream.name || '').toLowerCase();
+      const meta = this.getChannelMetadata(stream);
+      let isStudioMatch = false;
+      let reason = '';
+      let isDirect = false;
 
-        if (compLower.includes('super lig') || compLower.includes('turk')) {
-          if (stream.country === 'TR' || stream.clean_name.includes('aspor')) {
-            affinity = 75;
-            reason = 'Turkish League Regional Stream';
-          }
-        } else if (compLower.includes('la liga') || compLower.includes('copa')) {
-          if (stream.country === 'ES' || stream.clean_name.includes('esport3')) {
-            affinity = 75;
-            reason = 'Spanish Football Broadcaster';
-          }
-        } else if (compLower.includes('caf') || compLower.includes('african')) {
-          if (stream.country === 'AFRICA' || stream.country === 'ET' || stream.clean_name.includes('africa24')) {
-            affinity = 75;
-            reason = 'African Football Feed';
-          }
-        } else if (compLower.includes('afc') || compLower.includes('gulf') || compLower.includes('saudi')) {
-          if (stream.country === 'BH' || stream.clean_name.includes('bahrain')) {
-            affinity = 75;
-            reason = 'Gulf/AFC Broadcaster';
-          }
+      if (compLower.includes('super lig') || compLower.includes('turk') || homeLower.includes('besiktas') || awayLower.includes('besiktas') || homeLower.includes('galatasaray') || awayLower.includes('fenerbahce')) {
+        if (stream.country === 'TR' || sClean.includes('aspor')) {
+          isStudioMatch = true;
+          isDirect = compLower.includes('türkiye kupası') || compLower.includes('turkish cup');
+          reason = isDirect ? 'Official Cup Broadcaster' : 'Turkish Süper Lig Studio & Match Feed';
         }
-
-        if (affinity > 0) {
-          matchedStreams.push({ stream, score: affinity, reason });
-          usedStreamIds.add(stream.id);
+      } else if (compLower.includes('la liga') || compLower.includes('copa') || homeLower.includes('celta') || awayLower.includes('sociedad') || homeLower.includes('barcelona')) {
+        if (stream.country === 'ES' || sClean.includes('esport3')) {
+          isStudioMatch = true;
+          reason = 'Spanish & Catalan Football Studio Analysis';
+        }
+      } else if (compLower.includes('caf') || compLower.includes('african') || homeLower.includes('orlando') || awayLower.includes('sundowns')) {
+        if (stream.country === 'AFRICA' || stream.country === 'ET' || sClean.includes('africa24')) {
+          isStudioMatch = true;
+          reason = 'Pan-African Football Studio & Highlights Feed';
+        }
+      } else if (compLower.includes('afc') || compLower.includes('gulf') || compLower.includes('saudi')) {
+        if (stream.country === 'BH' || sClean.includes('bahrain')) {
+          isStudioMatch = true;
+          reason = 'Gulf & Asian Sports Coverage';
         }
       }
-    }
 
-    // 3. Fallback Multi-tier assignment: Top low-latency active sports channels
-    if (matchedStreams.length < 4) {
-      const topLowLatency = activeStreams
-        .filter(s => !usedStreamIds.has(s.id))
-        .sort((a, b) => (a.response_time_ms || 9999) - (b.response_time_ms || 9999));
-
-      for (const stream of topLowLatency) {
-        if (matchedStreams.length >= 4) break;
+      if (isStudioMatch) {
         matchedStreams.push({
           stream,
-          score: 50,
-          reason: 'Global Verified Sports Server'
+          score: isDirect ? 95 : 75,
+          contentType: isDirect ? 'LIVE_MATCH' : 'STUDIO_ANALYSIS',
+          contentBadge: isDirect ? 'Live Match Broadcaster' : 'Studio / Analysis Feed',
+          isDirectBroadcaster: isDirect,
+          regionLanguage: meta.regionLanguage,
+          reason
         });
         usedStreamIds.add(stream.id);
       }
     }
 
-    // Format streams with Server 1 (FHD), Server 2 (HD), Server 3 (SD), Server 4 (Backup)
-    const qualityTiers = ['FHD (1080p)', 'HD (720p)', 'SD (480p)', 'Backup Server'];
+    // 3. Fallback Sports Channels (Labeled strictly as 24/7 Sports Hub)
+    if (matchedStreams.length < 4) {
+      const remainingStreams = activeStreams
+        .filter(s => !usedStreamIds.has(s.id))
+        .sort((a, b) => (a.response_time_ms || 9999) - (b.response_time_ms || 9999));
+
+      for (const stream of remainingStreams) {
+        if (matchedStreams.length >= 6) break;
+        const meta = this.getChannelMetadata(stream);
+        matchedStreams.push({
+          stream,
+          score: 40,
+          contentType: 'GENERAL_SPORTS',
+          contentBadge: '24/7 Sports Feed',
+          isDirectBroadcaster: false,
+          regionLanguage: meta.regionLanguage,
+          reason: 'Continuous Sports News & Highlights Feed'
+        });
+        usedStreamIds.add(stream.id);
+      }
+    }
 
     return matchedStreams.map((m, idx) => {
       const s = m.stream;
       const serverNum = idx + 1;
-      const tierLabel = qualityTiers[idx] || `Server ${serverNum}`;
       const proxyUrl = `/api/proxy/stream.m3u8?url=${encodeURIComponent(s.url)}`;
 
       return {
         serverId: `server-${serverNum}`,
-        serverLabel: `Server ${serverNum} • ${tierLabel}`,
+        serverLabel: `Server ${serverNum} • ${s.name} (${s.quality || '1080p FHD'})`,
         channelId: s.id,
         channelName: s.name,
         country: s.country,
-        quality: s.quality || 'HD',
+        regionLanguage: m.regionLanguage || `${s.country} • Sports`,
+        quality: s.quality || '1080p FHD',
+        contentType: m.contentType,
+        contentBadge: m.contentBadge,
+        isDirectBroadcaster: m.isDirectBroadcaster,
+        matchReason: m.reason,
         latencyMs: s.response_time_ms,
         corsSupported: !!s.cors_supported,
         directUrl: s.url,
         proxyUrl: proxyUrl,
-        // Smart streamUrl: uses proxyUrl to guarantee zero CORS/mixed-content playback issues
         streamUrl: proxyUrl,
         isVerified: s.status === 'active',
         status: s.status
