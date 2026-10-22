@@ -129,16 +129,47 @@
         </div>
       </div>
 
-      <!-- Server / Quality Selection Bar (FHD / HD / SD) -->
+      <!-- Server / Quality Selection Bar (FHD / HD / SD / 360p) -->
       <div class="server-control-strip">
-        <div style="display:flex; align-items:center; gap:10px">
-          <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px">Stream Servers:</span>
-          <div id="server-selector-group" class="server-selector-group">
-            <!-- Dynamic Server Pills: Server 1 (FHD), Server 2 (HD), Server 3 (SD) -->
+        <!-- Quality Selector (for different networks: 360p Data Saver, 480p Mobile, 720p, 1080p, Auto) -->
+        <div class="control-row">
+          <div style="display:flex; align-items:center; gap:8px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <span class="control-label">Quality (Network Preset):</span>
+          </div>
+          <div id="quality-selector-group" class="quality-selector-group">
+            <button class="quality-pill active" data-quality="auto" title="Automatically adjusts bitrate based on connection speed">
+              <span class="q-title">Auto</span>
+              <span class="q-tag">Adaptive</span>
+            </button>
+            <button class="quality-pill" data-quality="1080" title="1080p Full HD - Best for High Speed Wi-Fi / Broadband">
+              <span class="q-title">1080p FHD</span>
+              <span class="q-tag">Fast Wi-Fi</span>
+            </button>
+            <button class="quality-pill" data-quality="720" title="720p HD - Good for 4G LTE">
+              <span class="q-title">720p HD</span>
+              <span class="q-tag">4G LTE</span>
+            </button>
+            <button class="quality-pill" data-quality="480" title="480p SD - Smooth for Mobile 3G networks">
+              <span class="q-title">480p SD</span>
+              <span class="q-tag">Mobile 3G</span>
+            </button>
+            <button class="quality-pill" data-quality="360" title="360p Low - Data Saver for slow or limited connections">
+              <span class="q-title">360p Low</span>
+              <span class="q-tag">Data Saver</span>
+            </button>
           </div>
         </div>
-        <div style="font-size:0.75rem; color:var(--text-dim)">
-          100% In-Browser HLS • Zero Ads • Auto Multi-Server Failover
+
+        <!-- Stream Servers (All Available Feeds) -->
+        <div class="control-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border)">
+          <div style="display:flex; align-items:center; gap:8px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            <span class="control-label">All Available Feed Servers:</span>
+          </div>
+          <div id="server-selector-group" class="server-selector-group">
+            <!-- Dynamic Server Pills: All Available Servers -->
+          </div>
         </div>
       </div>
     </section>

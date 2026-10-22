@@ -89,6 +89,8 @@ class SportsApp {
     this.currentChannel = null;
     this.currentServers = [];
     this.activeServerIndex = 0;
+    this.selectedQuality = 'auto';
+    this.currentStreamUrl = '';
     this.isBackendOnline = false;
     this.useProxy = !this.isIOS; // On iOS Safari, native HLS bypasses CORS natively
 
@@ -237,6 +239,16 @@ class SportsApp {
       });
     }
 
+    // Quality Selector Pills (Auto, 1080p, 720p, 480p, 360p)
+    const qButtons = document.querySelectorAll('.quality-pill');
+    qButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        qButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.setQuality(btn.dataset.quality);
+      });
+    });
+
     this.tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         this.tabButtons.forEach(b => b.classList.remove('active'));
@@ -298,6 +310,7 @@ class SportsApp {
   }
 
   loadStream(streamUrl, directUrl) {
+    this.currentStreamUrl = directUrl || streamUrl;
     // On iOS Safari, or when backend proxy is not reachable, use directUrl natively
     const shouldUseProxy = this.useProxy && this.isBackendOnline && !this.isIOS;
     const finalUrl = shouldUseProxy
@@ -314,6 +327,75 @@ class SportsApp {
       this.video.play().catch(e => {
         console.log('[Native HLS] Autoplay waiting for user gesture:', e);
       });
+    }
+  }
+
+  setQuality(targetQuality) {
+    this.selectedQuality = targetQuality; // 'auto', '1080', '720', '480', '360'
+
+    // Update active button state
+    const pills = document.querySelectorAll('.quality-pill');
+    pills.forEach(p => {
+      p.classList.toggle('active', p.dataset.quality === String(targetQuality));
+    });
+
+    // 1. If using HLS.js
+    if (this.hls && Hls.isSupported() && !this.isIOS) {
+      if (targetQuality === 'auto') {
+        this.hls.currentLevel = -1;
+        this.showFailover('Quality: Auto (Adaptive Bitrate)');
+      } else {
+        const targetH = parseInt(targetQuality, 10);
+        const levels = this.hls.levels || [];
+        if (levels.length > 0) {
+          let bestIdx = 0;
+          let minDiff = 999999;
+          levels.forEach((lvl, idx) => {
+            const h = lvl.height || Math.round((lvl.bitrate || 0) / 1000);
+            const diff = Math.abs(h - targetH);
+            if (diff < minDiff) {
+              minDiff = diff;
+              bestIdx = idx;
+            }
+          });
+          this.hls.currentLevel = bestIdx;
+          const chosen = levels[bestIdx];
+          const actualH = chosen ? (chosen.height || targetQuality) : targetQuality;
+          const label = targetQuality === '360' ? '360p (Data Saver)' : (targetQuality === '480' ? '480p (Mobile 3G)' : `${actualH}p HD`);
+          this.showFailover(`Quality Locked: ${label}`);
+        } else {
+          this.showFailover(`Quality Preset: ${targetQuality}p`);
+        }
+      }
+      return;
+    }
+
+    // 2. If using Safari Native HLS (iOS iPhone 11 Pro Max)
+    if (this.currentStreamUrl) {
+      let variantUrl = this.currentStreamUrl;
+      const tH = String(targetQuality);
+
+      if (variantUrl.includes('aspor.m3u8') || variantUrl.includes('aspor_')) {
+        variantUrl = (tH === 'auto')
+          ? 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8'
+          : `https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor_${tH}p.m3u8`;
+      } else if (variantUrl.includes('esport3')) {
+        if (tH === '1080') {
+          variantUrl = 'https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/bitrate_3.m3u8';
+        } else if (tH === '720') {
+          variantUrl = 'https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/bitrate_2.m3u8';
+        } else if (tH === '480' || tH === '360') {
+          variantUrl = 'https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/bitrate_1.m3u8';
+        } else {
+          variantUrl = 'https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/master.m3u8';
+        }
+      }
+
+      this.video.src = variantUrl;
+      this.video.load();
+      this.video.play().catch(e => console.log(e));
+      const label = targetQuality === '360' ? '360p (Data Saver)' : (targetQuality === '480' ? '480p (Mobile 3G)' : `${targetQuality}p`);
+      this.showFailover(`Safari Quality: ${targetQuality === 'auto' ? 'Auto' : label}`);
     }
   }
 
@@ -398,19 +480,21 @@ class SportsApp {
     this.playerTitle.textContent = channel.name;
     this.playerSubtitle.textContent = `24/7 Sports Stream • ${channel.country || 'Global'} (${channel.quality || '1080p'})`;
 
-    const serverObj = {
-      serverLabel: `${channel.name} (Primary)`,
-      name: channel.name,
-      quality: channel.quality,
-      directUrl: channel.url,
-      proxyUrl: channel.proxyUrl || `/api/proxy/stream.m3u8?url=${encodeURIComponent(channel.url)}`,
-      status: channel.status
-    };
+    // Map ALL available channels as servers so the user can switch feeds instantly
+    this.currentServers = this.directChannels.map((c, idx) => ({
+      serverId: `server-${idx + 1}`,
+      serverLabel: `Server ${idx + 1} • ${c.name} (${c.quality})`,
+      name: c.name,
+      quality: c.quality,
+      directUrl: c.url,
+      proxyUrl: c.proxyUrl || `/api/proxy/stream.m3u8?url=${encodeURIComponent(c.url)}`,
+      status: c.status
+    }));
 
-    this.currentServers = [serverObj];
-    this.activeServerIndex = 0;
+    const foundIdx = this.directChannels.findIndex(c => c.id === channel.id);
+    this.activeServerIndex = foundIdx !== -1 ? foundIdx : 0;
     this.renderServerControls(this.currentServers);
-    this.playServer(0);
+    this.playServer(this.activeServerIndex);
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -551,15 +635,22 @@ class SportsApp {
 
           let streamOptions = [...mappedServers];
           if (leagueName.includes('turk') || homeName.includes('besiktas') || homeName.includes('trabzon') || awayName.includes('besiktas') || awayName.includes('trabzon')) {
-            // Priority to A Spor (Turkey)
-            streamOptions = [mappedServers[0], mappedServers[1], mappedServers[3], mappedServers[4]];
+            // Priority to A Spor (Turkey), then all other servers
+            streamOptions = [mappedServers[0], ...mappedServers.filter((_, idx) => idx !== 0)];
           } else if (leagueName.includes('la liga') || homeName.includes('celta') || homeName.includes('sociedad') || homeName.includes('getafe') || awayName.includes('sociedad')) {
-            // Priority to Esport3 (Spain)
-            streamOptions = [mappedServers[1], mappedServers[0], mappedServers[3], mappedServers[5]];
+            // Priority to Esport3 (Spain), then all other servers
+            streamOptions = [mappedServers[1], ...mappedServers.filter((_, idx) => idx !== 1)];
           } else if (leagueName.includes('caf') || homeName.includes('ahly') || awayName.includes('sundowns')) {
-            // Priority to Africa 24 Sport
-            streamOptions = [mappedServers[2], mappedServers[3], mappedServers[0], mappedServers[1]];
+            // Priority to Africa 24 Sport, then all other servers
+            streamOptions = [mappedServers[2], ...mappedServers.filter((_, idx) => idx !== 2)];
           }
+
+          // Format labels with Server number
+          const formattedStreams = streamOptions.map((s, sIdx) => ({
+            ...s,
+            serverId: `server-${sIdx + 1}`,
+            serverLabel: `Server ${sIdx + 1} • ${s.name} (${s.quality})`
+          }));
 
           realMatches.push({
             id: `espn-${evt.id}`,
@@ -575,7 +666,7 @@ class SportsApp {
             score_home: parseInt(home.score, 10) || 0,
             score_away: parseInt(away.score, 10) || 0,
             broadcasters: broadcasterList.length > 0 ? broadcasterList : ['A Spor', 'Esport3', 'TNT Sports'],
-            streams: streamOptions.slice(0, 4)
+            streams: formattedStreams
           });
         });
       } catch (err) {
