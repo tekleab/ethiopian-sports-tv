@@ -1,9 +1,12 @@
-const CACHE_NAME = 'et-yacine-v4';
+const CACHE_NAME = 'et-sports-v5';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon-192.png'
+  './style.css',
+  './app.js',
+  './icon-192.png',
+  './apple-touch-icon.png'
 ];
 
 self.addEventListener('install', e => {
@@ -23,10 +26,17 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Never cache live video segments, manifests, or audio streams
-  if (e.request.url.includes('.m3u8') || e.request.url.includes('.ts') || e.request.url.includes('stream') || e.request.url.includes('broadcasting.news')) {
+  // Never cache live video segments, manifests, or dynamic API responses
+  if (
+    e.request.url.includes('.m3u8') ||
+    e.request.url.includes('.ts') ||
+    e.request.url.includes('/api/') ||
+    e.request.url.includes('stream') ||
+    e.request.url.includes('segment')
+  ) {
     return;
   }
+
   // Network first for HTML navigation
   if (e.request.mode === 'navigate') {
     e.respondWith(
@@ -34,6 +44,7 @@ self.addEventListener('fetch', e => {
     );
     return;
   }
+
   e.respondWith(
     caches.match(e.request).then(r => r || fetch(e.request))
   );

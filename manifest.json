@@ -1,12 +1,12 @@
 {
-  "name": "Yacine Sports TV — Live Football & Bouquets",
-  "short_name": "Yacine TV",
-  "description": "Free live football streaming with beIN, SSC, European UCL, and African bouquets",
-  "start_url": "./",
+  "name": "ET Sports TV — Live Football & UCL Matches",
+  "short_name": "ET Sports",
+  "description": "Watch live football matches, UEFA Champions League, and 24/7 sports TV channels directly in Safari",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#08080f",
-  "theme_color": "#08080f",
+  "background_color": "#07080d",
+  "theme_color": "#07080d",
   "orientation": "any",
   "icons": [
     {
@@ -20,6 +20,11 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
   ]
 }

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="ET Sports"/>
+  <meta name="theme-color" content="#07080d"/>
+  <meta name="description" content="Dual-Layer Live Football Streaming & Match Aggregator with Ingested HLS Streams"/>
+  <title>ET Sports TV — Live Football & Ingested HLS Streaming Engine</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" type="image/png" href="icon-192.png"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <!-- HLS.js for in-browser video playback without ads -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <a href="./" class="brand">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polygon points="10 8 16 12 10 16 10 8"></polygon>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">
+          ET SPORTS TV
+          <span class="brand-badge">PRO STREAM</span>
+        </div>
+      </div>
+    </a>
+
+    <div class="header-actions">
+      <div class="status-indicator" title="Layer 1 Stream Ingestion Engine Status">
+        <span class="status-dot"></span>
+        <span id="stat-active-streams">Scanning Streams...</span>
+      </div>
+
+      <button id="btn-open-monitor" class="btn-icon" title="View Stream Database & Health Monitor">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        <span>Health Center</span>
+      </button>
+
+      <button id="btn-refresh-streams" class="btn-icon" title="Trigger stream health check cycle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        <span>Verify Streams</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="container">
+
+    <!-- iPhone Safari Add to Home Screen Banner -->
+    <div id="ios-pwa-banner" class="ios-pwa-banner">
+      <div style="display:flex; align-items:center; gap:10px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+        <div>
+          <strong>Use as an iPhone App:</strong> Tap <strong>Share</strong> (box with arrow) and select <strong>"Add to Home Screen"</strong> for full-screen PWA mode!
+        </div>
+      </div>
+      <button onclick="document.getElementById('ios-pwa-banner').style.display='none'" class="btn-icon" style="padding:4px 8px; font-size:0.75rem">✕</button>
+    </div>
+
+    <!-- LAYER 3: FRONTEND VIDEO PLAYER -->
+    <section class="player-section">
+      <div class="player-header">
+        <div class="now-playing-info">
+          <span class="live-pill">
+            <span class="status-dot" style="background:#fff; width:6px; height:6px"></span>
+            LIVE
+          </span>
+          <div>
+            <div id="now-playing-title" class="now-playing-title">Select a Live Match or Channel</div>
+            <div id="now-playing-subtitle" class="now-playing-subtitle">Active HLS Pipeline • Direct In-Browser Playback</div>
+          </div>
+        </div>
+
+        <div class="player-tools">
+          <label class="proxy-toggle" title="Route stream via local HLS proxy to prevent CORS restrictions and mixed-content blocks">
+            <input type="checkbox" id="proxy-toggle-checkbox" checked/>
+            <span>Smart CORS Proxy</span>
+          </label>
+
+          <select id="quality-select" class="btn-icon" style="background:var(--surface-alt); padding:5px 10px">
+            <option value="-1">Auto Quality</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Failover Alert Banner -->
+      <div id="failover-banner" class="failover-banner hidden">
+        <div style="display:flex; align-items:center; gap:8px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span id="failover-msg">Stream server issue detected. Switching server...</span>
+        </div>
+      </div>
+
+      <!-- Video Canvas -->
+      <div class="video-wrapper">
+        <video id="main-video" controls playsinline webkit-playsinline x5-playsinline preload="auto"></video>
+        <button id="unmute-pill" class="unmute-pill hidden">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          Tap to Unmute
+        </button>
+        <div id="player-overlay" class="player-overlay hidden">
+          <div class="spinner"></div>
+          <div class="overlay-msg" style="font-weight:600">Initializing HLS Stream...</div>
+        </div>
+      </div>
+
+      <!-- Server / Quality Selection Bar (FHD / HD / SD) -->
+      <div class="server-control-strip">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px">Stream Servers:</span>
+          <div id="server-selector-group" class="server-selector-group">
+            <!-- Dynamic Server Pills: Server 1 (FHD), Server 2 (HD), Server 3 (SD) -->
+          </div>
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-dim)">
+          100% In-Browser HLS • Zero Ads • Auto Multi-Server Failover
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation & Filter Tabs -->
+    <nav class="section-nav">
+      <ul class="nav-tabs">
+        <li>
+          <button class="tab-btn active" data-tab="live">
+            <span>🔴 Live Now</span>
+            <span id="count-live" class="tab-counter">0</span>
+          </button>
+        </li>
+        <li>
+          <button class="tab-btn" data-tab="upcoming">
+            <span>📅 Today's Fixtures</span>
+            <span id="count-upcoming" class="tab-counter">0</span>
+          </button>
+        </li>
+        <li>
+          <button class="tab-btn" data-tab="channels">
+            <span>📺 24/7 TV Channels</span>
+          </button>
+        </li>
+      </ul>
+      <div id="stat-total-streams" style="font-size:0.8rem; color:var(--text-muted)">
+        Loading Ingested Streams...
+      </div>
+    </nav>
+
+    <!-- Match Fixtures Grid -->
+    <div id="matches-grid" class="matches-grid">
+      <!-- Dynamically filled with match cards mapped to active streams -->
+    </div>
+
+    <!-- 24/7 TV Channels Grid -->
+    <div id="channels-grid" class="channels-grid" style="display:none">
+      <!-- Dynamically filled with direct channels (A Spor, Esport3, Bahrain, Africa 24, Red Bull) -->
+    </div>
+
+  </main>
+
+  <!-- Health & Stream Ingestion Modal -->
+  <div id="monitor-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:10px">
+          <h3 style="font-size:1.1rem; font-weight:800">Stream Health & Database Monitor</h3>
+          <span class="brand-badge">SQLite Sync</span>
+        </div>
+        <button id="btn-close-monitor" class="btn-icon" style="padding:4px 8px">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="stat-cards-row">
+          <div class="stat-mini-card">
+            <div id="modal-stat-active" class="stat-mini-val">28</div>
+            <div class="stat-mini-label">Active 200 Streams</div>
+          </div>
+          <div class="stat-mini-card">
+            <div id="modal-stat-total" class="stat-mini-val">69</div>
+            <div class="stat-mini-label">Total Ingested</div>
+          </div>
+          <div class="stat-mini-card">
+            <div class="stat-mini-val" style="color:var(--accent-blue)">5 Min</div>
+            <div class="stat-mini-label">Health Interval</div>
+          </div>
+          <div class="stat-mini-card">
+            <div class="stat-mini-val" style="color:var(--accent-purple)">REST</div>
+            <div class="stat-mini-label">/api/matches/live</div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px">
+          <h4 style="font-size:0.9rem; font-weight:700">Verified Streams in Local SQLite Database</h4>
+          <button id="btn-run-health-now" class="btn-watch" style="padding:5px 12px; font-size:0.75rem">
+            Re-run Verification Now
+          </button>
+        </div>
+
+        <div style="max-height:360px; overflow-y:auto; border:1px solid var(--border); border-radius:8px">
+          <table class="streams-table">
+            <thead>
+              <tr>
+                <th>Channel Name</th>
+                <th>Country</th>
+                <th>Quality</th>
+                <th>Status</th>
+                <th>HTTP Code</th>
+                <th>Latency</th>
+              </tr>
+            </thead>
+            <tbody id="monitor-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

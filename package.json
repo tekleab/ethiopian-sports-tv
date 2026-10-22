@@ -1,0 +1,32 @@
+{
+  "name": "ethiopian-sports-tv",
+  "version": "2.0.0",
+  "description": "Dual-Layer Live Football Streaming & Match Aggregator with Ingested HLS Streams",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "ingest:py": "python3 pipeline/ingest.py --once",
+    "ingest:daemon": "python3 pipeline/ingest.py --daemon",
+    "test": "node test/verify_platform.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tekleab/ethiopian-sports-tv.git"
+  },
+  "keywords": [
+    "hls",
+    "football",
+    "streaming",
+    "m3u",
+    "aggregator",
+    "sqlite",
+    "node"
+  ],
+  "author": "Antigravity Architect",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0"
+  }
+}
