@@ -1,4 +1,4 @@
-const CACHE_NAME = 'et-yacine-v3';
+const CACHE_NAME = 'et-yacine-v4';
 const ASSETS = [
   './',
   './index.html',

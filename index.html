@@ -778,6 +778,66 @@ video {
 }
 
 /* =====================================================
+   DIRECT SYNC STATUS BAR
+===================================================== */
+.sync-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 11px;
+}
+.sync-status-left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #34d399;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+.sync-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse-sync 1.8s infinite;
+}
+@keyframes pulse-sync {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+.sync-status-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sync-time-label {
+  color: var(--text-sub);
+  font-size: 10px;
+  font-weight: 600;
+}
+.sync-refresh-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sync-refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-hi);
+}
+
+/* =====================================================
    LIVE MATCH FIXTURES CARDS (YACINE TV STYLE)
 ===================================================== */
 .match-section {
@@ -1797,11 +1857,14 @@ video {
 
   <!-- Chips Filter (for matches tab) -->
   <div class="chips-row" id="chips-row">
-    <button class="chip active" data-filter="all">All Matches</button>
+    <button class="chip active" data-filter="all">⚡ Live & Upcoming</button>
+    <button class="chip" data-filter="live">🔴 Live Now</button>
+    <button class="chip" data-filter="uel">🏆 Europa League</button>
     <button class="chip" data-filter="ucl">🏆 Champions League</button>
     <button class="chip" data-filter="epl">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
-    <button class="chip" data-filter="spl">🇸🇦 Saudi League</button>
-    <button class="chip" data-filter="live">🔴 Live Now</button>
+    <button class="chip" data-filter="laliga">🇪🇸 La Liga</button>
+    <button class="chip" data-filter="seriea">🇮🇹 Serie A</button>
+    <button class="chip" data-filter="past">🏁 Completed (FT)</button>
   </div>
 
   <!-- MATCH CENTER CONTAINER -->
@@ -2198,145 +2261,13 @@ const SPORTS_CHANNELS = [
 // ============================================================
 // YACINE TV TODAY'S LIVE MATCHES (MULTI-SERVER SYSTEM)
 // ============================================================
-const TODAYS_MATCHES = [
-  {
-    id: 'm-1',
-    comp: '🏆 UEFA Champions League · Marquee Clash',
-    leagueCode: 'UCL',
-    home: 'Real Madrid',
-    away: 'Manchester City',
-    homeLogo: 'https://img.thesports.com/football/team/5f7059f40965e5a2cc00987e6bac2f32.png',
-    awayLogo: 'https://img.thesports.com/football/team/d39ce586fd7278342dde33b3090b3f75.png',
-    homeScore: 2,
-    awayScore: 1,
-    statusText: "🔴 LIVE 74'",
-    isLive: true,
-    isFinished: false,
-    commentator: 'Issam Chaouali',
-    channelName: 'beIN Sports 1 HD',
-    servers: [
-      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
-    ],
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  },
-  {
-    id: 'm-2',
-    comp: '🏆 UEFA Champions League · Super Clash',
-    leagueCode: 'UCL',
-    home: 'Arsenal',
-    away: 'Paris Saint-Germain',
-    homeLogo: 'https://img.thesports.com/football/team/7dacaa934fe4be00f23c1e209b5ef947.png',
-    awayLogo: 'https://img.thesports.com/football/team/fbcf002c8d6dd34813fa2b3a4cc9b04c.png',
-    homeScore: '-',
-    awayScore: '-',
-    statusText: '⏱ Kickoff 22:00 EAT',
-    isLive: false,
-    isFinished: false,
-    commentator: 'Hafid Derradji',
-    channelName: 'beIN Sports 2 HD',
-    servers: [
-      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 3 (SD)',  url: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8' }
-    ],
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  },
-  {
-    id: 'm-3',
-    comp: '🏆 UEFA Champions League · Group Stage',
-    leagueCode: 'UCL',
-    home: 'Liverpool',
-    away: 'Barcelona',
-    homeLogo: 'https://img.thesports.com/football/team/c166a220bf20977df2bd82fc067696f5.png',
-    awayLogo: 'https://img.thesports.com/football/team/a3c32d6a906083118cac2cb796edaab3.png',
-    homeScore: '-',
-    awayScore: '-',
-    statusText: '⏱ Kickoff 22:00 EAT',
-    isLive: false,
-    isFinished: false,
-    commentator: 'Khalil Al Balushi',
-    channelName: 'beIN Sports 3 HD',
-    servers: [
-      { name: 'Server 1 (FHD)', url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 2 (HD)',  url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
-    ],
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  },
-  {
-    id: 'm-4',
-    comp: '🇸🇦 Saudi Pro League · Riyadh Derby',
-    leagueCode: 'SPL',
-    home: 'Al Hilal',
-    away: 'Al Nassr',
-    homeLogo: 'https://img.thesports.com/football/team/2fa0840e0cb77fd66f104fa932302a72.png',
-    awayLogo: 'https://img.thesports.com/football/team/d39ce586fd7278342dde33b3090b3f75.png',
-    homeScore: 2,
-    awayScore: 2,
-    statusText: "🔴 LIVE 82' (Ronaldo ★)",
-    isLive: true,
-    isFinished: false,
-    commentator: 'Fares Awad',
-    channelName: 'SSC 1 HD',
-    servers: [
-      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' }
-    ],
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  },
-  {
-    id: 'm-5',
-    comp: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League · Prime Block',
-    leagueCode: 'EPL',
-    home: 'Chelsea',
-    away: 'Manchester United',
-    homeLogo: 'https://img.thesports.com/football/team/28e94925fdcc848f86a544a1cedcceed.png',
-    awayLogo: 'https://img.thesports.com/football/team/7dacaa934fe4be00f23c1e209b5ef947.png',
-    homeScore: '-',
-    awayScore: '-',
-    statusText: '⏱ Kickoff 19:30 EAT',
-    isLive: false,
-    isFinished: false,
-    commentator: 'Raouf Khlif',
-    channelName: 'beIN Sports 1 HD',
-    servers: [
-      { name: 'Server 1 (FHD)', url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 2 (HD)',  url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' }
-    ],
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  },
-  {
-    id: 'm-6',
-    comp: '🏆 UEFA Champions League · Result',
-    leagueCode: 'UCL',
-    home: 'Bayern Munich',
-    away: 'Inter Milan',
-    homeLogo: 'https://img.thesports.com/football/team/28e94925fdcc848f86a544a1cedcceed.png',
-    awayLogo: 'https://img.thesports.com/football/team/a3c32d6a906083118cac2cb796edaab3.png',
-    homeScore: 3,
-    awayScore: 1,
-    statusText: 'FT (Final)',
-    isLive: false,
-    isFinished: true,
-    commentator: 'Ahmed Al Tayeb',
-    channelName: 'beIN Sports 1 HD',
-    servers: [
-      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
-      { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' }
-    ],
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  }
-];
-
 // ============================================================
 // APP STATE
 // ============================================================
 let state = {
   allChannels: [...SPORTS_CHANNELS],
   customChannels: [],
-  matches: [...TODAYS_MATCHES],
+  matches: [],
   currentChannel: null,
   activeServerIndex: 0,
   activeTab: 'matches',
@@ -2497,12 +2428,24 @@ function loadCustoms() {
 }
 
 // ============================================================
-// LIVE MATCH SCORE & EPG FETCHER (ESPN CLIENT-SIDE)
+// DIRECT SYNC LIVE MATCH SCOREBOARD (ESPN OFFICIAL API)
 // ============================================================
-async function fetchLiveProgramsAndMatches() {
+let isSyncing = false;
+let lastSyncTime = null;
+
+async function fetchLiveProgramsAndMatches(manual = false) {
+  if (isSyncing) return;
+  isSyncing = true;
+
+  const refreshBtn = document.getElementById('sync-refresh-btn');
+  if (refreshBtn) refreshBtn.textContent = '🔄 Syncing…';
+
   const endpoints = [
+    { league: 'UEL', compName: '🏆 UEFA Europa League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/scoreboard' },
     { league: 'UCL', compName: '🏆 UEFA Champions League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard' },
-    { league: 'EPL', compName: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard' }
+    { league: 'EPL', compName: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard' },
+    { league: 'LALIGA', compName: '🇪🇸 La Liga', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/esp.1/scoreboard' },
+    { league: 'SERIEA', compName: '🇮🇹 Serie A', url: 'https://site.api.espn.com/apis/site/v2/sports/soccer/ita.1/scoreboard' }
   ];
 
   let liveEvents = [];
@@ -2510,87 +2453,163 @@ async function fetchLiveProgramsAndMatches() {
   for (const ep of endpoints) {
     try {
       const res = await fetch(ep.url);
-      if (res.ok) {
-        const data = await res.json();
-        const evs = (data.events || []).map(e => {
-          const comp = e.competitions?.[0] || {};
-          const competitors = comp.competitors || [];
-          const home = competitors.find(c => c.homeAway === 'home') || competitors[0] || {};
-          const away = competitors.find(c => c.homeAway === 'away') || competitors[1] || {};
-          const isLive = e.status?.type?.state === 'in';
-          const isFinished = e.status?.type?.state === 'post';
-          const desc = e.status?.type?.description || '';
-          const statusText = isLive ? `🔴 LIVE ${e.status?.displayClock || 'IN PLAY'}` : (isFinished ? `FT (${desc})` : `⏱ ${new Date(e.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+      if (!res.ok) continue;
+      const data = await res.json();
+      const evs = (data.events || []).map(e => {
+        const comp = e.competitions?.[0] || {};
+        const competitors = comp.competitors || [];
+        const home = competitors.find(c => c.homeAway === 'home') || competitors[0] || {};
+        const away = competitors.find(c => c.homeAway === 'away') || competitors[1] || {};
+        const isLive = e.status?.type?.state === 'in';
+        const isFinished = e.status?.type?.state === 'post';
+        const desc = e.status?.type?.shortDetail || e.status?.type?.description || '';
+        const matchDate = new Date(e.date);
+        const timeStr = matchDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        const statusText = isLive 
+          ? `🔴 LIVE ${e.status?.displayClock || 'IN PLAY'}` 
+          : (isFinished ? `FT (${desc || 'Final'})` : `⏱ ${timeStr} EAT`);
 
-          return {
-            id: 'espn_' + e.id,
-            comp: ep.compName,
-            leagueCode: ep.league,
-            home: home.team?.displayName || 'Home Team',
-            away: away.team?.displayName || 'Away Team',
-            homeLogo: home.team?.logo || '',
-            awayLogo: away.team?.logo || '',
-            homeScore: home.score !== undefined ? home.score : '-',
-            awayScore: away.score !== undefined ? away.score : '-',
-            statusText: statusText,
-            isLive: isLive,
-            isFinished: isFinished,
-            commentator: 'English & Multi-Audio',
-            channelName: 'Live International Feed',
-            servers: [
-              { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
-              { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
-              { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
-            ],
-            camelRoomUrl: 'https://www.camel1.tv/en/live'
-          };
-        });
-        liveEvents.push(...evs);
-      }
+        const homeName = home.team?.displayName || 'Home Team';
+        const awayName = away.team?.displayName || 'Away Team';
+        const homeShort = home.team?.abbreviation || home.team?.shortDisplayName || homeName.slice(0, 3).toUpperCase();
+        const awayShort = away.team?.abbreviation || away.team?.shortDisplayName || awayName.slice(0, 3).toUpperCase();
+
+        return {
+          id: 'espn_' + e.id,
+          comp: ep.compName,
+          leagueCode: ep.league,
+          home: homeName,
+          homeShort: homeShort,
+          away: awayName,
+          awayShort: awayShort,
+          homeLogo: home.team?.logo || '',
+          awayLogo: away.team?.logo || '',
+          homeScore: (isLive || isFinished) ? (home.score !== undefined ? home.score : '0') : '-',
+          awayScore: (isLive || isFinished) ? (away.score !== undefined ? away.score : '0') : '-',
+          statusText: statusText,
+          isLive: isLive,
+          isFinished: isFinished,
+          kickoffMs: matchDate.getTime(),
+          commentator: 'Multi-Audio / English Sync',
+          channelName: isLive ? 'beIN Sports 1 HD (Live)' : 'Live Feed Broadcast',
+          servers: [
+            { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
+            { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
+            { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
+          ],
+          camelRoomUrl: 'https://www.camel1.tv/en/live'
+        };
+      });
+      liveEvents.push(...evs);
     } catch (err) {
-      console.warn('Live score fetch:', err);
+      console.warn('Live score fetch failed for ' + ep.league, err);
     }
   }
 
+  isSyncing = false;
+  if (refreshBtn) refreshBtn.textContent = '🔄 Sync Now';
+
   if (liveEvents.length > 0) {
-    state.matches = [...liveEvents, ...TODAYS_MATCHES.filter(tm => !liveEvents.some(le => le.home === tm.home))];
-  } else {
-    state.matches = [...TODAYS_MATCHES];
+    state.matches = liveEvents;
+    lastSyncTime = new Date();
+    updateSyncHeaderUI();
   }
 
   if (state.activeTab === 'matches') renderMatches();
+  if (state.activeTab === 'camel') renderCamelMatches();
+
+  if (manual) {
+    showToast(`✓ Synced ${state.matches.length} live & upcoming fixtures from ESPN`);
+  }
+}
+
+function updateSyncHeaderUI() {
+  const lbl = document.getElementById('sync-time-label');
+  if (lbl && lastSyncTime) {
+    lbl.textContent = 'Synced ' + lastSyncTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
 }
 
 function renderMatches() {
   const container = document.getElementById('matches-container');
   let list = [...state.matches];
 
-  if (state.matchFilter === 'ucl') {
+  // Sort: Live matches first, then upcoming by kickoff time, then finished
+  list.sort((a, b) => {
+    if (a.isLive && !b.isLive) return -1;
+    if (!a.isLive && b.isLive) return 1;
+    if (!a.isFinished && b.isFinished) return -1;
+    if (a.isFinished && !b.isFinished) return 1;
+    return a.kickoffMs - b.kickoffMs;
+  });
+
+  if (state.matchFilter === 'all') {
+    // Default: Show only Live and Upcoming Today (Exclude completed past matches!)
+    list = list.filter(m => !m.isFinished);
+  } else if (state.matchFilter === 'live') {
+    list = list.filter(m => m.isLive);
+  } else if (state.matchFilter === 'uel') {
+    list = list.filter(m => m.leagueCode === 'UEL');
+  } else if (state.matchFilter === 'ucl') {
     list = list.filter(m => m.leagueCode === 'UCL');
   } else if (state.matchFilter === 'epl') {
     list = list.filter(m => m.leagueCode === 'EPL');
-  } else if (state.matchFilter === 'spl') {
-    list = list.filter(m => m.leagueCode === 'SPL');
-  } else if (state.matchFilter === 'live') {
-    list = list.filter(m => m.isLive);
+  } else if (state.matchFilter === 'laliga') {
+    list = list.filter(m => m.leagueCode === 'LALIGA');
+  } else if (state.matchFilter === 'seriea') {
+    list = list.filter(m => m.leagueCode === 'SERIEA');
+  } else if (state.matchFilter === 'past') {
+    // Show only completed / finished matches when user explicitly taps filter
+    list = list.filter(m => m.isFinished);
   }
 
+  const syncHtml = `
+    <div class="sync-status-bar" id="sync-status-bar">
+      <div class="sync-status-left">
+        <span class="sync-pulse-dot"></span>
+        <span class="sync-status-text">DIRECT SYNC ACTIVE · ESPN LIVE SCOREBOARD</span>
+      </div>
+      <div class="sync-status-right">
+        <span class="sync-time-label" id="sync-time-label">${lastSyncTime ? 'Synced ' + lastSyncTime.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : 'Live Syncing…'}</span>
+        <button class="sync-refresh-btn" id="sync-refresh-btn" onclick="fetchLiveProgramsAndMatches(true)">
+          🔄 Sync Now
+        </button>
+      </div>
+    </div>
+  `;
+
   if (!list.length) {
-    container.innerHTML = `
+    let emptyMsg = state.matchFilter === 'live' 
+      ? 'No matches are currently in play right now. Upcoming fixtures start later today!'
+      : (state.matchFilter === 'past' ? 'No finished matches recorded today.' : 'No active or upcoming fixtures found for this filter.');
+
+    container.innerHTML = syncHtml + `
       <div style="text-align:center;padding:36px 16px;color:var(--text-muted);background:var(--surface);border-radius:16px;border:1px solid var(--border)">
-        <p style="font-size:15px;color:var(--text-main);font-weight:700;margin-bottom:6px">No matches found for this filter right now.</p>
-        <p style="font-size:12px;margin-bottom:14px">Check upcoming schedules or switch to "All Matches".</p>
-        <button class="watch-match-btn" onclick="document.querySelector('.chip[data-filter=all]').click()" style="margin:0 auto">View All Matches</button>
+        <p style="font-size:15px;color:var(--text-main);font-weight:700;margin-bottom:6px">${emptyMsg}</p>
+        <p style="font-size:12px;margin-bottom:14px">Check upcoming schedules or switch to "Live & Upcoming".</p>
+        <button class="watch-match-btn" onclick="document.querySelector('.chip[data-filter=all]').click()" style="margin:0 auto">View Live & Upcoming</button>
       </div>`;
     return;
   }
 
-  container.innerHTML = list.map(m => {
+  const cardsHtml = list.map(m => {
     const servers = m.servers || [
       { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' },
       { name: 'Server 2 (HD)',  url: 'https://tv-trt2.medya.trt.com.tr/master.m3u8' },
       { name: 'Server 3 (SD)',  url: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8' }
     ];
+
+    const safeHome = m.home.replace(/'/g, "\'");
+    const safeAway = m.away.replace(/'/g, "\'");
+    const safeComp = m.comp.replace(/'/g, "\'");
+
+    const homeBadge = m.homeLogo 
+      ? `<img src="${m.homeLogo}" class="team-logo" alt="${m.home}" onerror="this.onerror=null; this.outerHTML='<div class=\'team-logo-placeholder\'>${m.homeShort || m.home.slice(0,3)}</div>'"/>` 
+      : `<div class="team-logo-placeholder">${m.homeShort || m.home.slice(0,3)}</div>`;
+
+    const awayBadge = m.awayLogo 
+      ? `<img src="${m.awayLogo}" class="team-logo" alt="${m.away}" onerror="this.onerror=null; this.outerHTML='<div class=\'team-logo-placeholder\'>${m.awayShort || m.away.slice(0,3)}</div>'"/>` 
+      : `<div class="team-logo-placeholder">${m.awayShort || m.away.slice(0,3)}</div>`;
 
     return `
       <div class="match-card ${m.isLive ? 'is-live' : ''}">
@@ -2603,8 +2622,8 @@ function renderMatches() {
 
         <div class="match-teams-row">
           <div class="team-side">
-            ${m.homeLogo ? `<img src="${m.homeLogo}" class="team-logo" alt="${m.home}" onerror="this.outerHTML='<div class=\'team-logo-placeholder\'>${m.home.slice(0,2)}</div>'"/>` : `<div class="team-logo-placeholder">${m.home.slice(0,2)}</div>`}
-            <span class="team-name">${m.home}</span>
+            ${homeBadge}
+            <span class="team-name" title="${m.home}">${m.home}</span>
           </div>
 
           <div class="score-box">
@@ -2613,19 +2632,19 @@ function renderMatches() {
           </div>
 
           <div class="team-side away">
-            ${m.awayLogo ? `<img src="${m.awayLogo}" class="team-logo" alt="${m.away}" onerror="this.outerHTML='<div class=\'team-logo-placeholder\'>${m.away.slice(0,2)}</div>'"/>` : `<div class="team-logo-placeholder">${m.away.slice(0,2)}</div>`}
-            <span class="team-name">${m.away}</span>
+            ${awayBadge}
+            <span class="team-name" title="${m.away}">${m.away}</span>
           </div>
         </div>
 
         <div class="match-commentator-row">
-          <span>🎙 ${m.commentator || 'Official Commentary'}</span>
+          <span>🎙 ${m.commentator || 'Multi-Audio Sync'}</span>
           <span>📺 ${m.channelName || 'beIN Sports HD'}</span>
         </div>
 
         <div class="match-servers-row">
           ${servers.map((s, idx) => `
-            <button class="m-server-btn" onclick="playMatchServer('${m.home} vs ${m.away}', '${s.url}', '${s.name}', '${m.comp}', ${idx})">
+            <button class="m-server-btn" onclick="playMatchServer('${safeHome} vs ${safeAway}', '${s.url}', '${s.name}', '${safeComp}', ${idx})">
               ▶ ${s.name}
             </button>
           `).join('')}
@@ -2638,6 +2657,8 @@ function renderMatches() {
       </div>
     `;
   }).join('');
+
+  container.innerHTML = syncHtml + cardsHtml;
 }
 
 function playMatchServer(matchTitle, serverUrl, serverName, comp, serverIdx = 0) {
@@ -2983,96 +3004,76 @@ function renderChannels() {
 }
 
 // ============================================================
-// CAMEL1.TV LIVE MATCHES DATA & RENDERER
+// CAMEL1.TV LIVE MATCHES DIRECT SYNC RENDERER
 // ============================================================
-const CAMEL_MATCHES = [
-  {
-    comp: '🏆 UEFA Champions League · Camel1 Live Room',
-    home: 'Real Madrid',
-    away: 'Manchester City',
-    homeLogo: 'https://img.thesports.com/football/team/5f7059f40965e5a2cc00987e6bac2f32.png',
-    awayLogo: 'https://img.thesports.com/football/team/d39ce586fd7278342dde33b3090b3f75.png',
-    homeScore: 2,
-    awayScore: 1,
-    statusText: "🔴 LIVE 74'",
-    isLive: true,
-    streamUrl: 'https://tv-trt1.medya.trt.com.tr/master.m3u8',
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  },
-  {
-    comp: '🏆 UEFA Champions League · Camel1 Live Room',
-    home: 'Bayern Munich',
-    away: 'Paris Saint-Germain',
-    homeLogo: 'https://img.thesports.com/football/team/28e94925fdcc848f86a544a1cedcceed.png',
-    awayLogo: 'https://img.thesports.com/football/team/fbcf002c8d6dd34813fa2b3a4cc9b04c.png',
-    homeScore: 1,
-    awayScore: 1,
-    statusText: "🔴 LIVE 58'",
-    isLive: true,
-    streamUrl: 'https://tv-trt2.medya.trt.com.tr/master.m3u8',
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  },
-  {
-    comp: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League · Camel1 Live Room',
-    home: 'Arsenal',
-    away: 'Liverpool',
-    homeLogo: 'https://img.thesports.com/football/team/7dacaa934fe4be00f23c1e209b5ef947.png',
-    awayLogo: 'https://img.thesports.com/football/team/c166a220bf20977df2bd82fc067696f5.png',
-    homeScore: 0,
-    awayScore: 0,
-    statusText: '⏱ Kickoff 21:00 EAT',
-    isLive: false,
-    streamUrl: 'https://tv-trtworld.medya.trt.com.tr/master.m3u8',
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  },
-  {
-    comp: '🇪🇸 La Liga · Camel1 Live Room',
-    home: 'Barcelona',
-    away: 'Atletico Madrid',
-    homeLogo: 'https://img.thesports.com/football/team/a3c32d6a906083118cac2cb796edaab3.png',
-    awayLogo: 'https://img.thesports.com/football/team/2fa0840e0cb77fd66f104fa932302a72.png',
-    homeScore: 3,
-    awayScore: 2,
-    statusText: 'FT (Final)',
-    isLive: false,
-    streamUrl: 'https://tv-trtavaz.medya.trt.com.tr/master.m3u8',
-    camelRoomUrl: 'https://www.camel1.tv/en/live'
-  }
-];
-
 function renderCamelMatches() {
   const container = document.getElementById('camel-matches-list');
   if (!container) return;
-  container.innerHTML = CAMEL_MATCHES.map(m => {
+
+  // Filter only active & upcoming matches (no past completed matches)
+  let activeMatches = state.matches.filter(m => !m.isFinished);
+  if (!activeMatches.length) {
+    activeMatches = state.matches;
+  }
+
+  if (!activeMatches.length) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:32px 16px;color:var(--text-muted);background:var(--surface);border-radius:16px;border:1px solid var(--border)">
+        <p style="font-size:14px;color:var(--text-main);font-weight:700;margin-bottom:6px">Direct Syncing Camel1 Match Center…</p>
+        <p style="font-size:12px;margin-bottom:12px">Connecting to live scoreboard servers.</p>
+        <button class="watch-match-btn" onclick="fetchLiveProgramsAndMatches(true)" style="margin:0 auto">🔄 Refresh Feed</button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = activeMatches.map(m => {
+    const servers = m.servers || [
+      { name: 'Server 1 (FHD)', url: 'https://tv-trt1.medya.trt.com.tr/master.m3u8' }
+    ];
+    const streamUrl = servers[0]?.url || 'https://tv-trt1.medya.trt.com.tr/master.m3u8';
+
+    const safeHome = m.home.replace(/'/g, "\'");
+    const safeAway = m.away.replace(/'/g, "\'");
+    const safeComp = m.comp.replace(/'/g, "\'");
+
+    const homeBadge = m.homeLogo 
+      ? `<img src="${m.homeLogo}" class="team-logo" alt="${m.home}" onerror="this.onerror=null; this.outerHTML='<div class=\'team-logo-placeholder\'>${m.homeShort || m.home.slice(0,3)}</div>'"/>` 
+      : `<div class="team-logo-placeholder">${m.homeShort || m.home.slice(0,3)}</div>`;
+
+    const awayBadge = m.awayLogo 
+      ? `<img src="${m.awayLogo}" class="team-logo" alt="${m.away}" onerror="this.onerror=null; this.outerHTML='<div class=\'team-logo-placeholder\'>${m.awayShort || m.away.slice(0,3)}</div>'"/>` 
+      : `<div class="team-logo-placeholder">${m.awayShort || m.away.slice(0,3)}</div>`;
+
     return `
       <div class="match-card ${m.isLive ? 'is-live' : ''}">
         <div class="match-header">
-          <div class="match-comp">${m.comp}</div>
+          <div class="match-comp">${m.comp} · Camel1 Live Room</div>
           <div><span class="match-status-badge ${m.isLive ? 'live' : 'scheduled'}">${m.statusText}</span></div>
         </div>
 
         <div class="match-teams-row">
           <div class="team-side">
-            <img src="${m.homeLogo}" class="team-logo" alt="${m.home}" onerror="this.outerHTML='<div class=\'team-logo-placeholder\'>${m.home.slice(0,2)}</div>'"/>
-            <span class="team-name">${m.home}</span>
+            ${homeBadge}
+            <span class="team-name" title="${m.home}">${m.home}</span>
           </div>
 
           <div class="score-box">
             <span class="score-numbers">${m.homeScore} - ${m.awayScore}</span>
-            <span class="score-time">${m.isLive ? 'IN PLAY' : 'Score'}</span>
+            <span class="score-time">${m.isLive ? 'IN PLAY' : (m.isFinished ? 'FT' : 'vs')}</span>
           </div>
 
           <div class="team-side away">
-            <img src="${m.awayLogo}" class="team-logo" alt="${m.away}" onerror="this.outerHTML='<div class=\'team-logo-placeholder\'>${m.away.slice(0,2)}</div>'"/>
-            <span class="team-name">${m.away}</span>
+            ${awayBadge}
+            <span class="team-name" title="${m.away}">${m.away}</span>
           </div>
         </div>
 
         <div class="match-footer" style="gap:8px">
-          <button class="watch-match-btn" style="flex:1" onclick="playMatchServer('${m.home} vs ${m.away}', '${m.streamUrl}', 'Server 1 (FHD)', '${m.comp}', 0)">
+          <button class="watch-match-btn" style="flex:1" onclick="playMatchServer('${safeHome} vs ${safeAway}', '${streamUrl}', 'Server 1 (FHD)', '${safeComp}', 0)">
             ▶ Watch Live
           </button>
-          <a href="${m.camelRoomUrl}" target="_blank" rel="noopener noreferrer" class="cb-open-btn" style="padding:7px 11px;font-size:11px">
+          <a href="${m.camelRoomUrl || 'https://www.camel1.tv/en/live'}" target="_blank" rel="noopener noreferrer" class="cb-open-btn" style="padding:7px 11px;font-size:11px">
             🌐 Open on Camel1
           </a>
         </div>
