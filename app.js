@@ -599,8 +599,6 @@ class SportsApp {
     this.updateTabCounters(liveCount, realMatches.length);
     console.log(`[App] Successfully populated ${realMatches.length} 100% REAL fixtures!`);
   }
-    this.updateTabCounters(liveCount, curated.length);
-  }
 
   updateTabCounters(liveCount, totalCount) {
     const liveCounter = document.getElementById('count-live');
