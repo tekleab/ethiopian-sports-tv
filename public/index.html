@@ -20,6 +20,16 @@
   <!-- HLS.js for in-browser video playback without ads -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <link rel="stylesheet" href="style.css?v=2.1"/>
+  <script>
+    // Self-healing: Purge any stale service worker caches on load
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        names.forEach(function(name) {
+          if (name !== 'et-sports-v8') caches.delete(name);
+        });
+      });
+    }
+  </script>
 </head>
 <body>
 
@@ -230,7 +240,7 @@
     </div>
   </div>
 
-  <script src="app.js?v=2.2"></script>
+  <script src="app-v3.js?v=3.0"></script>
 </body>
 </html>
 
