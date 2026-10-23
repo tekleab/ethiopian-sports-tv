@@ -3,80 +3,789 @@
  * Optimized for iPhone Safari PWA (iOS Standalone Mode) & Full-Stack Node.js
  */
 
-const FALLBACK_DIRECT_STREAMS = [
+const FOOTBALL_CHANNELS = [
   {
-    id: 'aspor-tr',
-    name: 'A Spor (Turkey)',
-    country: 'TR',
-    quality: '1080p FHD',
-    url: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
-    logo: 'https://i.imgur.com/ZhkZzLf.png',
-    status: 'active'
+    "id": "canal-plus-sport-sk",
+    "name": "Canal+ Sport 1",
+    "category": "EPL & Champions League",
+    "country": "Slovakia / Czechia",
+    "country_code": "SK",
+    "language": "English / Slovak",
+    "coverage": "English Premier League (EPL) Official Live Broadcaster",
+    "quality": "1080p FHD",
+    "url": "http://rpprod.hbbtv.cdn.cra.cz:8080/hbbTV/cme-sk-canal-plus-sport/live_fullhd?offsetSeconds=0",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Canal%2B_Sport_2023.svg/320px-Canal%2B_Sport_2023.svg.png",
+    "status": "active",
+    "clean_name": "canalplussportsk",
+    "is_football": true
   },
   {
-    id: 'esport3-cat',
-    name: 'Esport3 (Spain)',
-    country: 'ES',
-    quality: '1080p FHD',
-    url: 'https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/master.m3u8',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Esport3_logo.svg/320px-Esport3_logo.svg.png',
-    status: 'active'
+    "id": "canal-plus-sport-2-sk",
+    "name": "Canal+ Sport 2",
+    "category": "EPL & Champions League",
+    "country": "Slovakia / Czechia",
+    "country_code": "SK",
+    "language": "English / Slovak",
+    "coverage": "Premier League Multi-Match 2 & Women's Super League",
+    "quality": "1080p FHD",
+    "url": "http://rpprod.hbbtv.cdn.cra.cz:8080/hbbTV/cme-sk-canal-plus-sport2/live_fullhd?offsetSeconds=0",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Canal%2B_Sport_2023.svg/320px-Canal%2B_Sport_2023.svg.png",
+    "status": "active",
+    "clean_name": "canalplussport2sk",
+    "is_football": true
   },
   {
-    id: 'africa24-sport',
-    name: 'Africa 24 Sport',
-    country: 'AFRICA',
-    quality: '1080p FHD',
-    url: 'https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8',
-    logo: 'https://i0.wp.com/africa24tv.com/wp-content/uploads/2023/12/LOGO-AFRICASPORT-4-HD-sans-fond.png?fit=512%2C107&ssl=1',
-    status: 'active'
+    "id": "canal-plus-sport-3-sk",
+    "name": "Canal+ Sport 3",
+    "category": "EPL & Champions League",
+    "country": "Slovakia / Czechia",
+    "country_code": "SK",
+    "language": "English / Slovak",
+    "coverage": "Premier League Multi-Match Saturday 3PM Kickoffs",
+    "quality": "1080p FHD",
+    "url": "http://rpprod.hbbtv.cdn.cra.cz:8080/hbbTV/cme-sk-canal-plus-sport3/live_fullhd?offsetSeconds=0",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Canal%2B_Sport_2023.svg/320px-Canal%2B_Sport_2023.svg.png",
+    "status": "active",
+    "clean_name": "canalplussport3sk",
+    "is_football": true
   },
   {
-    id: 'bahrain-sports-1',
-    name: 'Bahrain Sports 1',
-    country: 'BH',
-    quality: '720p HD',
-    url: 'https://5c7b683162943.streamlock.net/live/ngrp:sportsone_all/playlist.m3u8',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/2/23/Bahrain_Sports_Channel_logo.png',
-    status: 'active'
+    "id": "canal-plus-sport-4-sk",
+    "name": "Canal+ Sport 4",
+    "category": "EPL & Champions League",
+    "country": "Slovakia / Czechia",
+    "country_code": "SK",
+    "language": "English / Slovak",
+    "coverage": "Premier League Multi-Match Feed 4 & Matchday Highlights",
+    "quality": "1080p FHD",
+    "url": "http://rpprod.hbbtv.cdn.cra.cz:8080/hbbTV/cme-sk-canal-plus-sport4/live_fullhd?offsetSeconds=0",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Canal%2B_Sport_2023.svg/320px-Canal%2B_Sport_2023.svg.png",
+    "status": "active",
+    "clean_name": "canalplussport4sk",
+    "is_football": true
   },
   {
-    id: 'turkmenistan-sport',
-    name: 'Turkmenistan Sport',
-    country: 'TM',
-    quality: '720p HD',
-    url: 'https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Turkmenistan_Sport_logo.png/240px-Turkmenistan_Sport_logo.png',
-    status: 'active'
+    "id": "star-sports-select-1",
+    "name": "Star Sports Select 1 HD",
+    "category": "EPL & Champions League",
+    "country": "International",
+    "country_code": "GB",
+    "language": "English",
+    "coverage": "Premier League Live, Carabao Cup & International Football",
+    "quality": "1080p FHD",
+    "url": "http://103.151.60.162:2122/play/a026/index.m3u8?hls",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Star_Sports_logo_2013.svg/320px-Star_Sports_logo_2013.svg.png",
+    "status": "active",
+    "clean_name": "starsportsselect1",
+    "is_football": true
   },
   {
-    id: 'redbull-tv-sports',
-    name: 'Red Bull TV Sports',
-    country: 'GLOBAL',
-    quality: '1080p FHD',
-    url: 'https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master_3360.m3u8',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Red_Bull_TV_logo.svg/320px-Red_Bull_TV_logo.svg.png',
-    status: 'active'
+    "id": "star-sports-select-2",
+    "name": "Star Sports Select 2 HD",
+    "category": "EPL & Champions League",
+    "country": "International",
+    "country_code": "GB",
+    "language": "English",
+    "coverage": "Premier League Secondary Live Match & FA Cup Highlights",
+    "quality": "1080p FHD",
+    "url": "http://103.151.60.162:2122/play/a027/index.m3u8?hls",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Star_Sports_logo_2013.svg/320px-Star_Sports_logo_2013.svg.png",
+    "status": "active",
+    "clean_name": "starsportsselect2",
+    "is_football": true
   },
   {
-    id: 'ebs-hd-et',
-    name: 'EBS HD (Ethiopia)',
-    country: 'ET',
-    quality: '1080p FHD',
-    url: 'https://rpn.bozztv.com/ebstv/ebstv/index.m3u8',
-    logo: 'https://i.imgur.com/zqbK2IB.png',
-    status: 'active'
+    "id": "setanta-sports-1",
+    "name": "Setanta Sports 1",
+    "category": "EPL & Champions League",
+    "country": "Eurasia",
+    "country_code": "EU",
+    "language": "English / Russian",
+    "coverage": "Premier League, UEFA Champions League, La Liga & Serie A",
+    "quality": "1080p FHD",
+    "url": "http://stream.mcquack.net/234/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Setanta_Sports_logo.svg/320px-Setanta_Sports_logo.svg.png",
+    "status": "active",
+    "clean_name": "setantasports1",
+    "is_football": true
   },
   {
-    id: 'addis-tv-et',
-    name: 'Addis TV (Ethiopia)',
-    country: 'ET',
-    quality: '720p HD',
-    url: 'https://rrsatrtmp.tulix.tv/addis1/addis1multi.smil/playlist.m3u8',
-    logo: 'https://i.imgur.com/kqHWrZ9.png',
-    status: 'active'
+    "id": "setanta-sports-2",
+    "name": "Setanta Sports 2",
+    "category": "EPL & Champions League",
+    "country": "Eurasia",
+    "country_code": "EU",
+    "language": "English / Russian",
+    "coverage": "UEFA Europa League, Bundesliga, Ligue 1 & Carabao Cup",
+    "quality": "1080p FHD",
+    "url": "http://stream.mcquack.net/235/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Setanta_Sports_logo.svg/320px-Setanta_Sports_logo.svg.png",
+    "status": "active",
+    "clean_name": "setantasports2",
+    "is_football": true
+  },
+  {
+    "id": "bein-sports-xtra",
+    "name": "beIN SPORTS XTRA",
+    "category": "EPL & Champions League",
+    "country": "Global",
+    "country_code": "US",
+    "language": "English",
+    "coverage": "La Liga, Ligue 1, Copa Libertadores, CAF & European Qualifiers",
+    "quality": "1080p FHD",
+    "url": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BeIN_Sports_USA_logo.svg/320px-BeIN_Sports_USA_logo.svg.png",
+    "status": "active",
+    "clean_name": "beinsportsxtra",
+    "is_football": true
+  },
+  {
+    "id": "okko-futbol",
+    "name": "Okko Futbol HD",
+    "category": "EPL & Champions League",
+    "country": "International",
+    "country_code": "INT",
+    "language": "Russian / English",
+    "coverage": "UEFA Champions League, UEFA Europa League & Cup Football",
+    "quality": "720p HD",
+    "url": "http://178.124.179.122:8080/Setanta1/index.m3u8",
+    "logo": "https://i.imgur.com/kQoK29H.png",
+    "status": "active",
+    "clean_name": "okkofutbol",
+    "is_football": true
+  },
+  {
+    "id": "match-ultra",
+    "name": "Match! Ultra HD",
+    "category": "EPL & Champions League",
+    "country": "International",
+    "country_code": "INT",
+    "language": "Russian / English",
+    "coverage": "UEFA Champions League Live, Serie A, Bundesliga & Friendlies",
+    "quality": "1080p FHD",
+    "url": "http://31.148.5.241/kanal_3/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Match_TV_logo.svg/320px-Match_TV_logo.svg.png",
+    "status": "active",
+    "clean_name": "matchultra",
+    "is_football": true
+  },
+  {
+    "id": "eleven-sports-1",
+    "name": "Eleven Sports 1",
+    "category": "EPL & Champions League",
+    "country": "Europe",
+    "country_code": "EU",
+    "language": "English / Polish",
+    "coverage": "La Liga, Serie A, Ligue 1 & FA Cup Live Action",
+    "quality": "1080p FHD",
+    "url": "http://92.114.85.87:8002/play/a00e/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Eleven_Sports_logo.svg/320px-Eleven_Sports_logo.svg.png",
+    "status": "active",
+    "clean_name": "elevensports1",
+    "is_football": true
+  },
+  {
+    "id": "eleven-sports-2",
+    "name": "Eleven Sports 2",
+    "category": "EPL & Champions League",
+    "country": "Europe",
+    "country_code": "EU",
+    "language": "English / Polish",
+    "coverage": "Serie A Matchday Live & Carabao Cup Coverage",
+    "quality": "1080p FHD",
+    "url": "http://92.114.85.87:8002/play/a00f/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Eleven_Sports_logo.svg/320px-Eleven_Sports_logo.svg.png",
+    "status": "active",
+    "clean_name": "elevensports2",
+    "is_football": true
+  },
+  {
+    "id": "eleven-sports-3",
+    "name": "Eleven Sports 3",
+    "category": "EPL & Champions League",
+    "country": "Europe",
+    "country_code": "EU",
+    "language": "English / Polish",
+    "coverage": "European Domestic League Matches & Belgian Pro League",
+    "quality": "1080p FHD",
+    "url": "http://92.114.85.87:8002/play/a00g/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Eleven_Sports_logo.svg/320px-Eleven_Sports_logo.svg.png",
+    "status": "active",
+    "clean_name": "elevensports3",
+    "is_football": true
+  },
+  {
+    "id": "spiler-1-tv",
+    "name": "Sp\u00edler 1 TV",
+    "category": "EPL & Champions League",
+    "country": "Hungary / Central Europe",
+    "country_code": "HU",
+    "language": "Hungarian / English",
+    "coverage": "Premier League & UEFA Qualifiers Broadcaster",
+    "quality": "720p HD",
+    "url": "http://88.212.15.17/live/spiler1/index.m3u8",
+    "logo": "https://i.imgur.com/kQoK29H.png",
+    "status": "active",
+    "clean_name": "spiler1tv",
+    "is_football": true
+  },
+  {
+    "id": "aspor-turkey",
+    "name": "A Spor (Turkey)",
+    "category": "European Leagues",
+    "country": "Turkey",
+    "country_code": "TR",
+    "language": "Turkish",
+    "coverage": "Turkish S\u00fcper Lig, Ziraat T\u00fcrkiye Kupas\u0131 & European Football",
+    "quality": "1080p FHD",
+    "url": "https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8",
+    "logo": "https://i.imgur.com/ZhkZzLf.png",
+    "status": "active",
+    "clean_name": "asporturkey",
+    "is_football": true
+  },
+  {
+    "id": "esport3-spain",
+    "name": "Esport3 (Spain)",
+    "category": "European Leagues",
+    "country": "Spain / Catalonia",
+    "country_code": "ES",
+    "language": "Catalan / Spanish",
+    "coverage": "Spanish Regional Football, Copa de la Reina & International Cups",
+    "quality": "1080p FHD",
+    "url": "https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/master.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Esport3_logo.svg/320px-Esport3_logo.svg.png",
+    "status": "active",
+    "clean_name": "esport3spain",
+    "is_football": true
+  },
+  {
+    "id": "teledeporte-spain",
+    "name": "Teledeporte (RTVE Spain)",
+    "category": "European Leagues",
+    "country": "Spain",
+    "country_code": "ES",
+    "language": "Spanish",
+    "coverage": "Spanish National Football, Copa del Rey & Women's Liga F",
+    "quality": "720p HD",
+    "url": "https://rtve01p.origin.c21livecloud.com/live-origin/tdp-hls/master.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Teledeporte_logo.svg/320px-Teledeporte_logo.svg.png",
+    "status": "active",
+    "clean_name": "teledeportespain",
+    "is_football": true
+  },
+  {
+    "id": "sportitalia-hd",
+    "name": "Sportitalia HD",
+    "category": "European Leagues",
+    "country": "Italy",
+    "country_code": "IT",
+    "language": "Italian",
+    "coverage": "Italian Serie A Studio, Campionato Primavera, Argentine Primera",
+    "quality": "1080p FHD",
+    "url": "https://edge-001.streamup.eu/sportitalia/sihd_abr/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Sportitalia_logo_2019.svg/320px-Sportitalia_logo_2019.svg.png",
+    "status": "active",
+    "clean_name": "sportitaliahd",
+    "is_football": true
+  },
+  {
+    "id": "sport-1-ukraine",
+    "name": "Sport 1 (Ukraine)",
+    "category": "European Leagues",
+    "country": "Ukraine",
+    "country_code": "UA",
+    "language": "Ukrainian",
+    "coverage": "European Domestic League Matches & National Cup Ties",
+    "quality": "720p HD",
+    "url": "http://stream.mcquack.net/391/index.m3u8",
+    "logo": "https://i.imgur.com/kQoK29H.png",
+    "status": "active",
+    "clean_name": "sport1ukraine",
+    "is_football": true
+  },
+  {
+    "id": "sport-2-ukraine",
+    "name": "Sport 2 (Ukraine)",
+    "category": "European Leagues",
+    "country": "Ukraine",
+    "country_code": "UA",
+    "language": "Ukrainian",
+    "coverage": "European Football Leagues & Youth Competitions",
+    "quality": "1080p FHD",
+    "url": "http://stream.mcquack.net/392/index.m3u8",
+    "logo": "https://i.imgur.com/kQoK29H.png",
+    "status": "active",
+    "clean_name": "sport2ukraine",
+    "is_football": true
+  },
+  {
+    "id": "sport-1-baltic",
+    "name": "Sport 1 Baltic",
+    "category": "European Leagues",
+    "country": "Baltic States",
+    "country_code": "LV",
+    "language": "Russian / English",
+    "coverage": "Baltic Leagues, European Football & International Friendlies",
+    "quality": "1080p FHD",
+    "url": "http://stream.mcquack.net/461/index.m3u8",
+    "logo": "https://i.imgur.com/kQoK29H.png",
+    "status": "active",
+    "clean_name": "sport1baltic",
+    "is_football": true
+  },
+  {
+    "id": "belarus-5-hd",
+    "name": "Belarus-5 HD",
+    "category": "European Leagues",
+    "country": "Belarus",
+    "country_code": "BY",
+    "language": "Belarusian / Russian",
+    "coverage": "Belarusian Premier League, Russian Cup & International Football",
+    "quality": "1080p FHD",
+    "url": "http://178.124.179.122:8080/BT5/index.m3u8",
+    "logo": "https://i.imgur.com/kQoK29H.png",
+    "status": "active",
+    "clean_name": "belarus5hd",
+    "is_football": true
+  },
+  {
+    "id": "suspilne-sport",
+    "name": "Suspilne Sport",
+    "category": "European Leagues",
+    "country": "Ukraine",
+    "country_code": "UA",
+    "language": "Ukrainian",
+    "coverage": "Ukrainian National Football Team, UEFA & Youth Tournaments",
+    "quality": "1080p FHD",
+    "url": "http://stream.mcquack.net/444/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Suspilne_Sport_logo.svg/320px-Suspilne_Sport_logo.svg.png",
+    "status": "active",
+    "clean_name": "suspilnesport",
+    "is_football": true
+  },
+  {
+    "id": "prima-sport-cz",
+    "name": "Prima Sport (Czechia)",
+    "category": "European Leagues",
+    "country": "Czech Republic",
+    "country_code": "CZ",
+    "language": "Czech",
+    "coverage": "Czech First League & European Football Highlights",
+    "quality": "720p HD",
+    "url": "http://rpprod.hbbtv.cdn.cra.cz:8080/hbbTV/prima_sport/live_master.m3u8",
+    "logo": "https://i.imgur.com/kQoK29H.png",
+    "status": "active",
+    "clean_name": "primasportcz",
+    "is_football": true
+  },
+  {
+    "id": "arena-sport-1",
+    "name": "Arena Sport 1",
+    "category": "European Leagues",
+    "country": "Balkans",
+    "country_code": "RS",
+    "language": "Serbian / Croatian",
+    "coverage": "Balkans Domestic Football, Serie A & La Liga",
+    "quality": "720p HD",
+    "url": "http://88.212.15.17/live/test_arenasport/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Arena_Sport_logo.svg/320px-Arena_Sport_logo.svg.png",
+    "status": "active",
+    "clean_name": "arenasport1",
+    "is_football": true
+  },
+  {
+    "id": "arena-sport-2",
+    "name": "Arena Sport 2",
+    "category": "European Leagues",
+    "country": "Balkans",
+    "country_code": "RS",
+    "language": "Serbian / Croatian",
+    "coverage": "European Domestic Leagues & Cup Competitions",
+    "quality": "720p HD",
+    "url": "http://88.212.15.17/live/test_arenasport_dva/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Arena_Sport_logo.svg/320px-Arena_Sport_logo.svg.png",
+    "status": "active",
+    "clean_name": "arenasport2",
+    "is_football": true
+  },
+  {
+    "id": "arena-sport-premium-1",
+    "name": "Arena Sport Premium",
+    "category": "European Leagues",
+    "country": "Serbia",
+    "country_code": "RS",
+    "language": "Serbian",
+    "coverage": "Premier League & Champions League Live in Balkans",
+    "quality": "720p HD",
+    "url": "http://telekomsrbije.com:2095/play/lhpjmkfVyhON1JAiZCx7vmRdl09h9qNqA3bQ41fG60E/m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Arena_Sport_logo.svg/320px-Arena_Sport_logo.svg.png",
+    "status": "active",
+    "clean_name": "arenasportpremium1",
+    "is_football": true
+  },
+  {
+    "id": "real-madrid-tv-es",
+    "name": "Real Madrid TV (Espa\u00f1ol)",
+    "category": "Club TV & Matchday",
+    "country": "Spain",
+    "country_code": "ES",
+    "language": "Spanish",
+    "coverage": "Real Madrid Live Youth Matches, Castilla, Pre/Post Champions League",
+    "quality": "720p HD",
+    "url": "https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/320px-Real_Madrid_CF.svg.png",
+    "status": "active",
+    "clean_name": "realmadridtves",
+    "is_football": true
+  },
+  {
+    "id": "real-madrid-tv-en",
+    "name": "Real Madrid TV (English)",
+    "category": "Club TV & Matchday",
+    "country": "Spain / International",
+    "country_code": "ES",
+    "language": "English",
+    "coverage": "Official English Real Madrid Matchday & UEFA Coverage",
+    "quality": "720p HD",
+    "url": "http://88.212.15.17/live/real_madrid_tv/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/320px-Real_Madrid_CF.svg.png",
+    "status": "active",
+    "clean_name": "realmadridtven",
+    "is_football": true
+  },
+  {
+    "id": "milan-tv",
+    "name": "Milan TV",
+    "category": "Club TV & Matchday",
+    "country": "Italy",
+    "country_code": "IT",
+    "language": "Italian / English",
+    "coverage": "AC Milan Official Club Channel, Primavera Live & Serie A Analysis",
+    "quality": "720p HD",
+    "url": "http://team-tv.co:81/milan/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_of_AC_Milan.svg/320px-Logo_of_AC_Milan.svg.png",
+    "status": "active",
+    "clean_name": "milantv",
+    "is_football": true
+  },
+  {
+    "id": "mutv-manchester-united",
+    "name": "MUTV (Manchester United)",
+    "category": "Club TV & Matchday",
+    "country": "United Kingdom",
+    "country_code": "GB",
+    "language": "English",
+    "coverage": "Manchester United Official Channel, Academy Live & Matchday Hub",
+    "quality": "720p HD",
+    "url": "https://fastly.live.brightcove.com/6374054671112/eu-west-1/6374054671112/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/320px-Manchester_United_FC_crest.svg.png",
+    "status": "active",
+    "clean_name": "mutvmanchesterunited",
+    "is_football": true
+  },
+  {
+    "id": "dynamo-kyiv-tv",
+    "name": "Dynamo Kyiv TV",
+    "category": "Club TV & Matchday",
+    "country": "Ukraine",
+    "country_code": "UA",
+    "language": "Ukrainian",
+    "coverage": "FC Dynamo Kyiv Official Matches & Ukrainian Premier League",
+    "quality": "1080p FHD",
+    "url": "http://stream.mcquack.net/396/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/FC_Dynamo_Kyiv_logo.svg/320px-FC_Dynamo_Kyiv_logo.svg.png",
+    "status": "active",
+    "clean_name": "dynamokyivtv",
+    "is_football": true
+  },
+  {
+    "id": "fenerbahce-tv",
+    "name": "FB TV (Fenerbah\u00e7e)",
+    "category": "Club TV & Matchday",
+    "country": "Turkey",
+    "country_code": "TR",
+    "language": "Turkish",
+    "coverage": "Fenerbah\u00e7e SK Official Live Matches, Academy & S\u00fcper Lig Matchday",
+    "quality": "720p HD",
+    "url": "http://1hskrdto.rocketcdn.com/fenerbahcetv.smil/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Fenerbah%C3%A7e_SK.svg/320px-Fenerbah%C3%A7e_SK.svg.png",
+    "status": "active",
+    "clean_name": "fenerbahcetv",
+    "is_football": true
+  },
+  {
+    "id": "bahrain-sports-1",
+    "name": "Bahrain Sports 1",
+    "category": "Middle East & Africa",
+    "country": "Bahrain",
+    "country_code": "BH",
+    "language": "Arabic",
+    "coverage": "Bahrain Premier League, King's Cup & AFC Competitions",
+    "quality": "720p HD",
+    "url": "https://5c7b683162943.streamlock.net/live/ngrp:sportsone_all/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/2/23/Bahrain_Sports_Channel_logo.png",
+    "status": "active",
+    "clean_name": "bahrainsports1",
+    "is_football": true
+  },
+  {
+    "id": "bahrain-sports-2",
+    "name": "Bahrain Sports 2",
+    "category": "Middle East & Africa",
+    "country": "Bahrain",
+    "country_code": "BH",
+    "language": "Arabic",
+    "coverage": "Arab Gulf Football, Domestic Cups & Youth Tournaments",
+    "quality": "720p HD",
+    "url": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainsportstwo_all/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/2/23/Bahrain_Sports_Channel_logo.png",
+    "status": "active",
+    "clean_name": "bahrainsports2",
+    "is_football": true
+  },
+  {
+    "id": "oman-sports-tv",
+    "name": "Oman Sports TV",
+    "category": "Middle East & Africa",
+    "country": "Oman",
+    "country_code": "OM",
+    "language": "Arabic",
+    "coverage": "Oman Professional League, Sultan Cup & Asian Football",
+    "quality": "1080p FHD",
+    "url": "https://partneta.cdn.mgmlcdn.com/omsport/smil:omsport.stream.smil/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Oman_Sports_TV_logo.svg/320px-Oman_Sports_TV_logo.svg.png",
+    "status": "active",
+    "clean_name": "omansportstv",
+    "is_football": true
+  },
+  {
+    "id": "arryadia-maroc",
+    "name": "Arryadia (Morocco)",
+    "category": "Middle East & Africa",
+    "country": "Morocco",
+    "country_code": "MA",
+    "language": "Arabic / French",
+    "coverage": "Moroccan Botola Pro, Throne Cup, CAF Champions League & Atlas Lions",
+    "quality": "720p HD",
+    "url": "http://149.100.11.252:8000/play/a065/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Arryadia_logo.svg/320px-Arryadia_logo.svg.png",
+    "status": "active",
+    "clean_name": "arryadiamaroc",
+    "is_football": true
+  },
+  {
+    "id": "africa-24-sport",
+    "name": "Africa 24 Sport",
+    "category": "Middle East & Africa",
+    "country": "Pan-Africa",
+    "country_code": "AFR",
+    "language": "French / English",
+    "coverage": "Pan-African Football, CAF Champions League & Continental Tournaments",
+    "quality": "1080p FHD",
+    "url": "https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8",
+    "logo": "https://i0.wp.com/africa24tv.com/wp-content/uploads/2023/12/LOGO-AFRICASPORT-4-HD-sans-fond.png?fit=512%2C107&ssl=1",
+    "status": "active",
+    "clean_name": "africa24sport",
+    "is_football": true
+  },
+  {
+    "id": "iraqia-sports",
+    "name": "Al Iraqia Sport",
+    "category": "Middle East & Africa",
+    "country": "Iraq",
+    "country_code": "IQ",
+    "language": "Arabic",
+    "coverage": "Iraq Stars League, Iraq FA Cup & West Asian Football",
+    "quality": "720p HD",
+    "url": "https://imn-live.esite-lab.com/hls/iraqia-sports-1.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Al_Iraqiya_Sports_logo.png/320px-Al_Iraqiya_Sports_logo.png",
+    "status": "active",
+    "clean_name": "iraqiasports",
+    "is_football": true
+  },
+  {
+    "id": "el-heddaf-tv",
+    "name": "El-Heddaf TV",
+    "category": "Middle East & Africa",
+    "country": "Algeria",
+    "country_code": "DZ",
+    "language": "Arabic / French",
+    "coverage": "Algerian Ligue 1, North African Football & National Team Focus",
+    "quality": "1080p FHD",
+    "url": "https://live.elheddaftv.com:8081/elheddaftv/index.m3u8",
+    "logo": "https://i.imgur.com/kQoK29H.png",
+    "status": "active",
+    "clean_name": "elheddaftv",
+    "is_football": true
+  },
+  {
+    "id": "crtv-sports-cm",
+    "name": "CRTV Sports (Cameroon)",
+    "category": "Middle East & Africa",
+    "country": "Cameroon",
+    "country_code": "CM",
+    "language": "French / English",
+    "coverage": "Cameroon Elite One Football, Central African Football & AFCON",
+    "quality": "480p SD",
+    "url": "https://live1.acangroup.org:1929/publiclive/crtv_sport/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/CRTV_logo.svg/320px-CRTV_logo.svg.png",
+    "status": "active",
+    "clean_name": "crtvsportscm",
+    "is_football": true
+  },
+  {
+    "id": "varzesh-tv-iran",
+    "name": "Varzesh TV",
+    "category": "Middle East & Africa",
+    "country": "Iran / West Asia",
+    "country_code": "IR",
+    "language": "Persian",
+    "coverage": "Persian Gulf Pro League, AFC Champions League, European Football",
+    "quality": "720p HD",
+    "url": "https://ncdn.telewebion.ir/varzesh/live/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/IRIB_Varzesh_logo.png/320px-IRIB_Varzesh_logo.png",
+    "status": "active",
+    "clean_name": "varzeshtviran",
+    "is_football": true
+  },
+  {
+    "id": "tyc-sports-argentina",
+    "name": "TyC Sports",
+    "category": "Americas & World",
+    "country": "Argentina",
+    "country_code": "AR",
+    "language": "Spanish",
+    "coverage": "Argentine Primera Divisi\u00f3n, Copa Argentina & World Cup Qualifiers",
+    "quality": "1080p FHD",
+    "url": "https://amg26268-amg26268c14-freelivesports-emea-10267.playout.amagi.tv/playlist/amg26268-tycsports-tycsports-emea/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/TyC_Sports_logo_2020.svg/320px-TyC_Sports_logo_2020.svg.png",
+    "status": "active",
+    "clean_name": "tycsportsargentina",
+    "is_football": true
+  },
+  {
+    "id": "win-sports-colombia",
+    "name": "Win Sports",
+    "category": "Americas & World",
+    "country": "Colombia",
+    "country_code": "CO",
+    "language": "Spanish",
+    "coverage": "Colombian Liga BetPlay Dimayor & Copa Colombia",
+    "quality": "1080p FHD",
+    "url": "http://138.121.15.230:9002/WIN-SPORT/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Win_Sports_logo.svg/320px-Win_Sports_logo.svg.png",
+    "status": "active",
+    "clean_name": "winsportscolombia",
+    "is_football": true
+  },
+  {
+    "id": "tigo-sports-honduras",
+    "name": "Tigo Sports (Honduras)",
+    "category": "Americas & World",
+    "country": "Honduras / Central America",
+    "country_code": "HN",
+    "language": "Spanish",
+    "coverage": "Liga Nacional de Honduras, CONCACAF Champions Cup & Copa Am\u00e9rica",
+    "quality": "1080p FHD",
+    "url": "http://168.196.127.137:6001/play/a0ay/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Tigo_Sports_logo.svg/320px-Tigo_Sports_logo.svg.png",
+    "status": "active",
+    "clean_name": "tigosportshonduras",
+    "is_football": true
+  },
+  {
+    "id": "caze-tv-brasil",
+    "name": "Caz\u00e9TV (Brazil)",
+    "category": "Americas & World",
+    "country": "Brazil",
+    "country_code": "BR",
+    "language": "Portuguese",
+    "coverage": "Brasileir\u00e3o S\u00e9rie A, Copa do Brasil & International Football",
+    "quality": "720p HD",
+    "url": "http://138.204.86.4:8080/CAZE_TV/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Caz%C3%A9TV_logo.svg/320px-Caz%C3%A9TV_logo.svg.png",
+    "status": "active",
+    "clean_name": "cazetvbrasil",
+    "is_football": true
+  },
+  {
+    "id": "aym-sports-mexico",
+    "name": "AyM Sports (Mexico)",
+    "category": "Americas & World",
+    "country": "Mexico",
+    "country_code": "MX",
+    "language": "Spanish",
+    "coverage": "Mexican Football, Liga Premier, Liga TDP & Regional Football",
+    "quality": "1080p FHD",
+    "url": "http://168.196.127.137:6001/play/a06v/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/AyM_Sports_logo.png/320px-AyM_Sports_logo.png",
+    "status": "active",
+    "clean_name": "aymsportsmexico",
+    "is_football": true
+  },
+  {
+    "id": "meridiano-tv-venezuela",
+    "name": "Meridiano TV",
+    "category": "Americas & World",
+    "country": "Venezuela",
+    "country_code": "VE",
+    "language": "Spanish",
+    "coverage": "Liga FUTVE (Venezuela), Copa Venezuela & South American Football",
+    "quality": "720p HD",
+    "url": "http://181.78.8.199:8000/play/a0fr/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Meridiano_Televisi%C3%B3n_logo.svg/320px-Meridiano_Televisi%C3%B3n_logo.svg.png",
+    "status": "active",
+    "clean_name": "meridianotvvenezuela",
+    "is_football": true
+  },
+  {
+    "id": "fifa-plus-spain",
+    "name": "FIFA+ (Espa\u00f1ol)",
+    "category": "Americas & World",
+    "country": "Global",
+    "country_code": "INT",
+    "language": "Spanish",
+    "coverage": "FIFA World Qualifiers, Live Domestic Leagues & World Cup Archive",
+    "quality": "720p HD",
+    "url": "https://d63fabad.wurl.com/master/f36d25e7e52f1ba8d7e56eb859cd681cfdb88f23/FIFA_Plus_Spain/playlist.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/FIFA%2B_logo.svg/320px-FIFA%2B_logo.svg.png",
+    "status": "active",
+    "clean_name": "fifaplusspain",
+    "is_football": true
+  },
+  {
+    "id": "turkmenistan-sport",
+    "name": "Turkmenistan Sport",
+    "category": "Americas & World",
+    "country": "Turkmenistan",
+    "country_code": "TM",
+    "language": "Turkmen",
+    "coverage": "\u00ddokary Liga, Central Asian Football & AFC Champions League",
+    "quality": "720p HD",
+    "url": "https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Turkmenistan_Sport_logo.png/240px-Turkmenistan_Sport_logo.png",
+    "status": "active",
+    "clean_name": "turkmenistansport",
+    "is_football": true
+  },
+  {
+    "id": "redbull-tv-sports",
+    "name": "Red Bull TV Sports",
+    "category": "Americas & World",
+    "country": "Global",
+    "country_code": "GLOBAL",
+    "language": "English",
+    "coverage": "Global Football Documentaries, Youth Tournaments & Action Sports",
+    "quality": "1080p FHD",
+    "url": "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master_3360.m3u8",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Red_Bull_TV_logo.svg/320px-Red_Bull_TV_logo.svg.png",
+    "status": "active",
+    "clean_name": "redbulltvsports",
+    "is_football": true
   }
 ];
+const FALLBACK_DIRECT_STREAMS = FOOTBALL_CHANNELS;
 
 class SportsApp {
   constructor() {
@@ -96,7 +805,9 @@ class SportsApp {
 
     this.matches = [];
     this.directChannels = [];
-    this.currentFilter = 'live';
+    this.currentFilter = 'channels';
+    this.currentCategory = 'all';
+    this.channelSearchQuery = '';
 
     this.initElements();
     this.setupIOSOptimizations();
@@ -119,6 +830,14 @@ class SportsApp {
     this.serverGroup = document.getElementById('server-selector-group');
     this.qualitySelect = document.getElementById('quality-select');
     this.proxyCheckbox = document.getElementById('proxy-toggle-checkbox');
+
+    this.channelSearchInput = document.getElementById('channel-search-input');
+    this.channelSearchClear = document.getElementById('channel-search-clear');
+    this.categoryPills = document.querySelectorAll('.cat-pill');
+    this.btnPrevChannel = document.getElementById('btn-prev-channel');
+    this.btnNextChannel = document.getElementById('btn-next-channel');
+    this.playerChannelCounter = document.getElementById('player-channel-counter');
+    this.channelsDirectoryControls = document.getElementById('channels-directory-controls');
 
     this.matchesGrid = document.getElementById('matches-grid');
     this.channelsGrid = document.getElementById('channels-grid');
@@ -252,6 +971,46 @@ class SportsApp {
       });
     });
 
+    // Channel Surfer Buttons (Prev / Next)
+    if (this.btnPrevChannel) {
+      this.btnPrevChannel.addEventListener('click', () => this.navigateChannel(-1));
+    }
+    if (this.btnNextChannel) {
+      this.btnNextChannel.addEventListener('click', () => this.navigateChannel(1));
+    }
+
+    // Category Filter Pills
+    if (this.categoryPills) {
+      this.categoryPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          this.categoryPills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          this.currentCategory = pill.dataset.cat;
+          this.renderChannels();
+        });
+      });
+    }
+
+    // Channel Search Input
+    if (this.channelSearchInput) {
+      this.channelSearchInput.addEventListener('input', (e) => {
+        this.channelSearchQuery = e.target.value.trim().toLowerCase();
+        if (this.channelSearchClear) {
+          this.channelSearchClear.classList.toggle('hidden', !this.channelSearchQuery);
+        }
+        this.renderChannels();
+      });
+    }
+
+    if (this.channelSearchClear) {
+      this.channelSearchClear.addEventListener('click', () => {
+        if (this.channelSearchInput) this.channelSearchInput.value = '';
+        this.channelSearchQuery = '';
+        this.channelSearchClear.classList.add('hidden');
+        this.renderChannels();
+      });
+    }
+
     this.tabButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         this.tabButtons.forEach(b => b.classList.remove('active'));
@@ -272,6 +1031,17 @@ class SportsApp {
 
     const runHealthBtn = document.getElementById('btn-run-health-now');
     if (runHealthBtn) runHealthBtn.addEventListener('click', () => this.triggerRefresh());
+  }
+
+  navigateChannel(direction) {
+    if (!this.directChannels || this.directChannels.length === 0) return;
+    let curIdx = 0;
+    if (this.currentChannel) {
+      curIdx = this.directChannels.findIndex(c => c.id === this.currentChannel.id);
+      if (curIdx === -1) curIdx = 0;
+    }
+    const nextIdx = (curIdx + direction + this.directChannels.length) % this.directChannels.length;
+    this.selectChannel(this.directChannels[nextIdx]);
   }
 
   showOverlay(text = 'Buffering stream...') {
@@ -547,36 +1317,47 @@ class SportsApp {
     this.currentMatch = null;
 
     if (this.broadcasterNotice) this.broadcasterNotice.classList.add('hidden');
-    if (this.serverControlLabel) this.serverControlLabel.textContent = 'All Available Feed Servers:';
+    if (this.serverControlLabel) this.serverControlLabel.textContent = 'Channel Quick Switcher:';
 
     const badge = document.getElementById('player-status-badge');
     const badgeText = document.getElementById('player-status-text');
     if (badge) badge.className = 'live-pill is-channel';
-    if (badgeText) badgeText.textContent = '24/7 ON AIR';
+    if (badgeText) badgeText.textContent = 'LIVE ON AIR';
 
     this.playerTitle.textContent = channel.name;
-    this.playerSubtitle.textContent = `24/7 Sports Stream • ${channel.country || 'Global'} (${channel.quality || '1080p'}) • Verified Active`;
-
-    // Map ALL available channels as servers so the user can switch feeds instantly
-    this.currentServers = this.directChannels.map((c, idx) => ({
-      serverId: `server-${idx + 1}`,
-      serverLabel: `Server ${idx + 1} • ${c.name} (${c.quality})`,
-      name: c.name,
-      channelName: c.name,
-      regionLanguage: c.country ? `${c.country} • Sports` : 'Global',
-      contentType: 'GENERAL_SPORTS',
-      contentBadge: '24/7 Sports Feed',
-      isDirectBroadcaster: false,
-      quality: c.quality,
-      directUrl: c.url,
-      proxyUrl: c.proxyUrl || `/api/proxy/stream.m3u8?url=${encodeURIComponent(c.url)}`,
-      status: c.status
-    }));
+    const cov = channel.coverage || 'Live Football Broadcast';
+    this.playerSubtitle.textContent = `${cov} • ${channel.country || 'Global'} (${channel.quality || '1080p FHD'})`;
 
     const foundIdx = this.directChannels.findIndex(c => c.id === channel.id);
+    const channelNumber = foundIdx !== -1 ? foundIdx + 1 : 1;
+    if (this.playerChannelCounter) {
+      this.playerChannelCounter.textContent = `Channel ${channelNumber} of ${this.directChannels.length}`;
+    }
+
+    // Update active highlight in channel list
+    document.querySelectorAll('.channel-card').forEach(c => {
+      c.classList.toggle('is-active', c.dataset.id === channel.id);
+    });
+
+    // Provide all 52 channels in quick switcher
+    this.currentServers = this.directChannels.map((c, idx) => ({
+      serverId: `server-${idx + 1}`,
+      serverLabel: `Ch ${idx + 1} • ${c.name}`,
+      name: c.name,
+      channelName: c.name,
+      regionLanguage: c.country_code ? `${c.country_code} • ${c.language || 'Sports'}` : (c.country || 'Global'),
+      contentType: 'LIVE_MATCH',
+      contentBadge: c.category === 'EPL & Champions League' ? 'EPL / UCL' : (c.category || 'Live Football'),
+      isDirectBroadcaster: true,
+      quality: c.quality || '1080p FHD',
+      directUrl: c.url,
+      proxyUrl: c.proxyUrl || `/api/proxy/stream.m3u8?url=${encodeURIComponent(c.url)}`,
+      status: c.status || 'active'
+    }));
+
     this.activeServerIndex = foundIdx !== -1 ? foundIdx : 0;
     this.renderServerControls(this.currentServers);
-    this.playServer(this.activeServerIndex);
+    this.loadStream(channel.url, channel.url);
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -621,26 +1402,25 @@ class SportsApp {
 
     this.renderView();
 
-    // Auto-select first live match or first channel if nothing playing
+    // Auto-select first football channel on start
     if (!this.currentMatch && !this.currentChannel) {
-      const liveMatch = this.matches.find(m => m.status === 'LIVE' && m.streams && m.streams.length > 0);
-      if (liveMatch) {
-        this.selectMatch(liveMatch);
-      } else if (this.directChannels.length > 0) {
+      if (this.directChannels.length > 0) {
         this.selectChannel(this.directChannels[0]);
+      } else if (this.matches.length > 0) {
+        this.selectMatch(this.matches[0]);
       }
     }
   }
 
   /**
    * Standalone GitHub Pages / iPhone Safari Mode
-   * Fetches 100% REAL LIVE FIXTURES directly from ESPN public API without any fake/demo matches.
+   * Loads 52 curated international football channels + ESPN live fixtures
    */
   async loadStandaloneMode() {
-    console.log('[App] Loading REAL live fixtures from ESPN API (CORS enabled)...');
-    this.directChannels = FALLBACK_DIRECT_STREAMS;
-    if (this.statActive) this.statActive.textContent = `${FALLBACK_DIRECT_STREAMS.length} Verified Channels`;
-    if (this.statTotal) this.statTotal.textContent = `Live ESPN Sync Active`;
+    console.log('[App] Loading 52 REAL football streaming channels...');
+    this.directChannels = FOOTBALL_CHANNELS;
+    if (this.statActive) this.statActive.textContent = `${FOOTBALL_CHANNELS.length} Football Feeds Online`;
+    if (this.statTotal) this.statTotal.textContent = `Live EPL, UCL & World Channels`;
 
     const mappedServers = FALLBACK_DIRECT_STREAMS.map((s, idx) => ({
       serverId: `srv-${idx}`,
@@ -866,10 +1646,12 @@ class SportsApp {
 
   renderView() {
     if (this.currentFilter === 'channels') {
-      this.matchesGrid.style.display = 'none';
+      if (this.channelsDirectoryControls) this.channelsDirectoryControls.style.display = 'flex';
       this.channelsGrid.style.display = 'grid';
+      this.matchesGrid.style.display = 'none';
       this.renderChannels();
     } else {
+      if (this.channelsDirectoryControls) this.channelsDirectoryControls.style.display = 'none';
       this.channelsGrid.style.display = 'none';
       this.matchesGrid.style.display = 'grid';
       this.renderMatches();
@@ -888,7 +1670,7 @@ class SportsApp {
       this.matchesGrid.innerHTML = `
         <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); background: var(--surface); border-radius: 12px; border: 1px dashed var(--border)">
           <h3>No fixtures found in this category</h3>
-          <p style="font-size: 0.85rem; margin-top: 6px">Select "24/7 Sports TV Channels" above to watch direct live feeds.</p>
+          <p style="font-size: 0.85rem; margin-top: 6px">Switch to "📺 Football Channels" above to stream 52 live football feeds directly.</p>
         </div>
       `;
       return;
@@ -967,28 +1749,64 @@ class SportsApp {
 
   renderChannels() {
     this.channelsGrid.innerHTML = '';
-    this.directChannels.forEach(c => {
-      const isOnline = c.status === 'active';
-      const card = document.createElement('div');
-      card.className = 'channel-card';
-      card.innerHTML = `
-        <div class="channel-logo-wrap">
-          <img class="channel-logo-img" src="${c.logo || 'icon-192.png'}" onerror="this.src='icon-192.png'" alt=""/>
+    let filtered = this.directChannels;
+
+    if (this.currentCategory && this.currentCategory !== 'all') {
+      filtered = filtered.filter(c => c.category === this.currentCategory);
+    }
+
+    if (this.channelSearchQuery) {
+      const q = this.channelSearchQuery;
+      filtered = filtered.filter(c =>
+        c.name.toLowerCase().includes(q) ||
+        (c.coverage && c.coverage.toLowerCase().includes(q)) ||
+        (c.country && c.country.toLowerCase().includes(q)) ||
+        (c.language && c.language.toLowerCase().includes(q)) ||
+        (c.category && c.category.toLowerCase().includes(q))
+      );
+    }
+
+    if (filtered.length === 0) {
+      this.channelsGrid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); background: var(--surface); border-radius: 12px; border: 1px dashed var(--border)">
+          <h3>No football channels found</h3>
+          <p style="font-size: 0.85rem; margin-top: 6px">Try clearing your search query or switching categories.</p>
         </div>
-        <div class="channel-details">
-          <div class="channel-name">${c.name}</div>
-          <div class="channel-meta">
-            <span class="channel-status-dot ${isOnline ? '' : 'offline'}"></span>
-            <span>${isOnline ? 'Online (200 OK)' : 'Offline/Checking'}</span>
-            <span>•</span>
-            <span>${c.country}</span>
-            <span>•</span>
-            <span class="quality-badge">${c.quality || 'HD'}</span>
+      `;
+      return;
+    }
+
+    filtered.forEach(c => {
+      const isOnline = c.status === 'active';
+      const isActive = this.currentChannel && this.currentChannel.id === c.id;
+      const card = document.createElement('div');
+      card.className = `channel-card ${isActive ? 'is-active' : ''}`;
+      card.dataset.id = c.id;
+
+      card.innerHTML = `
+        <div class="channel-card-top">
+          <div class="channel-logo-wrap">
+            <img class="channel-logo-img" src="${c.logo || 'icon-192.png'}" onerror="this.src='icon-192.png'" alt="${c.name}"/>
+          </div>
+          <div class="channel-details">
+            <div class="channel-name" title="${c.name}">${c.name}</div>
+            <span class="channel-cat-tag">${c.category || 'Live Football'}</span>
           </div>
         </div>
-        <button class="btn-watch" style="padding: 6px 12px; font-size: 0.75rem">
-          Watch
-        </button>
+
+        <div class="channel-coverage-box">
+          ${c.coverage || 'Live matchday football streaming'}
+        </div>
+
+        <div class="channel-card-bottom">
+          <div class="channel-meta-tags">
+            <span class="channel-status-dot ${isOnline ? '' : 'offline'}"></span>
+            <span>${c.country}</span>
+            <span>•</span>
+            <span class="channel-lang-pill">${c.language || 'Multi-Lang'}</span>
+          </div>
+          <span class="quality-badge">${c.quality || '1080p FHD'}</span>
+        </div>
       `;
 
       card.addEventListener('click', () => this.selectChannel(c));

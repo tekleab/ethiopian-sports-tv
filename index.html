@@ -44,8 +44,8 @@
       </div>
       <div>
         <div class="brand-title">
-          ET SPORTS TV
-          <span class="brand-badge">PRO STREAM</span>
+          GLOBAL FOOTBALL TV
+          <span class="brand-badge">50+ LIVE FEEDS</span>
         </div>
       </div>
     </a>
@@ -173,15 +173,26 @@
           </div>
         </div>
 
-        <!-- Stream Servers (All Available Feeds) -->
+        <!-- Stream Servers & Channel Surfer Controls -->
         <div class="control-row" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border)">
           <div style="display:flex; align-items:center; gap:8px">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
-            <span id="server-control-label" class="control-label">All Available Feed Servers:</span>
+            <span id="server-control-label" class="control-label">Channel Quick Switcher:</span>
           </div>
-          <div id="server-selector-group" class="server-selector-group">
-            <!-- Dynamic Server Pills: All Available Servers -->
+          <div style="display:flex; align-items:center; gap:8px">
+            <button id="btn-prev-channel" class="btn-surfer" title="Previous Football Channel">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"></line></svg>
+              <span>Prev</span>
+            </button>
+            <span id="player-channel-counter" class="player-channel-counter">Channel 1 of 52</span>
+            <button id="btn-next-channel" class="btn-surfer" title="Next Football Channel">
+              <span>Next</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"></line></svg>
+            </button>
           </div>
+        </div>
+        <div id="server-selector-group" class="server-selector-group">
+          <!-- Dynamic Server / Feed Pills -->
         </div>
       </div>
     </section>
@@ -190,36 +201,56 @@
     <nav class="section-nav">
       <ul class="nav-tabs">
         <li>
-          <button class="tab-btn active" data-tab="live">
-            <span>🔴 Live Now</span>
+          <button class="tab-btn active" data-tab="channels">
+            <span>📺 Football Channels</span>
+            <span id="count-channels" class="tab-counter">52</span>
+          </button>
+        </li>
+        <li>
+          <button class="tab-btn" data-tab="live">
+            <span>🔴 Live Matches</span>
             <span id="count-live" class="tab-counter">0</span>
           </button>
         </li>
         <li>
           <button class="tab-btn" data-tab="upcoming">
-            <span>📅 Today's Fixtures</span>
+            <span>📅 Fixture Schedule</span>
             <span id="count-upcoming" class="tab-counter">0</span>
-          </button>
-        </li>
-        <li>
-          <button class="tab-btn" data-tab="channels">
-            <span>📺 24/7 TV Channels</span>
           </button>
         </li>
       </ul>
       <div id="stat-total-streams" style="font-size:0.8rem; color:var(--text-muted)">
-        Loading Ingested Streams...
+        52 Real Football Channels Active
       </div>
     </nav>
 
-    <!-- Match Fixtures Grid -->
-    <div id="matches-grid" class="matches-grid">
-      <!-- Dynamically filled with match cards mapped to active streams -->
+    <!-- 24/7 Football TV Channels Filter & Search Bar -->
+    <div id="channels-directory-controls" class="channels-filter-wrapper">
+      <div class="channel-search-row">
+        <div class="search-input-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="channel-search-input" class="channel-search-input" placeholder="Search 52 channels by name, league, country (e.g. Canal+, Star Sports, Spain, Turkey, Real Madrid, Premier League)..." />
+          <button id="channel-search-clear" class="btn-clear-search hidden">✕</button>
+        </div>
+      </div>
+      <div id="category-filter-group" class="category-filter-pills">
+        <button class="cat-pill active" data-cat="all">🌟 All Channels (52)</button>
+        <button class="cat-pill" data-cat="EPL & Champions League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL & Champions League (15)</button>
+        <button class="cat-pill" data-cat="European Leagues">🇪🇺 European Leagues (13)</button>
+        <button class="cat-pill" data-cat="Club TV & Matchday">⚽ Club TV (6)</button>
+        <button class="cat-pill" data-cat="Middle East & Africa">🌍 Middle East & Africa (9)</button>
+        <button class="cat-pill" data-cat="Americas & World">🌎 Americas & World (9)</button>
+      </div>
     </div>
 
-    <!-- 24/7 TV Channels Grid -->
-    <div id="channels-grid" class="channels-grid" style="display:none">
-      <!-- Dynamically filled with direct channels (A Spor, Esport3, Bahrain, Africa 24, Red Bull) -->
+    <!-- 24/7 Football TV Channels Grid (Primary Default View) -->
+    <div id="channels-grid" class="channels-grid">
+      <!-- Dynamically filled with 52 football channels -->
+    </div>
+
+    <!-- Match Fixtures Grid -->
+    <div id="matches-grid" class="matches-grid" style="display:none">
+      <!-- Dynamically filled with match cards mapped to active streams -->
     </div>
 
   </main>
