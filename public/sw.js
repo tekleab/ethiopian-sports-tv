@@ -1,4 +1,4 @@
-const CACHE_NAME = 'et-sports-v8';
+const CACHE_NAME = 'et-sports-v9';
 const ASSETS = [
   './',
   './index.html',

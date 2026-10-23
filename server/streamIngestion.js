@@ -6,105 +6,35 @@
  * - SQLite storage via server/db.js
  */
 
+const fs = require('fs');
+const path = require('path');
 const db = require('./db');
 
-// Direct Stream Sources to Include (as specified in system requirements)
-const DIRECT_STREAM_SOURCES = [
-  {
-    id: 'aspor-tr',
-    name: 'A Spor (Turkey)',
-    clean_name: 'aspor',
-    url: 'https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8',
-    country: 'TR',
-    category: 'Sports',
-    logo: 'https://i.imgur.com/ZhkZzLf.png',
-    tvg_id: 'ASpor.tr',
-    quality: '1080p FHD',
-    source_type: 'direct'
-  },
-  {
-    id: 'africa24-sport',
-    name: 'Africa 24 Sport',
-    clean_name: 'africa24sport',
-    url: 'https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8',
-    country: 'AFRICA',
-    category: 'Sports',
-    logo: 'https://i0.wp.com/africa24tv.com/wp-content/uploads/2023/12/LOGO-AFRICASPORT-4-HD-sans-fond.png?fit=512%2C107&ssl=1',
-    tvg_id: 'Africa24Sport.fr',
-    quality: '1080p FHD',
-    source_type: 'direct'
-  },
-  {
-    id: 'esport3-cat',
-    name: 'Esport3 (Spain)',
-    clean_name: 'esport3',
-    url: 'https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/master.m3u8',
-    country: 'ES',
-    category: 'Sports',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Esport3_logo.svg/320px-Esport3_logo.svg.png',
-    tvg_id: 'Esport3.es',
-    quality: '1080p FHD',
-    source_type: 'direct'
-  },
-  {
-    id: 'bahrain-sports-1',
-    name: 'Bahrain Sports 1',
-    clean_name: 'bahrainsports1',
-    url: 'https://5c7b683162943.streamlock.net/live/ngrp:sportsone_all/playlist.m3u8',
-    country: 'BH',
-    category: 'Sports',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/2/23/Bahrain_Sports_Channel_logo.png',
-    tvg_id: 'BahrainSports1.bh',
-    quality: '720p HD',
-    source_type: 'direct'
-  },
-  {
-    id: 'bahrain-sports-2',
-    name: 'Bahrain Sports 2',
-    clean_name: 'bahrainsports2',
-    url: 'https://5c7b683162943.streamlock.net/live/ngrp:bahrainsportstwo_all/playlist.m3u8',
-    country: 'BH',
-    category: 'Sports',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/2/23/Bahrain_Sports_Channel_logo.png',
-    tvg_id: 'BahrainSports2.bh',
-    quality: '720p HD',
-    source_type: 'direct'
-  },
-  {
-    id: 'turkmenistan-sport',
-    name: 'Turkmenistan Sport',
-    clean_name: 'turkmenistansport',
-    url: 'https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8',
-    country: 'TM',
-    category: 'Sports',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Turkmenistan_Sport_logo.png/240px-Turkmenistan_Sport_logo.png',
-    tvg_id: 'TurkmenistanSport.tm',
-    quality: '720p HD',
-    source_type: 'direct'
-  },
-  {
-    id: 'redbull-tv-sports',
-    name: 'Red Bull TV Sports',
-    clean_name: 'redbulltvsports',
-    url: 'https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master_3360.m3u8',
-    country: 'GLOBAL',
-    category: 'Sports',
-    logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Red_Bull_TV_logo.svg/320px-Red_Bull_TV_logo.svg.png',
-    tvg_id: 'RedBullTV.at',
-    quality: '1080p FHD',
-    source_type: 'direct'
+// Load Verified Football Channels (51 chunk-verified live feeds, excluding Ethiopian feeds)
+let DIRECT_STREAM_SOURCES = [];
+try {
+  const jsonPath = path.join(__dirname, '../data/football_channels.json');
+  if (fs.existsSync(jsonPath)) {
+    const raw = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+    DIRECT_STREAM_SOURCES = raw.map(ch => ({
+      id: ch.id,
+      name: ch.name,
+      clean_name: ch.clean_name || ch.id.replace(/-/g, ''),
+      url: ch.url,
+      country: ch.country_code || ch.country || 'GLOBAL',
+      category: ch.category || 'Football',
+      logo: ch.logo,
+      quality: ch.quality || '720p HD',
+      source_type: 'direct',
+      coverage: ch.coverage
+    }));
   }
-];
+} catch (e) {
+  console.error('[Ingestion] Failed to load football_channels.json:', e);
+}
 
-// Auto-Updating Master Playlists
+// Auto-Updating Master Playlists (Excluding Ethiopian feeds per strict user requirements)
 const MASTER_PLAYLISTS = [
-  {
-    name: 'Ethiopian Local Feeds',
-    url: 'https://iptv-org.github.io/iptv/countries/et.m3u',
-    country: 'ET',
-    category: 'Local/Sports',
-    priority: 1
-  },
   {
     name: 'Global Sports Index',
     // We check both the requested 'sport.m3u' and current 'sports.m3u' standard
@@ -114,14 +44,14 @@ const MASTER_PLAYLISTS = [
     ],
     country: 'GLOBAL',
     category: 'Sports',
-    priority: 2
+    priority: 1
   },
   {
     name: 'Global Master Index (Sports Subset)',
     url: 'https://iptv-org.github.io/iptv/index.m3u',
     country: 'GLOBAL',
     category: 'Master',
-    priority: 3
+    priority: 2
   }
 ];
 

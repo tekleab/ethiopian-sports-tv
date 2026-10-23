@@ -2,4 +2,7 @@ node_modules/
 .DS_Store
 *.log
 .claude/
+*.db-shm
+*.db-wal
+
 
